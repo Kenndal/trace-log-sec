@@ -1,0 +1,1203 @@
+Nov 12 00:00:00 web01 sshd[3001]: Accepted publickey for bob from 10.0.0.12 port 58949 ssh2
+Nov 12 00:01:44 web01 sshd[3002]: Accepted publickey for alice from 10.0.0.11 port 48190 ssh2
+Nov 12 00:03:27 web01 sshd[3003]: Connection closed by 10.0.0.15 port 35477 [preauth]
+Nov 12 00:05:04 web01 sshd[3004]: Connection closed by 10.0.0.11 port 52671 [preauth]
+Nov 12 00:05:49 web01 sshd[3005]: Connection closed by 10.0.0.13 port 34734 [preauth]
+Nov 12 00:06:52 web01 sshd[3006]: Accepted publickey for bob from 10.0.0.12 port 47806 ssh2
+Nov 12 00:08:01 web01 sshd[3007]: Accepted publickey for dave from 10.0.0.14 port 45089 ssh2
+Nov 12 00:09:04 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 00:10:25 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 00:11:27 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 00:12:30 web01 sshd[3008]: Accepted publickey for jenkins from 10.0.0.15 port 56012 ssh2
+Nov 12 00:13:25 web01 sudo: deploy : TTY=pts/3 ; PWD=/var/www ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 00:14:38 web01 sshd[3009]: Accepted publickey for jenkins from 10.0.0.15 port 31111 ssh2
+Nov 12 00:16:25 web01 sshd[3010]: Accepted publickey for bob from 10.0.0.12 port 37726 ssh2
+Nov 12 00:17:52 web01 sudo: deploy : TTY=pts/3 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 00:19:38 web01 sshd[3011]: Accepted publickey for jenkins from 10.0.0.15 port 51313 ssh2
+Nov 12 00:20:38 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 00:21:48 web01 sshd[3012]: Accepted publickey for dave from 10.0.0.14 port 35027 ssh2
+Nov 12 00:23:00 web01 sshd[3013]: Accepted publickey for jenkins from 10.0.0.15 port 43076 ssh2
+Nov 12 00:24:29 web01 sshd[3014]: Accepted publickey for dave from 10.0.0.14 port 49681 ssh2
+Nov 12 00:25:27 web01 sshd[3015]: Accepted publickey for carol from 10.0.0.13 port 46617 ssh2
+Nov 12 00:26:17 web01 sshd[3016]: Connection closed by 10.0.0.14 port 42661 [preauth]
+Nov 12 00:27:35 web01 sshd[3017]: Accepted publickey for jenkins from 10.0.0.15 port 31861 ssh2
+Nov 12 00:29:22 web01 sshd[3018]: Accepted publickey for jenkins from 10.0.0.15 port 51674 ssh2
+Nov 12 00:30:56 web01 sshd[3019]: Accepted publickey for bob from 10.0.0.12 port 58918 ssh2
+Nov 12 00:32:40 web01 sshd[3020]: Accepted publickey for alice from 10.0.0.11 port 45651 ssh2
+Nov 12 00:33:31 web01 sshd[3021]: Accepted publickey for carol from 10.0.0.13 port 55593 ssh2
+Nov 12 00:35:18 web01 sshd[3022]: Accepted publickey for bob from 10.0.0.12 port 47639 ssh2
+Nov 12 00:36:40 web01 sshd[3023]: Accepted publickey for carol from 10.0.0.13 port 47015 ssh2
+Nov 12 00:37:39 web01 sshd[3024]: Accepted publickey for deploy from 10.0.0.9 port 32388 ssh2
+Nov 12 00:39:08 web01 sshd[3025]: Accepted publickey for dave from 10.0.0.14 port 54678 ssh2
+Nov 12 00:39:58 web01 sudo: alice : TTY=pts/3 ; PWD=/home/alice ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 00:41:35 web01 sshd[3026]: Accepted publickey for jenkins from 10.0.0.15 port 41126 ssh2
+Nov 12 00:42:57 web01 sshd[3027]: Accepted publickey for bob from 10.0.0.12 port 45421 ssh2
+Nov 12 00:44:38 web01 sudo: dave : TTY=pts/3 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 00:45:54 web01 sshd[3028]: Accepted publickey for bob from 10.0.0.12 port 50957 ssh2
+Nov 12 00:47:08 web01 sudo: bob : TTY=pts/3 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 00:48:05 web01 sshd[3029]: Accepted publickey for jenkins from 10.0.0.15 port 51771 ssh2
+Nov 12 00:49:18 web01 sshd[3030]: Accepted publickey for alice from 10.0.0.11 port 32877 ssh2
+Nov 12 00:50:15 web01 sshd[3031]: Accepted publickey for bob from 10.0.0.12 port 37932 ssh2
+Nov 12 00:51:46 web01 sshd[3032]: Connection closed by 10.0.0.15 port 58655 [preauth]
+Nov 12 00:53:30 web01 sshd[3033]: Connection closed by 10.0.0.9 port 42114 [preauth]
+Nov 12 00:55:13 web01 sshd[3034]: Accepted publickey for carol from 10.0.0.13 port 53376 ssh2
+Nov 12 00:56:33 web01 sshd[3035]: Accepted publickey for carol from 10.0.0.13 port 45818 ssh2
+Nov 12 00:58:03 web01 sshd[3036]: Accepted publickey for deploy from 10.0.0.9 port 39101 ssh2
+Nov 12 00:59:08 web01 sshd[3037]: Accepted publickey for alice from 10.0.0.11 port 52922 ssh2
+Nov 12 01:00:07 web01 sudo: deploy : TTY=pts/0 ; PWD=/var/www ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 01:01:17 web01 sshd[3038]: Accepted publickey for bob from 10.0.0.12 port 30384 ssh2
+Nov 12 01:02:13 web01 sshd[3039]: Accepted publickey for deploy from 10.0.0.9 port 32453 ssh2
+Nov 12 01:03:46 web01 sshd[3040]: Accepted publickey for bob from 10.0.0.12 port 34566 ssh2
+Nov 12 01:05:16 web01 sshd[3041]: Accepted publickey for carol from 10.0.0.13 port 30479 ssh2
+Nov 12 01:06:41 web01 sshd[3042]: Accepted publickey for deploy from 10.0.0.9 port 42771 ssh2
+Nov 12 01:07:22 web01 sshd[3043]: Connection closed by 10.0.0.11 port 54091 [preauth]
+Nov 12 01:09:12 web01 sudo: jenkins : TTY=pts/0 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 01:10:42 web01 sudo: carol : TTY=pts/0 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 01:12:30 web01 sshd[3044]: Accepted publickey for jenkins from 10.0.0.15 port 42721 ssh2
+Nov 12 01:13:40 web01 sshd[3045]: Accepted publickey for jenkins from 10.0.0.15 port 46669 ssh2
+Nov 12 01:14:44 web01 sshd[3046]: Accepted publickey for carol from 10.0.0.13 port 34449 ssh2
+Nov 12 01:15:59 web01 sshd[3047]: Accepted publickey for carol from 10.0.0.13 port 43574 ssh2
+Nov 12 01:17:40 web01 sshd[3048]: Connection closed by 10.0.0.15 port 30520 [preauth]
+Nov 12 01:18:24 web01 sudo: deploy : TTY=pts/3 ; PWD=/var/www ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 01:19:23 web01 sshd[3049]: Accepted publickey for deploy from 10.0.0.9 port 37433 ssh2
+Nov 12 01:20:51 web01 sshd[3050]: Accepted publickey for bob from 10.0.0.12 port 35703 ssh2
+Nov 12 01:22:31 web01 sshd[3051]: Connection closed by 10.0.0.12 port 37043 [preauth]
+Nov 12 01:23:12 web01 sudo: alice : TTY=pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 01:24:47 web01 sudo: dave : TTY=pts/3 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 01:26:29 web01 sshd[3052]: Accepted publickey for jenkins from 10.0.0.15 port 34533 ssh2
+Nov 12 01:27:18 web01 sshd[3053]: Connection closed by 10.0.0.15 port 46352 [preauth]
+Nov 12 01:28:02 web01 sshd[3054]: Accepted publickey for deploy from 10.0.0.9 port 47688 ssh2
+Nov 12 01:29:09 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 01:30:54 web01 sshd[3055]: Accepted publickey for bob from 10.0.0.12 port 43513 ssh2
+Nov 12 01:32:36 web01 sshd[3056]: Accepted publickey for bob from 10.0.0.12 port 40970 ssh2
+Nov 12 01:34:22 web01 sshd[3057]: Accepted publickey for bob from 10.0.0.12 port 46530 ssh2
+Nov 12 01:35:16 web01 sshd[3058]: Accepted publickey for dave from 10.0.0.14 port 57377 ssh2
+Nov 12 01:37:00 web01 sshd[3059]: Accepted publickey for jenkins from 10.0.0.15 port 33102 ssh2
+Nov 12 01:37:45 web01 sshd[3060]: Connection closed by 10.0.0.15 port 41448 [preauth]
+Nov 12 01:39:13 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 01:40:14 web01 sshd[3061]: Accepted publickey for deploy from 10.0.0.9 port 45294 ssh2
+Nov 12 01:41:43 web01 sudo: dave : TTY=pts/3 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 01:42:26 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 01:44:10 web01 sshd[3062]: Accepted publickey for deploy from 10.0.0.9 port 37227 ssh2
+Nov 12 01:44:58 web01 sudo: bob : TTY=pts/3 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 01:45:43 web01 sshd[3063]: Connection closed by 10.0.0.13 port 43019 [preauth]
+Nov 12 01:46:42 web01 sudo: alice : TTY=pts/3 ; PWD=/home/alice ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 01:48:05 web01 sshd[3064]: Accepted publickey for carol from 10.0.0.13 port 56807 ssh2
+Nov 12 01:49:03 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 01:49:49 web01 sshd[3065]: Accepted publickey for jenkins from 10.0.0.15 port 48557 ssh2
+Nov 12 01:51:20 web01 sshd[3066]: Accepted publickey for dave from 10.0.0.14 port 41148 ssh2
+Nov 12 01:52:31 web01 sshd[3067]: Connection closed by 10.0.0.15 port 31845 [preauth]
+Nov 12 01:54:02 web01 sudo: jenkins : TTY=pts/0 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 01:55:46 web01 sshd[3068]: Accepted publickey for jenkins from 10.0.0.15 port 58369 ssh2
+Nov 12 01:56:51 web01 sshd[3069]: Connection closed by 10.0.0.12 port 32992 [preauth]
+Nov 12 01:58:02 web01 sudo: deploy : TTY=pts/2 ; PWD=/var/www ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 01:58:46 web01 sshd[3070]: Accepted publickey for deploy from 10.0.0.9 port 32190 ssh2
+Nov 12 01:59:49 web01 sudo: deploy : TTY=pts/1 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 02:01:12 web01 sshd[3071]: Connection closed by 10.0.0.11 port 31812 [preauth]
+Nov 12 02:02:23 web01 sshd[3072]: Accepted publickey for bob from 10.0.0.12 port 31108 ssh2
+Nov 12 02:03:48 web01 sshd[3073]: Accepted publickey for jenkins from 10.0.0.15 port 54552 ssh2
+Nov 12 02:05:30 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 02:06:20 web01 sudo: carol : TTY=pts/3 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 02:07:23 web01 sshd[3074]: Accepted publickey for alice from 10.0.0.11 port 58633 ssh2
+Nov 12 02:08:04 web01 sshd[3075]: Accepted publickey for deploy from 10.0.0.9 port 54048 ssh2
+Nov 12 02:09:20 web01 sshd[3076]: Accepted publickey for deploy from 10.0.0.9 port 53942 ssh2
+Nov 12 02:10:04 web01 sshd[3077]: Accepted publickey for deploy from 10.0.0.9 port 42180 ssh2
+Nov 12 02:11:15 web01 sudo: jenkins : TTY=pts/1 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 02:13:02 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 02:14:15 web01 sudo: jenkins : TTY=pts/3 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 02:15:00 web01 sshd[3824]: Accepted publickey for carol from 45.33.12.9 port 51811 ssh2
+Nov 12 02:15:25 web01 sudo: carol : TTY=pts/7 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow
+Nov 12 02:15:45 web01 sudo: carol : TTY=pts/7 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/cp /root/.aws/credentials /tmp/creds.txt
+Nov 12 02:15:56 web01 sudo: alice : TTY=pts/1 ; PWD=/home/alice ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 02:16:25 web01 sudo: carol : TTY=pts/7 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/sbin/useradd -m backdoor
+Nov 12 02:16:35 web01 sudo: carol : TTY=pts/7 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/sbin/usermod -aG sudo backdoor
+Nov 12 02:17:15 web01 sshd[3078]: Accepted publickey for bob from 10.0.0.12 port 59088 ssh2
+Nov 12 02:18:28 web01 sshd[3079]: Connection closed by 10.0.0.9 port 47998 [preauth]
+Nov 12 02:20:17 web01 sudo: carol : TTY=pts/3 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 02:21:56 web01 sudo: deploy : TTY=pts/0 ; PWD=/var/www ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 02:23:21 web01 sudo: carol : TTY=pts/2 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 02:24:17 web01 sudo: carol : TTY=pts/1 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 02:25:39 web01 sshd[3080]: Accepted publickey for deploy from 10.0.0.9 port 30765 ssh2
+Nov 12 02:26:44 web01 sudo: dave : TTY=pts/3 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 02:28:34 web01 sshd[3081]: Connection closed by 10.0.0.15 port 32568 [preauth]
+Nov 12 02:30:18 web01 sshd[3082]: Accepted publickey for deploy from 10.0.0.9 port 51561 ssh2
+Nov 12 02:31:36 web01 sshd[3083]: Accepted publickey for bob from 10.0.0.12 port 32283 ssh2
+Nov 12 02:32:17 web01 sshd[3084]: Accepted publickey for alice from 10.0.0.11 port 49091 ssh2
+Nov 12 02:34:02 web01 sshd[3085]: Accepted publickey for deploy from 10.0.0.9 port 30925 ssh2
+Nov 12 02:35:25 web01 sshd[3086]: Accepted publickey for dave from 10.0.0.14 port 58217 ssh2
+Nov 12 02:36:56 web01 sshd[3087]: Connection closed by 10.0.0.13 port 57105 [preauth]
+Nov 12 02:38:14 web01 sshd[3088]: Connection closed by 10.0.0.15 port 58351 [preauth]
+Nov 12 02:39:09 web01 sshd[3089]: Accepted publickey for bob from 10.0.0.12 port 59029 ssh2
+Nov 12 02:39:54 web01 sudo: deploy : TTY=pts/2 ; PWD=/var/www ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 02:40:46 web01 sshd[3090]: Accepted publickey for alice from 10.0.0.11 port 38659 ssh2
+Nov 12 02:42:01 web01 sudo: bob : TTY=pts/2 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 02:43:35 web01 sudo: jenkins : TTY=pts/2 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 02:44:48 web01 sshd[3091]: Accepted publickey for carol from 10.0.0.13 port 43495 ssh2
+Nov 12 02:46:37 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 02:47:32 web01 sshd[3092]: Accepted publickey for alice from 10.0.0.11 port 40762 ssh2
+Nov 12 02:48:25 web01 sshd[3093]: Accepted publickey for deploy from 10.0.0.9 port 41880 ssh2
+Nov 12 02:49:15 web01 sshd[3094]: Accepted publickey for alice from 10.0.0.11 port 37716 ssh2
+Nov 12 02:50:43 web01 sshd[3095]: Connection closed by 10.0.0.9 port 45548 [preauth]
+Nov 12 02:52:32 web01 sshd[3096]: Accepted publickey for alice from 10.0.0.11 port 49456 ssh2
+Nov 12 02:54:20 web01 sshd[3097]: Accepted publickey for alice from 10.0.0.11 port 42763 ssh2
+Nov 12 02:55:04 web01 sudo: alice : TTY=pts/3 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 02:56:14 web01 sshd[3098]: Accepted publickey for alice from 10.0.0.11 port 59445 ssh2
+Nov 12 02:57:54 web01 sshd[3099]: Accepted publickey for dave from 10.0.0.14 port 57749 ssh2
+Nov 12 02:58:44 web01 sshd[3100]: Accepted publickey for dave from 10.0.0.14 port 40828 ssh2
+Nov 12 03:00:18 web01 sshd[3101]: Accepted publickey for bob from 10.0.0.12 port 30133 ssh2
+Nov 12 03:02:06 web01 sudo: dave : TTY=pts/3 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 03:03:08 web01 sudo: jenkins : TTY=pts/0 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 03:03:56 web01 sudo: jenkins : TTY=pts/3 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 03:04:48 web01 sshd[3102]: Accepted publickey for alice from 10.0.0.11 port 58394 ssh2
+Nov 12 03:05:32 web01 sshd[3103]: Accepted publickey for bob from 10.0.0.12 port 54668 ssh2
+Nov 12 03:06:59 web01 sshd[3104]: Accepted publickey for carol from 10.0.0.13 port 46377 ssh2
+Nov 12 03:08:03 web01 sshd[3105]: Accepted publickey for carol from 10.0.0.13 port 36545 ssh2
+Nov 12 03:09:52 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 03:11:06 web01 sshd[3106]: Accepted publickey for carol from 10.0.0.13 port 53363 ssh2
+Nov 12 03:12:37 web01 sudo: deploy : TTY=pts/2 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 03:14:01 web01 sshd[3107]: Accepted publickey for dave from 10.0.0.14 port 48974 ssh2
+Nov 12 03:15:25 web01 sudo: bob : TTY=pts/3 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 03:16:51 web01 sshd[3108]: Accepted publickey for carol from 10.0.0.13 port 41236 ssh2
+Nov 12 03:18:04 web01 sudo: alice : TTY=pts/1 ; PWD=/home/alice ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 03:19:28 web01 sudo: carol : TTY=pts/1 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 03:21:16 web01 sshd[3109]: Accepted publickey for alice from 10.0.0.11 port 56654 ssh2
+Nov 12 03:22:28 web01 sudo: jenkins : TTY=pts/0 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 03:23:09 web01 sshd[3110]: Accepted publickey for bob from 10.0.0.12 port 45704 ssh2
+Nov 12 03:24:54 web01 sshd[3111]: Accepted publickey for alice from 10.0.0.11 port 35422 ssh2
+Nov 12 03:26:22 web01 sshd[3112]: Accepted publickey for dave from 10.0.0.14 port 52924 ssh2
+Nov 12 03:27:50 web01 sudo: carol : TTY=pts/2 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 03:28:43 web01 sshd[3113]: Accepted publickey for carol from 10.0.0.13 port 44813 ssh2
+Nov 12 03:29:26 web01 sshd[3114]: Connection closed by 10.0.0.15 port 57909 [preauth]
+Nov 12 03:30:53 web01 sshd[3115]: Accepted publickey for jenkins from 10.0.0.15 port 36169 ssh2
+Nov 12 03:32:20 web01 sshd[3116]: Accepted publickey for dave from 10.0.0.14 port 56265 ssh2
+Nov 12 03:33:27 web01 sshd[3117]: Accepted publickey for deploy from 10.0.0.9 port 39485 ssh2
+Nov 12 03:34:13 web01 sudo: jenkins : TTY=pts/0 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 03:35:12 web01 sudo: alice : TTY=pts/2 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 03:36:41 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 03:37:39 web01 sudo: jenkins : TTY=pts/3 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 03:39:14 web01 sshd[3118]: Connection closed by 10.0.0.9 port 47175 [preauth]
+Nov 12 03:40:34 web01 sudo: jenkins : TTY=pts/1 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 03:41:24 web01 sshd[3119]: Accepted publickey for bob from 10.0.0.12 port 50778 ssh2
+Nov 12 03:42:25 web01 sshd[3120]: Connection closed by 10.0.0.15 port 36286 [preauth]
+Nov 12 03:44:09 web01 sshd[3121]: Accepted publickey for jenkins from 10.0.0.15 port 40438 ssh2
+Nov 12 03:45:16 web01 sudo: deploy : TTY=pts/2 ; PWD=/var/www ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 03:46:41 web01 sshd[3122]: Connection closed by 10.0.0.9 port 37747 [preauth]
+Nov 12 03:47:32 web01 sshd[3123]: Accepted publickey for jenkins from 10.0.0.15 port 37579 ssh2
+Nov 12 03:49:05 web01 sshd[3124]: Accepted publickey for deploy from 10.0.0.9 port 45531 ssh2
+Nov 12 03:49:59 web01 sudo: carol : TTY=pts/1 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 03:51:26 web01 sudo: bob : TTY=pts/2 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 03:52:28 web01 sudo: jenkins : TTY=pts/1 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 03:53:33 web01 sudo: carol : TTY=pts/3 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 03:55:09 web01 sudo: alice : TTY=pts/3 ; PWD=/home/alice ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 03:56:27 web01 sudo: deploy : TTY=pts/0 ; PWD=/var/www ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 03:57:22 web01 sshd[3125]: Accepted publickey for jenkins from 10.0.0.15 port 30126 ssh2
+Nov 12 03:58:26 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 04:00:07 web01 sshd[3126]: Accepted publickey for deploy from 10.0.0.9 port 55072 ssh2
+Nov 12 04:01:17 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 04:02:25 web01 sshd[3127]: Accepted publickey for dave from 10.0.0.14 port 50063 ssh2
+Nov 12 04:04:03 web01 sshd[3128]: Accepted publickey for dave from 10.0.0.14 port 55985 ssh2
+Nov 12 04:05:17 web01 sshd[3129]: Accepted publickey for jenkins from 10.0.0.15 port 31651 ssh2
+Nov 12 04:06:26 web01 sshd[3130]: Accepted publickey for carol from 10.0.0.13 port 49174 ssh2
+Nov 12 04:07:19 web01 sshd[3131]: Accepted publickey for alice from 10.0.0.11 port 52230 ssh2
+Nov 12 04:09:00 web01 sshd[3132]: Accepted publickey for jenkins from 10.0.0.15 port 53426 ssh2
+Nov 12 04:10:24 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 04:11:05 web01 sshd[3133]: Accepted publickey for carol from 10.0.0.13 port 30058 ssh2
+Nov 12 04:12:53 web01 sudo: carol : TTY=pts/2 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 04:13:59 web01 sudo: jenkins : TTY=pts/1 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 04:14:50 web01 sudo: alice : TTY=pts/2 ; PWD=/home/alice ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 04:16:29 web01 sshd[3134]: Accepted publickey for dave from 10.0.0.14 port 39899 ssh2
+Nov 12 04:17:34 web01 sshd[3135]: Accepted publickey for bob from 10.0.0.12 port 32767 ssh2
+Nov 12 04:18:32 web01 sshd[3136]: Accepted publickey for jenkins from 10.0.0.15 port 33539 ssh2
+Nov 12 04:20:08 web01 sudo: alice : TTY=pts/2 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 04:21:09 web01 sshd[3137]: Accepted publickey for bob from 10.0.0.12 port 36468 ssh2
+Nov 12 04:22:33 web01 sudo: carol : TTY=pts/2 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 04:23:41 web01 sshd[3138]: Connection closed by 10.0.0.13 port 57192 [preauth]
+Nov 12 04:24:27 web01 sudo: bob : TTY=pts/0 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 04:25:52 web01 sshd[3139]: Accepted publickey for alice from 10.0.0.11 port 56169 ssh2
+Nov 12 04:26:33 web01 sshd[3140]: Accepted publickey for jenkins from 10.0.0.15 port 54128 ssh2
+Nov 12 04:27:30 web01 sshd[3141]: Accepted publickey for jenkins from 10.0.0.15 port 30110 ssh2
+Nov 12 04:28:32 web01 sshd[3142]: Accepted publickey for dave from 10.0.0.14 port 38270 ssh2
+Nov 12 04:30:15 web01 sshd[3143]: Accepted publickey for alice from 10.0.0.11 port 37405 ssh2
+Nov 12 04:30:57 web01 sshd[3144]: Accepted publickey for deploy from 10.0.0.9 port 47461 ssh2
+Nov 12 04:32:14 web01 sshd[3145]: Accepted publickey for jenkins from 10.0.0.15 port 55821 ssh2
+Nov 12 04:33:02 web01 sshd[3146]: Accepted publickey for jenkins from 10.0.0.15 port 53884 ssh2
+Nov 12 04:34:12 web01 sshd[3147]: Accepted publickey for bob from 10.0.0.12 port 55954 ssh2
+Nov 12 04:35:47 web01 sudo: bob : TTY=pts/3 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 04:37:10 web01 sudo: bob : TTY=pts/3 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 04:38:50 web01 sshd[3148]: Accepted publickey for dave from 10.0.0.14 port 52607 ssh2
+Nov 12 04:40:16 web01 sshd[3149]: Accepted publickey for carol from 10.0.0.13 port 52978 ssh2
+Nov 12 04:40:58 web01 sshd[3150]: Accepted publickey for dave from 10.0.0.14 port 45770 ssh2
+Nov 12 04:42:28 web01 sudo: alice : TTY=pts/3 ; PWD=/home/alice ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 04:43:28 web01 sudo: alice : TTY=pts/2 ; PWD=/home/alice ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 04:44:15 web01 sshd[3151]: Accepted publickey for deploy from 10.0.0.9 port 58022 ssh2
+Nov 12 04:45:31 web01 sshd[3152]: Accepted publickey for deploy from 10.0.0.9 port 48948 ssh2
+Nov 12 04:46:46 web01 sshd[3153]: Connection closed by 10.0.0.11 port 47310 [preauth]
+Nov 12 04:47:34 web01 sshd[3154]: Accepted publickey for deploy from 10.0.0.9 port 34477 ssh2
+Nov 12 04:49:04 web01 sudo: carol : TTY=pts/1 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 04:50:39 web01 sshd[3155]: Accepted publickey for alice from 10.0.0.11 port 54102 ssh2
+Nov 12 04:52:18 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 04:53:09 web01 sudo: dave : TTY=pts/3 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 04:54:31 web01 sshd[3156]: Accepted publickey for dave from 10.0.0.14 port 50725 ssh2
+Nov 12 04:55:26 web01 sshd[3157]: Accepted publickey for carol from 10.0.0.13 port 44811 ssh2
+Nov 12 04:57:00 web01 sshd[3158]: Accepted publickey for jenkins from 10.0.0.15 port 45610 ssh2
+Nov 12 04:57:59 web01 sudo: deploy : TTY=pts/2 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 04:58:49 web01 sudo: carol : TTY=pts/3 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 05:00:03 web01 sshd[3159]: Accepted publickey for bob from 10.0.0.12 port 30220 ssh2
+Nov 12 05:01:49 web01 sshd[3160]: Accepted publickey for carol from 10.0.0.13 port 39964 ssh2
+Nov 12 05:02:39 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 05:03:30 web01 sshd[3161]: Accepted publickey for deploy from 10.0.0.9 port 59766 ssh2
+Nov 12 05:04:18 web01 sshd[3162]: Accepted publickey for carol from 10.0.0.13 port 57001 ssh2
+Nov 12 05:05:27 web01 sshd[3163]: Accepted publickey for jenkins from 10.0.0.15 port 35045 ssh2
+Nov 12 05:06:22 web01 sudo: alice : TTY=pts/1 ; PWD=/home/alice ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 05:08:06 web01 sshd[3164]: Accepted publickey for jenkins from 10.0.0.15 port 30532 ssh2
+Nov 12 05:09:24 web01 sudo: bob : TTY=pts/3 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 05:10:40 web01 sudo: alice : TTY=pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 05:11:28 web01 sshd[3165]: Accepted publickey for dave from 10.0.0.14 port 59264 ssh2
+Nov 12 05:12:23 web01 sshd[3166]: Accepted publickey for deploy from 10.0.0.9 port 31942 ssh2
+Nov 12 05:13:33 web01 sudo: carol : TTY=pts/1 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 05:14:34 web01 sshd[3167]: Accepted publickey for carol from 10.0.0.13 port 47279 ssh2
+Nov 12 05:16:01 web01 sshd[3168]: Accepted publickey for carol from 10.0.0.13 port 35197 ssh2
+Nov 12 05:17:22 web01 sshd[3169]: Accepted publickey for carol from 10.0.0.13 port 41494 ssh2
+Nov 12 05:18:33 web01 sudo: jenkins : TTY=pts/0 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 05:20:14 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 05:21:58 web01 sudo: carol : TTY=pts/1 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 05:23:07 web01 sshd[3170]: Accepted publickey for alice from 10.0.0.11 port 48062 ssh2
+Nov 12 05:24:35 web01 sshd[3171]: Accepted publickey for carol from 10.0.0.13 port 31945 ssh2
+Nov 12 05:25:55 web01 sshd[3172]: Accepted publickey for jenkins from 10.0.0.15 port 42043 ssh2
+Nov 12 05:27:15 web01 sshd[3173]: Accepted publickey for bob from 10.0.0.12 port 35664 ssh2
+Nov 12 05:29:04 web01 sshd[3174]: Accepted publickey for dave from 10.0.0.14 port 36626 ssh2
+Nov 12 05:30:31 web01 sshd[3175]: Accepted publickey for bob from 10.0.0.12 port 49729 ssh2
+Nov 12 05:31:36 web01 sshd[3176]: Accepted publickey for jenkins from 10.0.0.15 port 38209 ssh2
+Nov 12 05:32:25 web01 sshd[3177]: Connection closed by 10.0.0.9 port 38157 [preauth]
+Nov 12 05:33:43 web01 sshd[3178]: Accepted publickey for carol from 10.0.0.13 port 34024 ssh2
+Nov 12 05:35:20 web01 sshd[3179]: Accepted publickey for bob from 10.0.0.12 port 40586 ssh2
+Nov 12 05:36:08 web01 sshd[3180]: Accepted publickey for bob from 10.0.0.12 port 46659 ssh2
+Nov 12 05:37:36 web01 sshd[3181]: Connection closed by 10.0.0.13 port 38349 [preauth]
+Nov 12 05:38:46 web01 sudo: bob : TTY=pts/0 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 05:39:28 web01 sshd[3182]: Accepted publickey for dave from 10.0.0.14 port 56112 ssh2
+Nov 12 05:40:52 web01 sshd[3183]: Connection closed by 10.0.0.11 port 56693 [preauth]
+Nov 12 05:41:51 web01 sudo: carol : TTY=pts/1 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 05:42:36 web01 sshd[3184]: Accepted publickey for bob from 10.0.0.12 port 59082 ssh2
+Nov 12 05:43:34 web01 sudo: jenkins : TTY=pts/0 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 05:44:14 web01 sshd[3185]: Accepted publickey for deploy from 10.0.0.9 port 30687 ssh2
+Nov 12 05:45:12 web01 sudo: alice : TTY=pts/2 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 05:46:59 web01 sshd[3186]: Accepted publickey for deploy from 10.0.0.9 port 46830 ssh2
+Nov 12 05:47:44 web01 sudo: jenkins : TTY=pts/1 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 05:48:30 web01 sudo: bob : TTY=pts/2 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 05:50:05 web01 sshd[3187]: Accepted publickey for alice from 10.0.0.11 port 53905 ssh2
+Nov 12 05:51:06 web01 sshd[3188]: Accepted publickey for alice from 10.0.0.11 port 46014 ssh2
+Nov 12 05:52:32 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 05:53:21 web01 sshd[3189]: Accepted publickey for bob from 10.0.0.12 port 37915 ssh2
+Nov 12 05:54:15 web01 sshd[3190]: Accepted publickey for alice from 10.0.0.11 port 43383 ssh2
+Nov 12 05:55:56 web01 sudo: alice : TTY=pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 05:56:52 web01 sshd[3191]: Connection closed by 10.0.0.11 port 39254 [preauth]
+Nov 12 05:58:17 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 05:59:33 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 06:00:49 web01 sshd[3192]: Connection closed by 10.0.0.14 port 32076 [preauth]
+Nov 12 06:02:01 web01 sshd[3193]: Connection closed by 10.0.0.11 port 42028 [preauth]
+Nov 12 06:03:25 web01 sshd[3194]: Accepted publickey for dave from 10.0.0.14 port 57474 ssh2
+Nov 12 06:04:58 web01 sshd[3195]: Accepted publickey for bob from 10.0.0.12 port 38713 ssh2
+Nov 12 06:06:39 web01 sshd[3196]: Accepted publickey for carol from 10.0.0.13 port 49169 ssh2
+Nov 12 06:07:53 web01 sshd[3197]: Accepted publickey for bob from 10.0.0.12 port 59258 ssh2
+Nov 12 06:08:45 web01 sshd[3198]: Connection closed by 10.0.0.12 port 40795 [preauth]
+Nov 12 06:10:27 web01 sshd[3199]: Connection closed by 10.0.0.12 port 51424 [preauth]
+Nov 12 06:11:48 web01 sudo: dave : TTY=pts/0 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 06:12:54 web01 sshd[3200]: Accepted publickey for alice from 10.0.0.11 port 37545 ssh2
+Nov 12 06:14:38 web01 sshd[3201]: Accepted publickey for dave from 10.0.0.14 port 35653 ssh2
+Nov 12 06:15:46 web01 sshd[3202]: Accepted publickey for dave from 10.0.0.14 port 52907 ssh2
+Nov 12 06:17:31 web01 sudo: bob : TTY=pts/3 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 06:18:31 web01 sudo: dave : TTY=pts/3 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 06:20:01 web01 sudo: jenkins : TTY=pts/2 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 06:20:57 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 06:21:44 web01 sshd[3203]: Accepted publickey for alice from 10.0.0.11 port 32418 ssh2
+Nov 12 06:23:26 web01 sshd[3204]: Connection closed by 10.0.0.15 port 40403 [preauth]
+Nov 12 06:25:08 web01 sshd[3205]: Accepted publickey for alice from 10.0.0.11 port 33478 ssh2
+Nov 12 06:26:07 web01 sudo: jenkins : TTY=pts/2 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 06:27:12 web01 sshd[3206]: Accepted publickey for dave from 10.0.0.14 port 59833 ssh2
+Nov 12 06:28:13 web01 sudo: jenkins : TTY=pts/1 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 06:29:57 web01 sudo: jenkins : TTY=pts/1 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 06:30:58 web01 sshd[3207]: Accepted publickey for dave from 10.0.0.14 port 35086 ssh2
+Nov 12 06:32:21 web01 sudo: jenkins : TTY=pts/3 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 06:33:19 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 06:34:54 web01 sudo: jenkins : TTY=pts/0 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 06:36:31 web01 sudo: deploy : TTY=pts/1 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 06:37:14 web01 sshd[3208]: Connection closed by 10.0.0.9 port 44550 [preauth]
+Nov 12 06:38:30 web01 sshd[3209]: Accepted publickey for deploy from 10.0.0.9 port 50395 ssh2
+Nov 12 06:39:48 web01 sshd[3210]: Accepted publickey for bob from 10.0.0.12 port 30562 ssh2
+Nov 12 06:41:32 web01 sshd[3211]: Accepted publickey for jenkins from 10.0.0.15 port 40096 ssh2
+Nov 12 06:42:24 web01 sshd[3212]: Accepted publickey for alice from 10.0.0.11 port 49590 ssh2
+Nov 12 06:44:06 web01 sshd[3213]: Accepted publickey for carol from 10.0.0.13 port 37783 ssh2
+Nov 12 06:45:30 web01 sshd[3214]: Accepted publickey for jenkins from 10.0.0.15 port 30818 ssh2
+Nov 12 06:46:48 web01 sshd[3215]: Accepted publickey for jenkins from 10.0.0.15 port 34704 ssh2
+Nov 12 06:47:38 web01 sshd[3216]: Accepted publickey for bob from 10.0.0.12 port 49389 ssh2
+Nov 12 06:49:16 web01 sshd[3217]: Accepted publickey for carol from 10.0.0.13 port 51871 ssh2
+Nov 12 06:50:50 web01 sudo: carol : TTY=pts/3 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 06:52:01 web01 sshd[3218]: Connection closed by 10.0.0.11 port 34527 [preauth]
+Nov 12 06:53:35 web01 sshd[3219]: Accepted publickey for deploy from 10.0.0.9 port 59638 ssh2
+Nov 12 06:54:27 web01 sshd[3220]: Connection closed by 10.0.0.9 port 41575 [preauth]
+Nov 12 06:55:15 web01 sshd[3221]: Connection closed by 10.0.0.14 port 53711 [preauth]
+Nov 12 06:56:20 web01 sudo: alice : TTY=pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 06:57:58 web01 sshd[3222]: Accepted publickey for carol from 10.0.0.13 port 57481 ssh2
+Nov 12 06:59:27 web01 sshd[3223]: Accepted publickey for deploy from 10.0.0.9 port 44585 ssh2
+Nov 12 07:00:21 web01 sshd[3224]: Accepted publickey for bob from 10.0.0.12 port 57793 ssh2
+Nov 12 07:02:03 web01 sshd[3225]: Accepted publickey for dave from 10.0.0.14 port 31047 ssh2
+Nov 12 07:03:35 web01 sshd[3226]: Accepted publickey for alice from 10.0.0.11 port 50783 ssh2
+Nov 12 07:04:42 web01 sshd[3227]: Accepted publickey for jenkins from 10.0.0.15 port 49031 ssh2
+Nov 12 07:05:52 web01 sshd[3228]: Accepted publickey for jenkins from 10.0.0.15 port 41283 ssh2
+Nov 12 07:07:17 web01 sudo: jenkins : TTY=pts/0 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 07:08:58 web01 sshd[3229]: Accepted publickey for carol from 10.0.0.13 port 55407 ssh2
+Nov 12 07:10:48 web01 sshd[3230]: Connection closed by 10.0.0.13 port 50465 [preauth]
+Nov 12 07:11:32 web01 sshd[3231]: Accepted publickey for alice from 10.0.0.11 port 31310 ssh2
+Nov 12 07:12:12 web01 sshd[3232]: Connection closed by 10.0.0.9 port 36024 [preauth]
+Nov 12 07:13:32 web01 sshd[3233]: Accepted publickey for bob from 10.0.0.12 port 47018 ssh2
+Nov 12 07:14:32 web01 sshd[3234]: Connection closed by 10.0.0.13 port 42628 [preauth]
+Nov 12 07:16:15 web01 sshd[3235]: Accepted publickey for carol from 10.0.0.13 port 56346 ssh2
+Nov 12 07:17:10 web01 sshd[3236]: Accepted publickey for alice from 10.0.0.11 port 52212 ssh2
+Nov 12 07:18:11 web01 sudo: alice : TTY=pts/1 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 07:19:00 web01 sshd[3237]: Accepted publickey for carol from 10.0.0.13 port 30355 ssh2
+Nov 12 07:20:43 web01 sshd[3238]: Accepted publickey for deploy from 10.0.0.9 port 56738 ssh2
+Nov 12 07:21:30 web01 sudo: dave : TTY=pts/0 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 07:22:47 web01 sshd[3239]: Connection closed by 10.0.0.14 port 40303 [preauth]
+Nov 12 07:23:34 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 07:24:42 web01 sshd[3240]: Accepted publickey for deploy from 10.0.0.9 port 41475 ssh2
+Nov 12 07:26:16 web01 sshd[3241]: Accepted publickey for bob from 10.0.0.12 port 33872 ssh2
+Nov 12 07:28:02 web01 sudo: dave : TTY=pts/0 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 07:28:47 web01 sshd[3242]: Accepted publickey for bob from 10.0.0.12 port 33495 ssh2
+Nov 12 07:30:10 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 07:31:41 web01 sudo: jenkins : TTY=pts/2 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 07:33:27 web01 sshd[3243]: Accepted publickey for carol from 10.0.0.13 port 36542 ssh2
+Nov 12 07:35:10 web01 sudo: carol : TTY=pts/3 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 07:36:51 web01 sshd[3244]: Connection closed by 10.0.0.14 port 30281 [preauth]
+Nov 12 07:38:15 web01 sshd[3245]: Accepted publickey for carol from 10.0.0.13 port 39570 ssh2
+Nov 12 07:39:09 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 07:40:33 web01 sshd[3246]: Connection closed by 10.0.0.13 port 53005 [preauth]
+Nov 12 07:42:03 web01 sshd[3247]: Accepted publickey for jenkins from 10.0.0.15 port 41118 ssh2
+Nov 12 07:43:16 web01 sshd[3248]: Accepted publickey for deploy from 10.0.0.9 port 39570 ssh2
+Nov 12 07:44:16 web01 sshd[3249]: Accepted publickey for carol from 10.0.0.13 port 52955 ssh2
+Nov 12 07:45:22 web01 sshd[3250]: Connection closed by 10.0.0.13 port 42433 [preauth]
+Nov 12 07:46:25 web01 sudo: jenkins : TTY=pts/2 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 07:47:45 web01 sudo: jenkins : TTY=pts/2 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 07:49:18 web01 sudo: alice : TTY=pts/2 ; PWD=/home/alice ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 07:50:08 web01 sudo: jenkins : TTY=pts/2 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 07:50:53 web01 sudo: dave : TTY=pts/0 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 07:51:54 web01 sshd[3251]: Accepted publickey for carol from 10.0.0.13 port 35384 ssh2
+Nov 12 07:53:41 web01 sshd[3252]: Accepted publickey for alice from 10.0.0.11 port 32561 ssh2
+Nov 12 07:54:50 web01 sudo: deploy : TTY=pts/0 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 07:56:17 web01 sudo: jenkins : TTY=pts/0 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 07:57:23 web01 sshd[3253]: Accepted publickey for alice from 10.0.0.11 port 57551 ssh2
+Nov 12 07:58:30 web01 sshd[3254]: Accepted publickey for alice from 10.0.0.11 port 44723 ssh2
+Nov 12 08:00:14 web01 sudo: jenkins : TTY=pts/2 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 08:01:06 web01 sshd[3255]: Accepted publickey for bob from 10.0.0.12 port 38082 ssh2
+Nov 12 08:01:54 web01 sshd[3256]: Accepted publickey for jenkins from 10.0.0.15 port 43761 ssh2
+Nov 12 08:02:47 web01 sudo: jenkins : TTY=pts/3 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 08:04:35 web01 sshd[3257]: Connection closed by 10.0.0.14 port 57675 [preauth]
+Nov 12 08:06:15 web01 sshd[3258]: Accepted publickey for jenkins from 10.0.0.15 port 59792 ssh2
+Nov 12 08:08:02 web01 sshd[3259]: Accepted publickey for bob from 10.0.0.12 port 45400 ssh2
+Nov 12 08:09:31 web01 sudo: jenkins : TTY=pts/0 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 08:10:45 web01 sshd[3260]: Accepted publickey for deploy from 10.0.0.9 port 33041 ssh2
+Nov 12 08:11:51 web01 sudo: carol : TTY=pts/3 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 08:13:34 web01 sudo: alice : TTY=pts/1 ; PWD=/home/alice ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 08:14:21 web01 sshd[3261]: Accepted publickey for dave from 10.0.0.14 port 31215 ssh2
+Nov 12 08:15:00 web01 sshd[3788]: Failed password for root from 198.51.100.23 port 40010 ssh2
+Nov 12 08:15:05 web01 sshd[3789]: Failed password for root from 198.51.100.23 port 40011 ssh2
+Nov 12 08:15:10 web01 sshd[3790]: Failed password for root from 198.51.100.23 port 40012 ssh2
+Nov 12 08:15:15 web01 sshd[3791]: Failed password for root from 198.51.100.23 port 40013 ssh2
+Nov 12 08:15:20 web01 sshd[3792]: Failed password for root from 198.51.100.23 port 40014 ssh2
+Nov 12 08:15:25 web01 sshd[3793]: Failed password for root from 198.51.100.23 port 40015 ssh2
+Nov 12 08:15:30 web01 sshd[3794]: Failed password for root from 198.51.100.23 port 40016 ssh2
+Nov 12 08:15:35 web01 sshd[3795]: Failed password for root from 198.51.100.23 port 40017 ssh2
+Nov 12 08:16:09 web01 sshd[3262]: Connection closed by 10.0.0.14 port 55507 [preauth]
+Nov 12 08:17:39 web01 sshd[3263]: Connection closed by 10.0.0.15 port 44842 [preauth]
+Nov 12 08:18:20 web01 sshd[3264]: Accepted publickey for carol from 10.0.0.13 port 42842 ssh2
+Nov 12 08:19:23 web01 sudo: deploy : TTY=pts/0 ; PWD=/var/www ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 08:20:12 web01 sshd[3265]: Accepted publickey for alice from 10.0.0.11 port 31080 ssh2
+Nov 12 08:21:20 web01 sshd[3266]: Accepted publickey for deploy from 10.0.0.9 port 30901 ssh2
+Nov 12 08:22:09 web01 sshd[3267]: Accepted publickey for carol from 10.0.0.13 port 53256 ssh2
+Nov 12 08:23:23 web01 sshd[3268]: Connection closed by 10.0.0.11 port 57850 [preauth]
+Nov 12 08:24:16 web01 sshd[3269]: Accepted publickey for carol from 10.0.0.13 port 39854 ssh2
+Nov 12 08:25:35 web01 sshd[3270]: Accepted publickey for alice from 10.0.0.11 port 42772 ssh2
+Nov 12 08:26:32 web01 sshd[3271]: Connection closed by 10.0.0.11 port 57717 [preauth]
+Nov 12 08:28:07 web01 sudo: deploy : TTY=pts/2 ; PWD=/var/www ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 08:29:13 web01 sudo: deploy : TTY=pts/0 ; PWD=/var/www ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 08:30:14 web01 sshd[3272]: Connection closed by 10.0.0.11 port 48029 [preauth]
+Nov 12 08:31:27 web01 sshd[3273]: Accepted publickey for dave from 10.0.0.14 port 57851 ssh2
+Nov 12 08:32:53 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 08:34:26 web01 sudo: carol : TTY=pts/0 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 08:35:55 web01 sshd[3274]: Accepted publickey for carol from 10.0.0.13 port 50523 ssh2
+Nov 12 08:37:13 web01 sshd[3275]: Accepted publickey for bob from 10.0.0.12 port 48698 ssh2
+Nov 12 08:37:56 web01 sudo: jenkins : TTY=pts/2 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 08:39:39 web01 sshd[3276]: Accepted publickey for alice from 10.0.0.11 port 33263 ssh2
+Nov 12 08:41:16 web01 sshd[3277]: Accepted publickey for bob from 10.0.0.12 port 51816 ssh2
+Nov 12 08:42:02 web01 sshd[3278]: Accepted publickey for deploy from 10.0.0.9 port 32791 ssh2
+Nov 12 08:43:15 web01 sshd[3279]: Connection closed by 10.0.0.15 port 59486 [preauth]
+Nov 12 08:44:06 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 08:44:55 web01 sshd[3280]: Accepted publickey for jenkins from 10.0.0.15 port 53249 ssh2
+Nov 12 08:46:12 web01 sshd[3281]: Accepted publickey for bob from 10.0.0.12 port 39560 ssh2
+Nov 12 08:47:47 web01 sudo: bob : TTY=pts/2 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 08:48:58 web01 sshd[3282]: Accepted publickey for dave from 10.0.0.14 port 41730 ssh2
+Nov 12 08:50:38 web01 sshd[3283]: Accepted publickey for deploy from 10.0.0.9 port 52093 ssh2
+Nov 12 08:51:41 web01 sudo: bob : TTY=pts/0 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 08:53:13 web01 sshd[3284]: Connection closed by 10.0.0.12 port 38079 [preauth]
+Nov 12 08:53:53 web01 sudo: bob : TTY=pts/3 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 08:55:19 web01 sshd[3285]: Connection closed by 10.0.0.11 port 50215 [preauth]
+Nov 12 08:56:32 web01 sshd[3286]: Connection closed by 10.0.0.15 port 33727 [preauth]
+Nov 12 08:57:56 web01 sshd[3287]: Accepted publickey for jenkins from 10.0.0.15 port 32979 ssh2
+Nov 12 08:58:46 web01 sshd[3288]: Accepted publickey for alice from 10.0.0.11 port 33183 ssh2
+Nov 12 08:59:46 web01 sudo: deploy : TTY=pts/2 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 09:00:35 web01 sshd[3289]: Accepted publickey for bob from 10.0.0.12 port 44145 ssh2
+Nov 12 09:01:56 web01 sshd[3290]: Connection closed by 10.0.0.11 port 58593 [preauth]
+Nov 12 09:03:45 web01 sshd[3291]: Accepted publickey for alice from 10.0.0.11 port 36887 ssh2
+Nov 12 09:05:27 web01 sudo: dave : TTY=pts/3 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 09:06:23 web01 sshd[3292]: Accepted publickey for alice from 10.0.0.11 port 53434 ssh2
+Nov 12 09:07:09 web01 sshd[3293]: Accepted publickey for deploy from 10.0.0.9 port 34747 ssh2
+Nov 12 09:08:07 web01 sudo: bob : TTY=pts/0 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 09:09:50 web01 sshd[3294]: Accepted publickey for deploy from 10.0.0.9 port 52907 ssh2
+Nov 12 09:10:39 web01 sshd[3295]: Accepted publickey for alice from 10.0.0.11 port 33750 ssh2
+Nov 12 09:12:20 web01 sudo: carol : TTY=pts/3 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 09:13:39 web01 sshd[3296]: Connection closed by 10.0.0.9 port 36557 [preauth]
+Nov 12 09:14:46 web01 sudo: dave : TTY=pts/3 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 09:16:20 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 09:17:33 web01 sshd[3297]: Accepted publickey for deploy from 10.0.0.9 port 59511 ssh2
+Nov 12 09:19:16 web01 sshd[3298]: Accepted publickey for alice from 10.0.0.11 port 59369 ssh2
+Nov 12 09:20:45 web01 sshd[3299]: Accepted publickey for dave from 10.0.0.14 port 52653 ssh2
+Nov 12 09:21:36 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 09:22:18 web01 sshd[3300]: Accepted publickey for deploy from 10.0.0.9 port 56160 ssh2
+Nov 12 09:24:04 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 09:25:04 web01 sshd[3301]: Accepted publickey for alice from 10.0.0.11 port 49618 ssh2
+Nov 12 09:26:20 web01 sshd[3302]: Accepted publickey for dave from 10.0.0.14 port 42736 ssh2
+Nov 12 09:27:40 web01 sudo: jenkins : TTY=pts/1 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 09:28:21 web01 sudo: bob : TTY=pts/0 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 09:29:11 web01 sshd[3303]: Accepted publickey for jenkins from 10.0.0.15 port 51763 ssh2
+Nov 12 09:30:07 web01 sshd[3304]: Accepted publickey for carol from 10.0.0.13 port 36967 ssh2
+Nov 12 09:31:22 web01 sshd[3305]: Accepted publickey for alice from 10.0.0.11 port 44909 ssh2
+Nov 12 09:32:06 web01 sshd[3306]: Accepted publickey for bob from 10.0.0.12 port 59444 ssh2
+Nov 12 09:33:20 web01 sshd[3307]: Accepted publickey for alice from 10.0.0.11 port 37101 ssh2
+Nov 12 09:35:00 web01 sshd[3308]: Accepted publickey for bob from 10.0.0.12 port 46838 ssh2
+Nov 12 09:36:37 web01 sshd[3309]: Accepted publickey for carol from 10.0.0.13 port 36757 ssh2
+Nov 12 09:37:41 web01 sshd[3310]: Accepted publickey for carol from 10.0.0.13 port 32386 ssh2
+Nov 12 09:38:24 web01 sshd[3311]: Connection closed by 10.0.0.15 port 55161 [preauth]
+Nov 12 09:39:53 web01 sshd[3312]: Connection closed by 10.0.0.11 port 46296 [preauth]
+Nov 12 09:40:00 web01 sshd[3796]: Failed password for admin from 203.0.113.77 port 41000 ssh2
+Nov 12 09:40:08 web01 sshd[3797]: Failed password for admin from 203.0.113.77 port 41001 ssh2
+Nov 12 09:40:16 web01 sshd[3798]: Failed password for admin from 203.0.113.77 port 41002 ssh2
+Nov 12 09:40:24 web01 sshd[3799]: Failed password for admin from 203.0.113.77 port 41003 ssh2
+Nov 12 09:40:32 web01 sshd[3800]: Failed password for admin from 203.0.113.77 port 41004 ssh2
+Nov 12 09:40:40 web01 sshd[3801]: Failed password for admin from 203.0.113.77 port 41005 ssh2
+Nov 12 09:41:05 web01 sshd[3802]: Accepted password for admin from 203.0.113.77 port 41099 ssh2
+Nov 12 09:41:08 web01 sshd[3313]: Accepted publickey for jenkins from 10.0.0.15 port 49041 ssh2
+Nov 12 09:41:25 web01 sudo: admin : TTY=pts/4 ; PWD=/home/admin ; USER=root ; COMMAND=/bin/cat /etc/shadow
+Nov 12 09:41:40 web01 sudo: admin : TTY=pts/4 ; PWD=/home/admin ; USER=root ; COMMAND=/usr/bin/cat /root/.ssh/id_rsa
+Nov 12 09:42:23 web01 sshd[3314]: Connection closed by 10.0.0.14 port 59066 [preauth]
+Nov 12 09:43:14 web01 sshd[3315]: Connection closed by 10.0.0.12 port 42836 [preauth]
+Nov 12 09:44:16 web01 sudo: alice : TTY=pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 09:45:59 web01 sudo: bob : TTY=pts/3 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 09:47:14 web01 sshd[3316]: Connection closed by 10.0.0.11 port 44180 [preauth]
+Nov 12 09:48:15 web01 sshd[3317]: Accepted publickey for carol from 10.0.0.13 port 56009 ssh2
+Nov 12 09:48:59 web01 sshd[3318]: Accepted publickey for jenkins from 10.0.0.15 port 31142 ssh2
+Nov 12 09:50:07 web01 sshd[3319]: Accepted publickey for dave from 10.0.0.14 port 55998 ssh2
+Nov 12 09:50:53 web01 sshd[3320]: Accepted publickey for bob from 10.0.0.12 port 58498 ssh2
+Nov 12 09:52:32 web01 sshd[3321]: Accepted publickey for deploy from 10.0.0.9 port 48542 ssh2
+Nov 12 09:53:19 web01 sudo: carol : TTY=pts/0 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 09:54:49 web01 sshd[3322]: Accepted publickey for dave from 10.0.0.14 port 35175 ssh2
+Nov 12 09:56:19 web01 sshd[3323]: Accepted publickey for bob from 10.0.0.12 port 41750 ssh2
+Nov 12 09:57:49 web01 sshd[3324]: Accepted publickey for carol from 10.0.0.13 port 51854 ssh2
+Nov 12 09:59:38 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 10:01:13 web01 sshd[3325]: Accepted publickey for deploy from 10.0.0.9 port 39240 ssh2
+Nov 12 10:02:24 web01 sudo: deploy : TTY=pts/0 ; PWD=/var/www ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 10:03:04 web01 sudo: carol : TTY=pts/3 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 10:04:25 web01 sudo: bob : TTY=pts/2 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 10:05:08 web01 sudo: alice : TTY=pts/1 ; PWD=/home/alice ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 10:06:36 web01 sshd[3326]: Accepted publickey for alice from 10.0.0.11 port 58612 ssh2
+Nov 12 10:07:22 web01 sudo: bob : TTY=pts/2 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 10:08:19 web01 sudo: dave : TTY=pts/0 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 10:09:32 web01 sshd[3327]: Accepted publickey for deploy from 10.0.0.9 port 39937 ssh2
+Nov 12 10:10:31 web01 sshd[3328]: Accepted publickey for dave from 10.0.0.14 port 44356 ssh2
+Nov 12 10:11:35 web01 sudo: jenkins : TTY=pts/3 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 10:12:31 web01 sudo: jenkins : TTY=pts/0 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 10:13:23 web01 sudo: carol : TTY=pts/3 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 10:14:39 web01 sudo: alice : TTY=pts/2 ; PWD=/home/alice ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 10:15:22 web01 sshd[3329]: Accepted publickey for carol from 10.0.0.13 port 47786 ssh2
+Nov 12 10:17:08 web01 sshd[3330]: Accepted publickey for deploy from 10.0.0.9 port 59698 ssh2
+Nov 12 10:17:55 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 10:18:56 web01 sshd[3331]: Connection closed by 10.0.0.11 port 55142 [preauth]
+Nov 12 10:20:39 web01 sudo: alice : TTY=pts/2 ; PWD=/home/alice ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 10:22:15 web01 sshd[3332]: Accepted publickey for jenkins from 10.0.0.15 port 54007 ssh2
+Nov 12 10:23:20 web01 sshd[3333]: Connection closed by 10.0.0.9 port 46911 [preauth]
+Nov 12 10:25:07 web01 sshd[3334]: Connection closed by 10.0.0.12 port 39451 [preauth]
+Nov 12 10:26:11 web01 sshd[3335]: Accepted publickey for bob from 10.0.0.12 port 38439 ssh2
+Nov 12 10:27:46 web01 sshd[3336]: Accepted publickey for bob from 10.0.0.12 port 48275 ssh2
+Nov 12 10:29:19 web01 sshd[3337]: Accepted publickey for jenkins from 10.0.0.15 port 56004 ssh2
+Nov 12 10:30:30 web01 sudo: deploy : TTY=pts/0 ; PWD=/var/www ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 10:32:18 web01 sshd[3338]: Accepted publickey for alice from 10.0.0.11 port 59518 ssh2
+Nov 12 10:33:25 web01 sshd[3339]: Accepted publickey for alice from 10.0.0.11 port 45845 ssh2
+Nov 12 10:34:21 web01 sudo: jenkins : TTY=pts/3 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 10:35:16 web01 sshd[3340]: Connection closed by 10.0.0.15 port 47623 [preauth]
+Nov 12 10:36:53 web01 sshd[3341]: Connection closed by 10.0.0.9 port 47303 [preauth]
+Nov 12 10:37:34 web01 sshd[3342]: Accepted publickey for deploy from 10.0.0.9 port 36337 ssh2
+Nov 12 10:39:00 web01 sshd[3343]: Accepted publickey for deploy from 10.0.0.9 port 53552 ssh2
+Nov 12 10:40:20 web01 sshd[3344]: Accepted publickey for dave from 10.0.0.14 port 58439 ssh2
+Nov 12 10:41:16 web01 sshd[3345]: Connection closed by 10.0.0.13 port 42461 [preauth]
+Nov 12 10:42:19 web01 sshd[3346]: Accepted publickey for dave from 10.0.0.14 port 51593 ssh2
+Nov 12 10:43:47 web01 sshd[3347]: Accepted publickey for deploy from 10.0.0.9 port 33913 ssh2
+Nov 12 10:45:32 web01 sshd[3348]: Connection closed by 10.0.0.9 port 33756 [preauth]
+Nov 12 10:46:12 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 10:47:17 web01 sshd[3349]: Accepted publickey for alice from 10.0.0.11 port 30517 ssh2
+Nov 12 10:49:05 web01 sshd[3350]: Connection closed by 10.0.0.15 port 47287 [preauth]
+Nov 12 10:50:38 web01 sshd[3351]: Accepted publickey for jenkins from 10.0.0.15 port 46334 ssh2
+Nov 12 10:51:59 web01 sshd[3352]: Accepted publickey for alice from 10.0.0.11 port 33851 ssh2
+Nov 12 10:53:29 web01 sshd[3353]: Accepted publickey for carol from 10.0.0.13 port 35332 ssh2
+Nov 12 10:54:27 web01 sshd[3354]: Accepted publickey for carol from 10.0.0.13 port 41428 ssh2
+Nov 12 10:55:41 web01 sshd[3355]: Accepted publickey for carol from 10.0.0.13 port 46982 ssh2
+Nov 12 10:57:17 web01 sshd[3356]: Accepted publickey for carol from 10.0.0.13 port 30876 ssh2
+Nov 12 10:58:41 web01 sshd[3357]: Accepted publickey for dave from 10.0.0.14 port 57934 ssh2
+Nov 12 11:00:17 web01 sudo: alice : TTY=pts/2 ; PWD=/home/alice ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 11:01:12 web01 sshd[3358]: Accepted publickey for deploy from 10.0.0.9 port 51499 ssh2
+Nov 12 11:02:00 web01 sshd[3359]: Accepted publickey for carol from 10.0.0.13 port 44677 ssh2
+Nov 12 11:03:27 web01 sshd[3360]: Accepted publickey for jenkins from 10.0.0.15 port 34889 ssh2
+Nov 12 11:04:45 web01 sudo: bob : TTY=pts/3 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 11:05:34 web01 sshd[3361]: Accepted publickey for alice from 10.0.0.11 port 36371 ssh2
+Nov 12 11:07:20 web01 sshd[3362]: Connection closed by 10.0.0.14 port 42099 [preauth]
+Nov 12 11:08:36 web01 sshd[3363]: Accepted publickey for deploy from 10.0.0.9 port 43527 ssh2
+Nov 12 11:09:41 web01 sshd[3364]: Connection closed by 10.0.0.13 port 31186 [preauth]
+Nov 12 11:10:40 web01 sudo: deploy : TTY=pts/1 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 11:11:48 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 11:12:30 web01 sshd[3365]: Accepted publickey for deploy from 10.0.0.9 port 31043 ssh2
+Nov 12 11:14:04 web01 sudo: bob : TTY=pts/2 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 11:15:22 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 11:16:07 web01 sshd[3366]: Connection closed by 10.0.0.14 port 33813 [preauth]
+Nov 12 11:17:08 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 11:17:53 web01 sshd[3367]: Accepted publickey for deploy from 10.0.0.9 port 41862 ssh2
+Nov 12 11:19:40 web01 sshd[3368]: Connection closed by 10.0.0.11 port 38263 [preauth]
+Nov 12 11:20:44 web01 sshd[3369]: Accepted publickey for carol from 10.0.0.13 port 48984 ssh2
+Nov 12 11:21:50 web01 sshd[3370]: Accepted publickey for dave from 10.0.0.14 port 48986 ssh2
+Nov 12 11:22:36 web01 sshd[3371]: Accepted publickey for bob from 10.0.0.12 port 37565 ssh2
+Nov 12 11:24:12 web01 sshd[3372]: Accepted publickey for carol from 10.0.0.13 port 40767 ssh2
+Nov 12 11:25:28 web01 sshd[3373]: Accepted publickey for deploy from 10.0.0.9 port 32601 ssh2
+Nov 12 11:26:25 web01 sshd[3374]: Connection closed by 10.0.0.12 port 41159 [preauth]
+Nov 12 11:27:30 web01 sshd[3375]: Accepted publickey for dave from 10.0.0.14 port 31716 ssh2
+Nov 12 11:29:08 web01 sshd[3376]: Accepted publickey for dave from 10.0.0.14 port 58523 ssh2
+Nov 12 11:30:46 web01 sshd[3377]: Accepted publickey for carol from 10.0.0.13 port 48611 ssh2
+Nov 12 11:31:38 web01 sshd[3378]: Accepted publickey for bob from 10.0.0.12 port 38564 ssh2
+Nov 12 11:33:10 web01 sshd[3379]: Accepted publickey for dave from 10.0.0.14 port 49312 ssh2
+Nov 12 11:34:21 web01 sshd[3380]: Accepted publickey for bob from 10.0.0.12 port 48178 ssh2
+Nov 12 11:35:05 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 11:36:07 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 11:37:00 web01 sshd[3381]: Accepted publickey for carol from 10.0.0.13 port 30960 ssh2
+Nov 12 11:38:19 web01 sudo: carol : TTY=pts/0 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 11:39:06 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 11:40:29 web01 sudo: carol : TTY=pts/3 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 11:41:57 web01 sshd[3382]: Accepted publickey for bob from 10.0.0.12 port 52760 ssh2
+Nov 12 11:42:56 web01 sshd[3383]: Accepted publickey for bob from 10.0.0.12 port 53761 ssh2
+Nov 12 11:43:46 web01 sudo: deploy : TTY=pts/1 ; PWD=/var/www ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 11:44:51 web01 sudo: deploy : TTY=pts/2 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 11:45:48 web01 sshd[3384]: Accepted publickey for dave from 10.0.0.14 port 44324 ssh2
+Nov 12 11:47:08 web01 sshd[3385]: Connection closed by 10.0.0.14 port 32305 [preauth]
+Nov 12 11:48:02 web01 sshd[3386]: Accepted publickey for bob from 10.0.0.12 port 49829 ssh2
+Nov 12 11:49:13 web01 sshd[3387]: Accepted publickey for alice from 10.0.0.11 port 43930 ssh2
+Nov 12 11:50:52 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 11:52:19 web01 sshd[3388]: Connection closed by 10.0.0.12 port 59078 [preauth]
+Nov 12 11:53:56 web01 sshd[3389]: Connection closed by 10.0.0.13 port 34309 [preauth]
+Nov 12 11:55:22 web01 sshd[3390]: Connection closed by 10.0.0.13 port 54762 [preauth]
+Nov 12 11:56:25 web01 sshd[3391]: Accepted publickey for alice from 10.0.0.11 port 42416 ssh2
+Nov 12 11:57:58 web01 sshd[3392]: Accepted publickey for dave from 10.0.0.14 port 36108 ssh2
+Nov 12 11:58:44 web01 sshd[3393]: Accepted publickey for carol from 10.0.0.13 port 53816 ssh2
+Nov 12 11:59:50 web01 sshd[3394]: Connection closed by 10.0.0.11 port 35668 [preauth]
+Nov 12 12:01:26 web01 sudo: jenkins : TTY=pts/2 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 12:02:06 web01 sshd[3395]: Accepted publickey for deploy from 10.0.0.9 port 40269 ssh2
+Nov 12 12:03:05 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 12:03:47 web01 sshd[3396]: Accepted publickey for deploy from 10.0.0.9 port 39170 ssh2
+Nov 12 12:04:36 web01 sudo: deploy : TTY=pts/1 ; PWD=/var/www ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 12:06:16 web01 sudo: bob : TTY=pts/0 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 12:07:17 web01 sshd[3397]: Accepted publickey for deploy from 10.0.0.9 port 58591 ssh2
+Nov 12 12:08:32 web01 sudo: deploy : TTY=pts/0 ; PWD=/var/www ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 12:09:24 web01 sshd[3398]: Connection closed by 10.0.0.11 port 53485 [preauth]
+Nov 12 12:10:43 web01 sshd[3399]: Accepted publickey for jenkins from 10.0.0.15 port 39517 ssh2
+Nov 12 12:11:51 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 12:13:36 web01 sshd[3400]: Accepted publickey for alice from 10.0.0.11 port 34329 ssh2
+Nov 12 12:14:43 web01 sshd[3401]: Connection closed by 10.0.0.12 port 51329 [preauth]
+Nov 12 12:16:16 web01 sshd[3402]: Accepted publickey for dave from 10.0.0.14 port 41327 ssh2
+Nov 12 12:17:08 web01 sshd[3403]: Accepted publickey for jenkins from 10.0.0.15 port 41603 ssh2
+Nov 12 12:18:25 web01 sshd[3404]: Accepted publickey for alice from 10.0.0.11 port 31471 ssh2
+Nov 12 12:19:10 web01 sshd[3405]: Connection closed by 10.0.0.12 port 50417 [preauth]
+Nov 12 12:20:04 web01 sshd[3406]: Accepted publickey for carol from 10.0.0.13 port 54335 ssh2
+Nov 12 12:20:55 web01 sshd[3407]: Accepted publickey for alice from 10.0.0.11 port 56360 ssh2
+Nov 12 12:21:46 web01 sshd[3408]: Accepted publickey for bob from 10.0.0.12 port 43726 ssh2
+Nov 12 12:23:10 web01 sudo: alice : TTY=pts/1 ; PWD=/home/alice ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 12:24:19 web01 sudo: jenkins : TTY=pts/1 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 12:25:48 web01 sshd[3409]: Accepted publickey for deploy from 10.0.0.9 port 39362 ssh2
+Nov 12 12:27:23 web01 sshd[3410]: Accepted publickey for deploy from 10.0.0.9 port 44499 ssh2
+Nov 12 12:28:54 web01 sshd[3411]: Accepted publickey for alice from 10.0.0.11 port 52366 ssh2
+Nov 12 12:30:43 web01 sshd[3412]: Accepted publickey for dave from 10.0.0.14 port 35794 ssh2
+Nov 12 12:32:08 web01 sshd[3413]: Accepted publickey for deploy from 10.0.0.9 port 37969 ssh2
+Nov 12 12:33:21 web01 sudo: bob : TTY=pts/2 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 12:34:28 web01 sshd[3414]: Accepted publickey for bob from 10.0.0.12 port 30330 ssh2
+Nov 12 12:35:46 web01 sshd[3415]: Accepted publickey for carol from 10.0.0.13 port 36902 ssh2
+Nov 12 12:36:46 web01 sshd[3416]: Accepted publickey for bob from 10.0.0.12 port 57444 ssh2
+Nov 12 12:38:18 web01 sshd[3417]: Accepted publickey for carol from 10.0.0.13 port 37277 ssh2
+Nov 12 12:39:01 web01 sshd[3418]: Connection closed by 10.0.0.15 port 39626 [preauth]
+Nov 12 12:40:11 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 12:41:44 web01 sshd[3419]: Accepted publickey for carol from 10.0.0.13 port 36981 ssh2
+Nov 12 12:42:50 web01 sshd[3420]: Accepted publickey for deploy from 10.0.0.9 port 48935 ssh2
+Nov 12 12:44:25 web01 sshd[3421]: Accepted publickey for alice from 10.0.0.11 port 47721 ssh2
+Nov 12 12:45:54 web01 sshd[3422]: Accepted publickey for deploy from 10.0.0.9 port 42551 ssh2
+Nov 12 12:47:43 web01 sshd[3423]: Accepted publickey for dave from 10.0.0.14 port 39476 ssh2
+Nov 12 12:48:35 web01 sudo: carol : TTY=pts/1 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 12:49:30 web01 sshd[3424]: Accepted publickey for alice from 10.0.0.11 port 46331 ssh2
+Nov 12 12:51:20 web01 sshd[3425]: Connection closed by 10.0.0.14 port 40835 [preauth]
+Nov 12 12:52:30 web01 sshd[3426]: Connection closed by 10.0.0.15 port 59741 [preauth]
+Nov 12 12:53:56 web01 sshd[3427]: Accepted publickey for dave from 10.0.0.14 port 30775 ssh2
+Nov 12 12:54:46 web01 sshd[3428]: Accepted publickey for alice from 10.0.0.11 port 32531 ssh2
+Nov 12 12:56:30 web01 sshd[3429]: Accepted publickey for alice from 10.0.0.11 port 53886 ssh2
+Nov 12 12:58:06 web01 sshd[3430]: Accepted publickey for jenkins from 10.0.0.15 port 43044 ssh2
+Nov 12 12:59:25 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 13:00:22 web01 sshd[3431]: Connection closed by 10.0.0.13 port 46684 [preauth]
+Nov 12 13:01:22 web01 sshd[3432]: Accepted publickey for jenkins from 10.0.0.15 port 59225 ssh2
+Nov 12 13:02:08 web01 sshd[3433]: Accepted publickey for alice from 10.0.0.11 port 40180 ssh2
+Nov 12 13:03:52 web01 sshd[3434]: Accepted publickey for jenkins from 10.0.0.15 port 33866 ssh2
+Nov 12 13:04:50 web01 sshd[3435]: Accepted publickey for jenkins from 10.0.0.15 port 52689 ssh2
+Nov 12 13:05:54 web01 sudo: deploy : TTY=pts/3 ; PWD=/var/www ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 13:06:54 web01 sshd[3436]: Accepted publickey for carol from 10.0.0.13 port 40863 ssh2
+Nov 12 13:07:34 web01 sshd[3437]: Accepted publickey for jenkins from 10.0.0.15 port 58845 ssh2
+Nov 12 13:08:41 web01 sshd[3438]: Accepted publickey for carol from 10.0.0.13 port 55015 ssh2
+Nov 12 13:10:25 web01 sudo: deploy : TTY=pts/0 ; PWD=/var/www ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 13:11:26 web01 sudo: dave : TTY=pts/3 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 13:12:34 web01 sudo: jenkins : TTY=pts/1 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 13:13:00 web01 sshd[3803]: Failed password for invalid user test from 203.0.113.150 port 42000 ssh2
+Nov 12 13:13:04 web01 sshd[3804]: Failed password for invalid user root from 203.0.113.150 port 42001 ssh2
+Nov 12 13:13:08 web01 sshd[3805]: Failed password for invalid user ubuntu from 203.0.113.150 port 42002 ssh2
+Nov 12 13:13:12 web01 sshd[3806]: Failed password for invalid user postgres from 203.0.113.150 port 42003 ssh2
+Nov 12 13:13:16 web01 sshd[3807]: Failed password for invalid user oracle from 203.0.113.150 port 42004 ssh2
+Nov 12 13:13:31 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 13:14:59 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 13:16:36 web01 sshd[3439]: Accepted publickey for dave from 10.0.0.14 port 32533 ssh2
+Nov 12 13:17:36 web01 sudo: carol : TTY=pts/2 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 13:18:31 web01 sshd[3440]: Accepted publickey for alice from 10.0.0.11 port 52873 ssh2
+Nov 12 13:19:52 web01 sshd[3441]: Connection closed by 10.0.0.15 port 37622 [preauth]
+Nov 12 13:21:09 web01 sudo: deploy : TTY=pts/2 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 13:21:59 web01 sudo: jenkins : TTY=pts/3 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 13:23:41 web01 sshd[3442]: Accepted publickey for dave from 10.0.0.14 port 50013 ssh2
+Nov 12 13:24:39 web01 sudo: bob : TTY=pts/0 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 13:25:44 web01 sshd[3443]: Accepted publickey for deploy from 10.0.0.9 port 44943 ssh2
+Nov 12 13:27:08 web01 sshd[3444]: Accepted publickey for deploy from 10.0.0.9 port 58609 ssh2
+Nov 12 13:28:33 web01 sshd[3445]: Accepted publickey for jenkins from 10.0.0.15 port 36399 ssh2
+Nov 12 13:30:19 web01 sudo: deploy : TTY=pts/0 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 13:31:52 web01 sudo: jenkins : TTY=pts/2 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 13:33:18 web01 sshd[3446]: Accepted publickey for carol from 10.0.0.13 port 44839 ssh2
+Nov 12 13:35:04 web01 sshd[3447]: Connection closed by 10.0.0.13 port 53442 [preauth]
+Nov 12 13:36:27 web01 sshd[3448]: Accepted publickey for dave from 10.0.0.14 port 32202 ssh2
+Nov 12 13:37:41 web01 sshd[3449]: Accepted publickey for jenkins from 10.0.0.15 port 36865 ssh2
+Nov 12 13:38:28 web01 sshd[3450]: Accepted publickey for carol from 10.0.0.13 port 52505 ssh2
+Nov 12 13:39:25 web01 sshd[3451]: Accepted publickey for dave from 10.0.0.14 port 34481 ssh2
+Nov 12 13:41:04 web01 sshd[3452]: Accepted publickey for bob from 10.0.0.12 port 48178 ssh2
+Nov 12 13:42:40 web01 sudo: jenkins : TTY=pts/0 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 13:43:35 web01 sshd[3453]: Accepted publickey for alice from 10.0.0.11 port 41766 ssh2
+Nov 12 13:44:56 web01 sshd[3454]: Accepted publickey for bob from 10.0.0.12 port 53766 ssh2
+Nov 12 13:46:18 web01 sshd[3455]: Connection closed by 10.0.0.15 port 56875 [preauth]
+Nov 12 13:47:58 web01 sshd[3456]: Connection closed by 10.0.0.9 port 48049 [preauth]
+Nov 12 13:49:25 web01 sudo: bob : TTY=pts/3 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 13:50:29 web01 sudo: dave : TTY=pts/0 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 13:51:21 web01 sudo: dave : TTY=pts/0 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 13:53:05 web01 sudo: jenkins : TTY=pts/1 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 13:53:57 web01 sshd[3457]: Accepted publickey for deploy from 10.0.0.9 port 50312 ssh2
+Nov 12 13:55:45 web01 sudo: deploy : TTY=pts/1 ; PWD=/var/www ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 13:56:37 web01 sshd[3458]: Accepted publickey for jenkins from 10.0.0.15 port 55971 ssh2
+Nov 12 13:57:54 web01 sshd[3459]: Accepted publickey for jenkins from 10.0.0.15 port 48600 ssh2
+Nov 12 13:59:41 web01 sudo: jenkins : TTY=pts/2 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 14:00:48 web01 sudo: carol : TTY=pts/1 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 14:02:15 web01 sudo: jenkins : TTY=pts/1 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 14:03:35 web01 sshd[3460]: Connection closed by 10.0.0.11 port 58511 [preauth]
+Nov 12 14:05:20 web01 sshd[3461]: Connection closed by 10.0.0.13 port 44027 [preauth]
+Nov 12 14:06:51 web01 sshd[3462]: Accepted publickey for jenkins from 10.0.0.15 port 38457 ssh2
+Nov 12 14:08:11 web01 sshd[3463]: Accepted publickey for jenkins from 10.0.0.15 port 59070 ssh2
+Nov 12 14:09:04 web01 sshd[3464]: Accepted publickey for alice from 10.0.0.11 port 38517 ssh2
+Nov 12 14:10:45 web01 sudo: carol : TTY=pts/0 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 14:11:26 web01 sshd[3465]: Accepted publickey for jenkins from 10.0.0.15 port 30386 ssh2
+Nov 12 14:12:52 web01 sshd[3466]: Accepted publickey for jenkins from 10.0.0.15 port 39001 ssh2
+Nov 12 14:13:52 web01 sshd[3467]: Accepted publickey for carol from 10.0.0.13 port 45378 ssh2
+Nov 12 14:15:29 web01 sshd[3468]: Accepted publickey for deploy from 10.0.0.9 port 37233 ssh2
+Nov 12 14:17:14 web01 sshd[3469]: Accepted publickey for jenkins from 10.0.0.15 port 37100 ssh2
+Nov 12 14:18:25 web01 sshd[3470]: Accepted publickey for carol from 10.0.0.13 port 54463 ssh2
+Nov 12 14:20:00 web01 sshd[3808]: Failed password for admin from 203.0.113.200 port 43000 ssh2
+Nov 12 14:20:03 web01 sudo: deploy : TTY=pts/1 ; PWD=/var/www ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 14:20:18 web01 sshd[3809]: Failed password for admin from 203.0.113.201 port 43001 ssh2
+Nov 12 14:20:36 web01 sshd[3810]: Failed password for admin from 203.0.113.202 port 43002 ssh2
+Nov 12 14:20:54 web01 sshd[3811]: Failed password for admin from 203.0.113.203 port 43003 ssh2
+Nov 12 14:21:12 web01 sshd[3812]: Failed password for admin from 203.0.113.204 port 43004 ssh2
+Nov 12 14:21:30 web01 sshd[3813]: Failed password for admin from 203.0.113.205 port 43005 ssh2
+Nov 12 14:21:40 web01 sshd[3471]: Accepted publickey for jenkins from 10.0.0.15 port 57861 ssh2
+Nov 12 14:21:48 web01 sshd[3814]: Failed password for admin from 203.0.113.206 port 43006 ssh2
+Nov 12 14:22:06 web01 sshd[3815]: Failed password for admin from 203.0.113.207 port 43007 ssh2
+Nov 12 14:22:24 web01 sshd[3816]: Failed password for admin from 203.0.113.208 port 43008 ssh2
+Nov 12 14:22:32 web01 sshd[3472]: Connection closed by 10.0.0.14 port 31367 [preauth]
+Nov 12 14:23:20 web01 sshd[3473]: Connection closed by 10.0.0.13 port 56577 [preauth]
+Nov 12 14:24:44 web01 sshd[3474]: Accepted publickey for alice from 10.0.0.11 port 39988 ssh2
+Nov 12 14:25:00 web01 sshd[3817]: Failed password for root from 198.51.100.210 port 44000 ssh2
+Nov 12 14:25:20 web01 sshd[3818]: Failed password for root from 198.51.100.211 port 44001 ssh2
+Nov 12 14:25:40 web01 sshd[3819]: Failed password for root from 198.51.100.212 port 44002 ssh2
+Nov 12 14:26:00 web01 sshd[3820]: Failed password for root from 198.51.100.213 port 44003 ssh2
+Nov 12 14:26:03 web01 sudo: carol : TTY=pts/2 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 14:26:20 web01 sshd[3821]: Failed password for root from 198.51.100.214 port 44004 ssh2
+Nov 12 14:26:40 web01 sshd[3822]: Failed password for root from 198.51.100.215 port 44005 ssh2
+Nov 12 14:27:00 web01 sshd[3823]: Failed password for root from 198.51.100.216 port 44006 ssh2
+Nov 12 14:27:09 web01 sshd[3475]: Connection closed by 10.0.0.14 port 49503 [preauth]
+Nov 12 14:28:25 web01 sshd[3476]: Connection closed by 10.0.0.13 port 54047 [preauth]
+Nov 12 14:30:07 web01 sshd[3477]: Accepted publickey for dave from 10.0.0.14 port 41082 ssh2
+Nov 12 14:31:38 web01 sshd[3478]: Connection closed by 10.0.0.13 port 44808 [preauth]
+Nov 12 14:33:15 web01 sshd[3479]: Accepted publickey for bob from 10.0.0.12 port 31312 ssh2
+Nov 12 14:34:27 web01 sudo: dave : TTY=pts/0 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 14:36:13 web01 sshd[3480]: Accepted publickey for carol from 10.0.0.13 port 31917 ssh2
+Nov 12 14:36:58 web01 sshd[3481]: Accepted publickey for carol from 10.0.0.13 port 47027 ssh2
+Nov 12 14:38:39 web01 sshd[3482]: Accepted publickey for carol from 10.0.0.13 port 49566 ssh2
+Nov 12 14:39:19 web01 sshd[3483]: Accepted publickey for jenkins from 10.0.0.15 port 48444 ssh2
+Nov 12 14:40:53 web01 sshd[3484]: Accepted publickey for alice from 10.0.0.11 port 59132 ssh2
+Nov 12 14:42:37 web01 sshd[3485]: Accepted publickey for alice from 10.0.0.11 port 55302 ssh2
+Nov 12 14:44:01 web01 sshd[3486]: Accepted publickey for carol from 10.0.0.13 port 46973 ssh2
+Nov 12 14:45:29 web01 sshd[3487]: Accepted publickey for bob from 10.0.0.12 port 41440 ssh2
+Nov 12 14:47:13 web01 sshd[3488]: Accepted publickey for dave from 10.0.0.14 port 40469 ssh2
+Nov 12 14:48:47 web01 sshd[3489]: Accepted publickey for jenkins from 10.0.0.15 port 45434 ssh2
+Nov 12 14:49:34 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 14:50:56 web01 sshd[3490]: Accepted publickey for alice from 10.0.0.11 port 49324 ssh2
+Nov 12 14:52:04 web01 sudo: jenkins : TTY=pts/1 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 14:53:51 web01 sshd[3491]: Accepted publickey for alice from 10.0.0.11 port 49008 ssh2
+Nov 12 14:55:08 web01 sudo: jenkins : TTY=pts/0 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 14:55:50 web01 sshd[3492]: Accepted publickey for jenkins from 10.0.0.15 port 46882 ssh2
+Nov 12 14:57:25 web01 sshd[3493]: Accepted publickey for jenkins from 10.0.0.15 port 36449 ssh2
+Nov 12 14:58:39 web01 sshd[3494]: Accepted publickey for jenkins from 10.0.0.15 port 48629 ssh2
+Nov 12 15:00:15 web01 sshd[3495]: Accepted publickey for jenkins from 10.0.0.15 port 50472 ssh2
+Nov 12 15:00:57 web01 sshd[3496]: Accepted publickey for alice from 10.0.0.11 port 32871 ssh2
+Nov 12 15:01:59 web01 sshd[3497]: Accepted publickey for jenkins from 10.0.0.15 port 38494 ssh2
+Nov 12 15:03:14 web01 sudo: jenkins : TTY=pts/3 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 15:04:35 web01 sshd[3498]: Accepted publickey for alice from 10.0.0.11 port 47352 ssh2
+Nov 12 15:05:49 web01 sshd[3499]: Accepted publickey for bob from 10.0.0.12 port 47129 ssh2
+Nov 12 15:07:03 web01 sshd[3500]: Connection closed by 10.0.0.12 port 42733 [preauth]
+Nov 12 15:08:47 web01 sudo: deploy : TTY=pts/1 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 15:09:28 web01 sshd[3501]: Accepted publickey for jenkins from 10.0.0.15 port 41044 ssh2
+Nov 12 15:10:37 web01 sudo: alice : TTY=pts/3 ; PWD=/home/alice ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 15:11:46 web01 sudo: carol : TTY=pts/1 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 15:12:33 web01 sshd[3502]: Connection closed by 10.0.0.9 port 46444 [preauth]
+Nov 12 15:13:45 web01 sshd[3503]: Accepted publickey for carol from 10.0.0.13 port 56968 ssh2
+Nov 12 15:15:04 web01 sshd[3504]: Accepted publickey for dave from 10.0.0.14 port 33198 ssh2
+Nov 12 15:15:48 web01 sshd[3505]: Connection closed by 10.0.0.9 port 46741 [preauth]
+Nov 12 15:16:49 web01 sshd[3506]: Connection closed by 10.0.0.12 port 46958 [preauth]
+Nov 12 15:17:45 web01 sshd[3507]: Accepted publickey for jenkins from 10.0.0.15 port 42558 ssh2
+Nov 12 15:19:14 web01 sshd[3508]: Connection closed by 10.0.0.15 port 41424 [preauth]
+Nov 12 15:20:37 web01 sudo: jenkins : TTY=pts/2 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 15:22:19 web01 sshd[3509]: Accepted publickey for dave from 10.0.0.14 port 49935 ssh2
+Nov 12 15:23:50 web01 sshd[3510]: Accepted publickey for dave from 10.0.0.14 port 47647 ssh2
+Nov 12 15:25:02 web01 sudo: deploy : TTY=pts/3 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 15:25:58 web01 sshd[3511]: Connection closed by 10.0.0.9 port 47551 [preauth]
+Nov 12 15:26:39 web01 sshd[3512]: Accepted publickey for bob from 10.0.0.12 port 33456 ssh2
+Nov 12 15:27:48 web01 sudo: deploy : TTY=pts/3 ; PWD=/var/www ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 15:28:31 web01 sshd[3513]: Accepted publickey for alice from 10.0.0.11 port 34247 ssh2
+Nov 12 15:29:56 web01 sudo: alice : TTY=pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 15:31:18 web01 sshd[3514]: Accepted publickey for jenkins from 10.0.0.15 port 49955 ssh2
+Nov 12 15:32:20 web01 sshd[3515]: Accepted publickey for bob from 10.0.0.12 port 34146 ssh2
+Nov 12 15:33:45 web01 sshd[3516]: Accepted publickey for jenkins from 10.0.0.15 port 39071 ssh2
+Nov 12 15:35:34 web01 sudo: deploy : TTY=pts/1 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 15:36:58 web01 sshd[3517]: Accepted publickey for deploy from 10.0.0.9 port 56873 ssh2
+Nov 12 15:37:48 web01 sudo: bob : TTY=pts/2 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 15:39:09 web01 sshd[3518]: Accepted publickey for deploy from 10.0.0.9 port 56834 ssh2
+Nov 12 15:39:52 web01 sudo: carol : TTY=pts/2 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 15:40:52 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 15:42:06 web01 sshd[3519]: Accepted publickey for carol from 10.0.0.13 port 31699 ssh2
+Nov 12 15:43:00 web01 sudo: alice : TTY=pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 15:44:46 web01 sshd[3520]: Accepted publickey for bob from 10.0.0.12 port 41664 ssh2
+Nov 12 15:45:30 web01 sshd[3521]: Accepted publickey for deploy from 10.0.0.9 port 37069 ssh2
+Nov 12 15:47:11 web01 sshd[3522]: Accepted publickey for alice from 10.0.0.11 port 38392 ssh2
+Nov 12 15:48:39 web01 sshd[3523]: Accepted publickey for dave from 10.0.0.14 port 38371 ssh2
+Nov 12 15:50:04 web01 sshd[3524]: Connection closed by 10.0.0.15 port 54990 [preauth]
+Nov 12 15:51:43 web01 sudo: bob : TTY=pts/3 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 15:52:55 web01 sudo: carol : TTY=pts/3 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 15:53:38 web01 sshd[3525]: Accepted publickey for bob from 10.0.0.12 port 33615 ssh2
+Nov 12 15:54:54 web01 sshd[3526]: Connection closed by 10.0.0.9 port 45352 [preauth]
+Nov 12 15:55:35 web01 sshd[3527]: Accepted publickey for deploy from 10.0.0.9 port 33480 ssh2
+Nov 12 15:56:53 web01 sshd[3528]: Accepted publickey for alice from 10.0.0.11 port 33963 ssh2
+Nov 12 15:58:26 web01 sshd[3529]: Accepted publickey for alice from 10.0.0.11 port 58805 ssh2
+Nov 12 15:59:39 web01 sshd[3530]: Accepted publickey for alice from 10.0.0.11 port 45007 ssh2
+Nov 12 16:00:48 web01 sudo: dave : TTY=pts/3 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 16:02:17 web01 sshd[3531]: Accepted publickey for dave from 10.0.0.14 port 31016 ssh2
+Nov 12 16:03:21 web01 sshd[3532]: Accepted publickey for alice from 10.0.0.11 port 45883 ssh2
+Nov 12 16:04:03 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 16:04:45 web01 sshd[3533]: Accepted publickey for alice from 10.0.0.11 port 55710 ssh2
+Nov 12 16:06:34 web01 sshd[3534]: Connection closed by 10.0.0.15 port 46187 [preauth]
+Nov 12 16:08:07 web01 sshd[3535]: Accepted publickey for dave from 10.0.0.14 port 38144 ssh2
+Nov 12 16:09:27 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 16:11:09 web01 sudo: deploy : TTY=pts/3 ; PWD=/var/www ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 16:12:05 web01 sshd[3536]: Accepted publickey for deploy from 10.0.0.9 port 31364 ssh2
+Nov 12 16:12:46 web01 sshd[3537]: Connection closed by 10.0.0.9 port 54192 [preauth]
+Nov 12 16:13:31 web01 sshd[3538]: Accepted publickey for carol from 10.0.0.13 port 40012 ssh2
+Nov 12 16:14:33 web01 sshd[3539]: Accepted publickey for deploy from 10.0.0.9 port 42696 ssh2
+Nov 12 16:16:13 web01 sudo: dave : TTY=pts/0 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 16:17:28 web01 sshd[3540]: Accepted publickey for alice from 10.0.0.11 port 50014 ssh2
+Nov 12 16:18:19 web01 sudo: deploy : TTY=pts/1 ; PWD=/var/www ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 16:19:44 web01 sudo: alice : TTY=pts/2 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 16:20:40 web01 sudo: jenkins : TTY=pts/3 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 16:21:46 web01 sshd[3541]: Connection closed by 10.0.0.11 port 49709 [preauth]
+Nov 12 16:23:08 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 16:24:40 web01 sshd[3542]: Connection closed by 10.0.0.9 port 40221 [preauth]
+Nov 12 16:25:43 web01 sshd[3543]: Accepted publickey for bob from 10.0.0.12 port 54255 ssh2
+Nov 12 16:26:58 web01 sshd[3544]: Accepted publickey for alice from 10.0.0.11 port 59539 ssh2
+Nov 12 16:27:52 web01 sshd[3545]: Accepted publickey for bob from 10.0.0.12 port 58338 ssh2
+Nov 12 16:29:16 web01 sudo: bob : TTY=pts/3 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 16:30:55 web01 sshd[3546]: Connection closed by 10.0.0.9 port 46663 [preauth]
+Nov 12 16:32:28 web01 sshd[3547]: Accepted publickey for dave from 10.0.0.14 port 48906 ssh2
+Nov 12 16:33:28 web01 sshd[3548]: Accepted publickey for jenkins from 10.0.0.15 port 43797 ssh2
+Nov 12 16:35:14 web01 sshd[3549]: Accepted publickey for deploy from 10.0.0.9 port 37662 ssh2
+Nov 12 16:36:39 web01 sudo: alice : TTY=pts/2 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 16:37:59 web01 sudo: alice : TTY=pts/2 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 16:38:46 web01 sudo: alice : TTY=pts/1 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 16:40:19 web01 sshd[3550]: Accepted publickey for carol from 10.0.0.13 port 48377 ssh2
+Nov 12 16:42:00 web01 sshd[3551]: Connection closed by 10.0.0.13 port 39028 [preauth]
+Nov 12 16:43:00 web01 sshd[3552]: Connection closed by 10.0.0.15 port 46983 [preauth]
+Nov 12 16:43:42 web01 sshd[3553]: Connection closed by 10.0.0.14 port 45092 [preauth]
+Nov 12 16:44:23 web01 sudo: bob : TTY=pts/0 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 16:45:09 web01 sudo: deploy : TTY=pts/0 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 16:46:02 web01 sshd[3554]: Accepted publickey for bob from 10.0.0.12 port 51851 ssh2
+Nov 12 16:46:57 web01 sudo: alice : TTY=pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 16:48:24 web01 sshd[3555]: Accepted publickey for dave from 10.0.0.14 port 58910 ssh2
+Nov 12 16:49:06 web01 sshd[3556]: Accepted publickey for dave from 10.0.0.14 port 40554 ssh2
+Nov 12 16:50:36 web01 sshd[3557]: Accepted publickey for dave from 10.0.0.14 port 51206 ssh2
+Nov 12 16:51:43 web01 sshd[3558]: Connection closed by 10.0.0.14 port 40528 [preauth]
+Nov 12 16:53:20 web01 sshd[3559]: Accepted publickey for alice from 10.0.0.11 port 47535 ssh2
+Nov 12 16:55:00 web01 sshd[3560]: Accepted publickey for bob from 10.0.0.12 port 47061 ssh2
+Nov 12 16:56:25 web01 sshd[3561]: Accepted publickey for dave from 10.0.0.14 port 56418 ssh2
+Nov 12 16:57:44 web01 sshd[3562]: Connection closed by 10.0.0.15 port 54621 [preauth]
+Nov 12 16:59:06 web01 sshd[3563]: Accepted publickey for dave from 10.0.0.14 port 58212 ssh2
+Nov 12 17:00:55 web01 sshd[3564]: Connection closed by 10.0.0.11 port 52864 [preauth]
+Nov 12 17:01:46 web01 sshd[3565]: Accepted publickey for carol from 10.0.0.13 port 45646 ssh2
+Nov 12 17:03:23 web01 sshd[3566]: Accepted publickey for carol from 10.0.0.13 port 37067 ssh2
+Nov 12 17:04:25 web01 sshd[3567]: Accepted publickey for carol from 10.0.0.13 port 45212 ssh2
+Nov 12 17:05:49 web01 sshd[3568]: Accepted publickey for deploy from 10.0.0.9 port 50674 ssh2
+Nov 12 17:06:50 web01 sshd[3569]: Connection closed by 10.0.0.11 port 49556 [preauth]
+Nov 12 17:07:44 web01 sshd[3570]: Accepted publickey for deploy from 10.0.0.9 port 46392 ssh2
+Nov 12 17:08:57 web01 sshd[3571]: Connection closed by 10.0.0.9 port 54931 [preauth]
+Nov 12 17:10:42 web01 sudo: bob : TTY=pts/2 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 17:11:41 web01 sshd[3572]: Accepted publickey for dave from 10.0.0.14 port 31860 ssh2
+Nov 12 17:12:57 web01 sshd[3573]: Accepted publickey for deploy from 10.0.0.9 port 37301 ssh2
+Nov 12 17:14:24 web01 sshd[3574]: Accepted publickey for alice from 10.0.0.11 port 54082 ssh2
+Nov 12 17:15:31 web01 sshd[3575]: Accepted publickey for bob from 10.0.0.12 port 53388 ssh2
+Nov 12 17:17:07 web01 sshd[3576]: Accepted publickey for dave from 10.0.0.14 port 36025 ssh2
+Nov 12 17:18:45 web01 sshd[3577]: Accepted publickey for alice from 10.0.0.11 port 57043 ssh2
+Nov 12 17:20:30 web01 sshd[3578]: Accepted publickey for deploy from 10.0.0.9 port 51681 ssh2
+Nov 12 17:21:20 web01 sshd[3579]: Accepted publickey for jenkins from 10.0.0.15 port 52803 ssh2
+Nov 12 17:23:07 web01 sudo: bob : TTY=pts/3 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 17:24:33 web01 sshd[3580]: Accepted publickey for dave from 10.0.0.14 port 44568 ssh2
+Nov 12 17:26:04 web01 sudo: deploy : TTY=pts/1 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 17:27:48 web01 sshd[3581]: Connection closed by 10.0.0.15 port 45925 [preauth]
+Nov 12 17:28:43 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 17:29:46 web01 sudo: alice : TTY=pts/2 ; PWD=/home/alice ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 17:30:37 web01 sshd[3582]: Accepted publickey for dave from 10.0.0.14 port 33151 ssh2
+Nov 12 17:31:53 web01 sudo: jenkins : TTY=pts/0 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 17:33:24 web01 sshd[3583]: Accepted publickey for jenkins from 10.0.0.15 port 48248 ssh2
+Nov 12 17:34:28 web01 sudo: deploy : TTY=pts/1 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 17:35:11 web01 sshd[3584]: Accepted publickey for dave from 10.0.0.14 port 37166 ssh2
+Nov 12 17:35:58 web01 sshd[3585]: Connection closed by 10.0.0.11 port 57724 [preauth]
+Nov 12 17:37:29 web01 sudo: deploy : TTY=pts/2 ; PWD=/var/www ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 17:39:08 web01 sudo: jenkins : TTY=pts/3 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 17:40:46 web01 sshd[3586]: Connection closed by 10.0.0.13 port 31006 [preauth]
+Nov 12 17:41:38 web01 sshd[3587]: Accepted publickey for jenkins from 10.0.0.15 port 40310 ssh2
+Nov 12 17:42:20 web01 sudo: alice : TTY=pts/3 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 17:43:35 web01 sudo: deploy : TTY=pts/1 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 17:44:18 web01 sshd[3588]: Accepted publickey for jenkins from 10.0.0.15 port 51064 ssh2
+Nov 12 17:45:06 web01 sshd[3589]: Accepted publickey for dave from 10.0.0.14 port 57978 ssh2
+Nov 12 17:46:30 web01 sshd[3590]: Accepted publickey for bob from 10.0.0.12 port 45029 ssh2
+Nov 12 17:47:42 web01 sshd[3591]: Accepted publickey for deploy from 10.0.0.9 port 35938 ssh2
+Nov 12 17:49:18 web01 sshd[3592]: Accepted publickey for deploy from 10.0.0.9 port 34145 ssh2
+Nov 12 17:50:02 web01 sudo: dave : TTY=pts/0 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 17:50:57 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 17:52:17 web01 sshd[3593]: Accepted publickey for dave from 10.0.0.14 port 33807 ssh2
+Nov 12 17:53:09 web01 sshd[3594]: Accepted publickey for jenkins from 10.0.0.15 port 31554 ssh2
+Nov 12 17:54:32 web01 sudo: deploy : TTY=pts/0 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 17:55:57 web01 sshd[3595]: Accepted publickey for dave from 10.0.0.14 port 36196 ssh2
+Nov 12 17:56:44 web01 sudo: jenkins : TTY=pts/3 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 17:57:43 web01 sshd[3596]: Accepted publickey for carol from 10.0.0.13 port 35539 ssh2
+Nov 12 17:59:20 web01 sshd[3597]: Accepted publickey for bob from 10.0.0.12 port 44429 ssh2
+Nov 12 18:00:25 web01 sshd[3598]: Accepted publickey for deploy from 10.0.0.9 port 36002 ssh2
+Nov 12 18:01:50 web01 sshd[3599]: Accepted publickey for carol from 10.0.0.13 port 42634 ssh2
+Nov 12 18:03:34 web01 sudo: jenkins : TTY=pts/1 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 18:04:39 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 18:05:xx web01 sshd[99999
+Nov 12 18:05:37 web01 sshd[3600]: Accepted publickey for deploy from 10.0.0.9 port 58793 ssh2
+Nov 12 18:07:24 web01 sshd[3601]: Accepted publickey for deploy from 10.0.0.9 port 30792 ssh2
+Nov 12 18:08:52 web01 sshd[3602]: Accepted publickey for alice from 10.0.0.11 port 42595 ssh2
+Nov 12 18:10:13 web01 sshd[3603]: Accepted publickey for alice from 10.0.0.11 port 55512 ssh2
+Nov 12 18:11:33 web01 sshd[3604]: Accepted publickey for dave from 10.0.0.14 port 31671 ssh2
+Nov 12 18:12:50 web01 sshd[3605]: Accepted publickey for bob from 10.0.0.12 port 37603 ssh2
+Nov 12 18:13:49 web01 sshd[3606]: Accepted publickey for bob from 10.0.0.12 port 30744 ssh2
+Nov 12 18:14:49 web01 sudo: alice : TTY=pts/2 ; PWD=/home/alice ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 18:16:19 web01 sshd[3607]: Accepted publickey for bob from 10.0.0.12 port 38375 ssh2
+Nov 12 18:17:15 web01 sudo: alice : TTY=pts/1 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 18:18:25 web01 sshd[3608]: Accepted publickey for alice from 10.0.0.11 port 52962 ssh2
+Nov 12 18:19:42 web01 sudo: jenkins : TTY=pts/1 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 18:20:35 web01 sshd[3609]: Accepted publickey for dave from 10.0.0.14 port 51037 ssh2
+Nov 12 18:21:33 web01 sshd[3610]: Accepted publickey for carol from 10.0.0.13 port 38316 ssh2
+Nov 12 18:22:26 web01 sshd[3611]: Connection closed by 10.0.0.13 port 54187 [preauth]
+Nov 12 18:23:24 web01 sshd[3612]: Accepted publickey for jenkins from 10.0.0.15 port 42021 ssh2
+Nov 12 18:24:23 web01 sshd[3613]: Accepted publickey for deploy from 10.0.0.9 port 41879 ssh2
+Nov 12 18:25:12 web01 sshd[3614]: Connection closed by 10.0.0.9 port 42477 [preauth]
+Nov 12 18:26:42 web01 sshd[3615]: Accepted publickey for alice from 10.0.0.11 port 56660 ssh2
+Nov 12 18:28:26 web01 sudo: bob : TTY=pts/0 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 18:30:03 web01 sudo: deploy : TTY=pts/3 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 18:31:21 web01 sshd[3616]: Accepted publickey for deploy from 10.0.0.9 port 51559 ssh2
+Nov 12 18:32:04 web01 sshd[3617]: Accepted publickey for deploy from 10.0.0.9 port 35387 ssh2
+Nov 12 18:33:42 web01 sshd[3618]: Accepted publickey for dave from 10.0.0.14 port 49933 ssh2
+Nov 12 18:34:43 web01 sshd[3619]: Accepted publickey for jenkins from 10.0.0.15 port 53968 ssh2
+Nov 12 18:35:34 web01 sudo: alice : TTY=pts/1 ; PWD=/home/alice ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 18:36:17 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 18:38:03 web01 sshd[3620]: Connection closed by 10.0.0.11 port 54238 [preauth]
+Nov 12 18:39:48 web01 sshd[3621]: Accepted publickey for carol from 10.0.0.13 port 43968 ssh2
+Nov 12 18:41:21 web01 sshd[3622]: Accepted publickey for bob from 10.0.0.12 port 44724 ssh2
+Nov 12 18:42:54 web01 sshd[3623]: Accepted publickey for alice from 10.0.0.11 port 32585 ssh2
+Nov 12 18:43:38 web01 sudo: carol : TTY=pts/0 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 18:44:35 web01 sshd[3624]: Accepted publickey for carol from 10.0.0.13 port 41515 ssh2
+Nov 12 18:46:01 web01 sshd[3625]: Accepted publickey for alice from 10.0.0.11 port 47507 ssh2
+Nov 12 18:47:35 web01 sshd[3626]: Connection closed by 10.0.0.9 port 53455 [preauth]
+Nov 12 18:48:47 web01 sshd[3627]: Accepted publickey for carol from 10.0.0.13 port 31911 ssh2
+Nov 12 18:49:40 web01 sudo: bob : TTY=pts/0 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 18:50:31 web01 sshd[3628]: Accepted publickey for dave from 10.0.0.14 port 31945 ssh2
+Nov 12 18:52:12 web01 sudo: bob : TTY=pts/3 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 18:53:01 web01 sudo: bob : TTY=pts/3 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 18:54:29 web01 sshd[3629]: Accepted publickey for deploy from 10.0.0.9 port 43039 ssh2
+Nov 12 18:56:06 web01 sshd[3630]: Accepted publickey for alice from 10.0.0.11 port 43238 ssh2
+Nov 12 18:57:36 web01 sshd[3631]: Connection closed by 10.0.0.13 port 38135 [preauth]
+Nov 12 18:58:26 web01 sudo: deploy : TTY=pts/3 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 18:59:14 web01 sshd[3632]: Connection closed by 10.0.0.14 port 48820 [preauth]
+Nov 12 19:00:20 web01 sshd[3633]: Connection closed by 10.0.0.12 port 35552 [preauth]
+Nov 12 19:01:21 web01 sshd[3634]: Accepted publickey for deploy from 10.0.0.9 port 41673 ssh2
+Nov 12 19:02:20 web01 sshd[3635]: Accepted publickey for alice from 10.0.0.11 port 46095 ssh2
+Nov 12 19:03:04 web01 sshd[3636]: Accepted publickey for bob from 10.0.0.12 port 43455 ssh2
+Nov 12 19:03:45 web01 sshd[3637]: Accepted publickey for jenkins from 10.0.0.15 port 59389 ssh2
+Nov 12 19:05:20 web01 sudo: carol : TTY=pts/2 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 19:06:23 web01 sshd[3638]: Accepted publickey for jenkins from 10.0.0.15 port 36368 ssh2
+Nov 12 19:07:42 web01 sudo: deploy : TTY=pts/2 ; PWD=/var/www ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 19:09:16 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 19:11:00 web01 sudo: dave : TTY=pts/3 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 19:12:34 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 19:13:31 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 19:14:30 web01 sshd[3639]: Connection closed by 10.0.0.12 port 50993 [preauth]
+Nov 12 19:15:51 web01 sshd[3640]: Accepted publickey for deploy from 10.0.0.9 port 40680 ssh2
+Nov 12 19:17:05 web01 sshd[3641]: Connection closed by 10.0.0.12 port 37352 [preauth]
+Nov 12 19:18:43 web01 sshd[3642]: Accepted publickey for deploy from 10.0.0.9 port 54568 ssh2
+Nov 12 19:20:04 web01 sshd[3643]: Connection closed by 10.0.0.15 port 34691 [preauth]
+Nov 12 19:21:19 web01 sshd[3644]: Accepted publickey for carol from 10.0.0.13 port 44126 ssh2
+Nov 12 19:22:15 web01 sshd[3645]: Accepted publickey for deploy from 10.0.0.9 port 49034 ssh2
+Nov 12 19:23:08 web01 sshd[3646]: Accepted publickey for deploy from 10.0.0.9 port 55028 ssh2
+Nov 12 19:24:20 web01 sudo: dave : TTY=pts/3 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 19:25:39 web01 sshd[3647]: Accepted publickey for bob from 10.0.0.12 port 47635 ssh2
+Nov 12 19:26:25 web01 sshd[3648]: Accepted publickey for carol from 10.0.0.13 port 32607 ssh2
+Nov 12 19:27:17 web01 sudo: dave : TTY=pts/0 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 19:27:58 web01 sudo: carol : TTY=pts/3 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 19:29:26 web01 sudo: alice : TTY=pts/1 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 19:30:43 web01 sshd[3649]: Accepted publickey for carol from 10.0.0.13 port 50187 ssh2
+Nov 12 19:32:05 web01 sudo: jenkins : TTY=pts/3 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 19:32:47 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 19:33:34 web01 sshd[3650]: Accepted publickey for deploy from 10.0.0.9 port 44721 ssh2
+Nov 12 19:34:34 web01 sudo: bob : TTY=pts/2 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 19:36:06 web01 sudo: dave : TTY=pts/3 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 19:37:23 web01 sshd[3651]: Accepted publickey for bob from 10.0.0.12 port 49065 ssh2
+Nov 12 19:38:08 web01 sudo: bob : TTY=pts/0 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 19:39:30 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 19:40:55 web01 sudo: carol : TTY=pts/1 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 19:41:50 web01 sshd[3652]: Accepted publickey for deploy from 10.0.0.9 port 50113 ssh2
+Nov 12 19:43:35 web01 sshd[3653]: Accepted publickey for alice from 10.0.0.11 port 51153 ssh2
+Nov 12 19:45:16 web01 sudo: jenkins : TTY=pts/3 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 19:46:09 web01 sudo: alice : TTY=pts/1 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 19:47:08 web01 sshd[3654]: Accepted publickey for alice from 10.0.0.11 port 36163 ssh2
+Nov 12 19:48:57 web01 sshd[3655]: Connection closed by 10.0.0.12 port 37923 [preauth]
+Nov 12 19:50:05 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 19:51:52 web01 sudo: alice : TTY=pts/2 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 19:52:58 web01 sudo: jenkins : TTY=pts/2 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 19:54:30 web01 sshd[3656]: Connection closed by 10.0.0.14 port 35879 [preauth]
+Nov 12 19:55:57 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 19:56:49 web01 sshd[3657]: Accepted publickey for carol from 10.0.0.13 port 57798 ssh2
+Nov 12 19:57:34 web01 sudo: deploy : TTY=pts/1 ; PWD=/var/www ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 19:58:55 web01 sudo: jenkins : TTY=pts/1 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 20:00:25 web01 sshd[3658]: Connection closed by 10.0.0.14 port 45889 [preauth]
+Nov 12 20:01:05 web01 sudo: deploy : TTY=pts/0 ; PWD=/var/www ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 20:02:05 web01 sshd[3659]: Connection closed by 10.0.0.11 port 47200 [preauth]
+Nov 12 20:03:00 web01 sudo: dave : TTY=pts/0 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 20:04:20 web01 sshd[3660]: Accepted publickey for dave from 10.0.0.14 port 41993 ssh2
+Nov 12 20:05:36 web01 sshd[3661]: Connection closed by 10.0.0.11 port 45224 [preauth]
+Nov 12 20:07:22 web01 sshd[3662]: Connection closed by 10.0.0.15 port 36731 [preauth]
+Nov 12 20:08:39 web01 sudo: alice : TTY=pts/1 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 20:09:24 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 20:10:09 web01 sshd[3663]: Connection closed by 10.0.0.13 port 55953 [preauth]
+Nov 12 20:11:55 web01 sshd[3664]: Accepted publickey for jenkins from 10.0.0.15 port 34544 ssh2
+Nov 12 20:12:39 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 20:14:06 web01 sshd[3665]: Accepted publickey for alice from 10.0.0.11 port 56775 ssh2
+Nov 12 20:15:19 web01 sudo: deploy : TTY=pts/0 ; PWD=/var/www ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 20:17:01 web01 sshd[3666]: Accepted publickey for deploy from 10.0.0.9 port 41241 ssh2
+Nov 12 20:18:18 web01 sudo: bob : TTY=pts/0 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 20:19:59 web01 sudo: carol : TTY=pts/0 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 20:21:25 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 20:22:54 web01 sshd[3667]: Accepted publickey for bob from 10.0.0.12 port 50142 ssh2
+Nov 12 20:23:47 web01 sshd[3668]: Connection closed by 10.0.0.14 port 35120 [preauth]
+Nov 12 20:24:28 web01 sshd[3669]: Accepted publickey for alice from 10.0.0.11 port 40775 ssh2
+Nov 12 20:26:17 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 20:27:55 web01 sshd[3670]: Accepted publickey for alice from 10.0.0.11 port 56481 ssh2
+Nov 12 20:28:54 web01 sshd[3671]: Accepted publickey for alice from 10.0.0.11 port 41234 ssh2
+*** log gap: rsyslog restarted ***
+Nov 12 20:30:12 web01 sudo: jenkins : TTY=pts/2 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 20:31:36 web01 sshd[3672]: Accepted publickey for deploy from 10.0.0.9 port 54113 ssh2
+Nov 12 20:33:10 web01 sshd[3673]: Accepted publickey for deploy from 10.0.0.9 port 54105 ssh2
+Nov 12 20:34:39 web01 sshd[3674]: Accepted publickey for carol from 10.0.0.13 port 57645 ssh2
+Nov 12 20:35:44 web01 sshd[3675]: Accepted publickey for carol from 10.0.0.13 port 41553 ssh2
+Nov 12 20:36:53 web01 sshd[3676]: Accepted publickey for bob from 10.0.0.12 port 55657 ssh2
+Nov 12 20:38:23 web01 sshd[3677]: Accepted publickey for alice from 10.0.0.11 port 46550 ssh2
+Nov 12 20:40:00 web01 sshd[3678]: Accepted publickey for carol from 10.0.0.13 port 38327 ssh2
+Nov 12 20:40:47 web01 sudo: carol : TTY=pts/1 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 20:42:15 web01 sshd[3679]: Accepted publickey for bob from 10.0.0.12 port 33442 ssh2
+Nov 12 20:43:16 web01 sshd[3680]: Accepted publickey for alice from 10.0.0.11 port 32232 ssh2
+Nov 12 20:44:53 web01 sudo: carol : TTY=pts/1 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 20:45:58 web01 sshd[3681]: Connection closed by 10.0.0.13 port 42125 [preauth]
+Nov 12 20:46:38 web01 sudo: jenkins : TTY=pts/3 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 20:47:18 web01 sshd[3682]: Accepted publickey for jenkins from 10.0.0.15 port 33541 ssh2
+Nov 12 20:48:25 web01 sshd[3683]: Accepted publickey for deploy from 10.0.0.9 port 49172 ssh2
+Nov 12 20:50:05 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 20:51:29 web01 sshd[3684]: Connection closed by 10.0.0.13 port 58115 [preauth]
+Nov 12 20:53:06 web01 sshd[3685]: Accepted publickey for carol from 10.0.0.13 port 38506 ssh2
+Nov 12 20:54:32 web01 sshd[3686]: Accepted publickey for jenkins from 10.0.0.15 port 55837 ssh2
+Nov 12 20:55:45 web01 sshd[3687]: Accepted publickey for carol from 10.0.0.13 port 56181 ssh2
+Nov 12 20:56:33 web01 sshd[3688]: Accepted publickey for alice from 10.0.0.11 port 54731 ssh2
+Nov 12 20:57:39 web01 sshd[3689]: Accepted publickey for alice from 10.0.0.11 port 52275 ssh2
+Nov 12 20:58:57 web01 sudo: jenkins : TTY=pts/3 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 21:00:06 web01 sshd[3690]: Accepted publickey for deploy from 10.0.0.9 port 55267 ssh2
+Nov 12 21:01:04 web01 sudo: carol : TTY=pts/1 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 21:01:57 web01 sshd[3691]: Connection closed by 10.0.0.12 port 57247 [preauth]
+Nov 12 21:03:02 web01 sshd[3692]: Accepted publickey for dave from 10.0.0.14 port 32596 ssh2
+Nov 12 21:03:45 web01 sshd[3693]: Connection closed by 10.0.0.15 port 52418 [preauth]
+Nov 12 21:05:19 web01 sshd[3694]: Accepted publickey for jenkins from 10.0.0.15 port 32746 ssh2
+Nov 12 21:07:02 web01 sudo: jenkins : TTY=pts/1 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 21:08:43 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 21:10:29 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 21:11:39 web01 sshd[3695]: Connection closed by 10.0.0.13 port 46370 [preauth]
+Nov 12 21:12:30 web01 sudo: deploy : TTY=pts/3 ; PWD=/var/www ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 21:14:12 web01 sshd[3696]: Connection closed by 10.0.0.9 port 42745 [preauth]
+Nov 12 21:15:08 web01 sshd[3697]: Connection closed by 10.0.0.12 port 45720 [preauth]
+Nov 12 21:16:50 web01 sudo: jenkins : TTY=pts/2 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 21:18:34 web01 sshd[3698]: Connection closed by 10.0.0.14 port 36780 [preauth]
+Nov 12 21:20:09 web01 sshd[3699]: Accepted publickey for dave from 10.0.0.14 port 36854 ssh2
+Nov 12 21:21:46 web01 sshd[3700]: Accepted publickey for alice from 10.0.0.11 port 43005 ssh2
+Nov 12 21:23:07 web01 sshd[3701]: Accepted publickey for jenkins from 10.0.0.15 port 56266 ssh2
+Nov 12 21:24:32 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 21:25:40 web01 sshd[3702]: Connection closed by 10.0.0.14 port 59814 [preauth]
+Nov 12 21:26:52 web01 sshd[3703]: Accepted publickey for deploy from 10.0.0.9 port 50907 ssh2
+Nov 12 21:27:45 web01 sshd[3704]: Accepted publickey for deploy from 10.0.0.9 port 43252 ssh2
+Nov 12 21:28:36 web01 sudo: jenkins : TTY=pts/1 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 21:29:51 web01 sshd[3705]: Connection closed by 10.0.0.15 port 45401 [preauth]
+Nov 12 21:31:18 web01 sudo: carol : TTY=pts/2 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 21:31:58 web01 sudo: carol : TTY=pts/0 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 21:33:42 web01 sshd[3706]: Connection closed by 10.0.0.13 port 33270 [preauth]
+Nov 12 21:35:15 web01 sshd[3707]: Accepted publickey for carol from 10.0.0.13 port 59529 ssh2
+Nov 12 21:36:15 web01 sshd[3708]: Accepted publickey for carol from 10.0.0.13 port 39152 ssh2
+Nov 12 21:37:25 web01 sshd[3709]: Connection closed by 10.0.0.15 port 33017 [preauth]
+Nov 12 21:38:38 web01 sudo: deploy : TTY=pts/3 ; PWD=/var/www ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 21:39:52 web01 sshd[3710]: Accepted publickey for jenkins from 10.0.0.15 port 32959 ssh2
+Nov 12 21:41:15 web01 sudo: deploy : TTY=pts/0 ; PWD=/var/www ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 21:42:10 web01 sshd[3711]: Connection closed by 10.0.0.13 port 30619 [preauth]
+Nov 12 21:43:01 web01 sshd[3712]: Accepted publickey for deploy from 10.0.0.9 port 33242 ssh2
+Nov 12 21:44:08 web01 sshd[3713]: Accepted publickey for jenkins from 10.0.0.15 port 56883 ssh2
+Nov 12 21:45:33 web01 sudo: bob : TTY=pts/3 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 21:47:14 web01 sshd[3714]: Accepted publickey for jenkins from 10.0.0.15 port 31798 ssh2
+Nov 12 21:48:30 web01 sudo: dave : TTY=pts/3 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 21:50:03 web01 sshd[3715]: Accepted publickey for bob from 10.0.0.12 port 45594 ssh2
+Nov 12 21:50:43 web01 sshd[3716]: Connection closed by 10.0.0.15 port 47611 [preauth]
+Nov 12 21:52:18 web01 sshd[3717]: Accepted publickey for bob from 10.0.0.12 port 32355 ssh2
+Nov 12 21:53:00 web01 sudo: jenkins : TTY=pts/2 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 21:53:47 web01 sshd[3718]: Accepted publickey for dave from 10.0.0.14 port 34169 ssh2
+Nov 12 21:54:48 web01 sshd[3719]: Accepted publickey for carol from 10.0.0.13 port 53591 ssh2
+Nov 12 21:55:45 web01 sudo: deploy : TTY=pts/1 ; PWD=/var/www ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 21:56:56 web01 sudo: bob : TTY=pts/2 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 21:58:27 web01 sshd[3720]: Accepted publickey for alice from 10.0.0.11 port 36850 ssh2
+Nov 12 21:59:38 web01 sshd[3721]: Accepted publickey for carol from 10.0.0.13 port 59327 ssh2
+Nov 12 22:00:34 web01 sshd[3722]: Connection closed by 10.0.0.14 port 48356 [preauth]
+Nov 12 22:01:49 web01 sudo: jenkins : TTY=pts/1 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 22:03:21 web01 sshd[3723]: Accepted publickey for alice from 10.0.0.11 port 34469 ssh2
+Nov 12 22:05:00 web01 sshd[3724]: Connection closed by 10.0.0.15 port 47674 [preauth]
+Nov 12 22:05:56 web01 sshd[3725]: Accepted publickey for deploy from 10.0.0.9 port 33190 ssh2
+Nov 12 22:06:57 web01 sshd[3726]: Accepted publickey for dave from 10.0.0.14 port 50336 ssh2
+Nov 12 22:08:38 web01 sshd[3727]: Accepted publickey for bob from 10.0.0.12 port 34866 ssh2
+Nov 12 22:09:44 web01 sudo: carol : TTY=pts/3 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 22:10:51 web01 sudo: jenkins : TTY=pts/0 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 22:11:56 web01 sshd[3728]: Connection closed by 10.0.0.12 port 38689 [preauth]
+Nov 12 22:13:10 web01 sudo: jenkins : TTY=pts/3 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 22:14:53 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 22:15:37 web01 sshd[3729]: Accepted publickey for carol from 10.0.0.13 port 35132 ssh2
+Nov 12 22:17:07 web01 sshd[3730]: Accepted publickey for dave from 10.0.0.14 port 42064 ssh2
+Nov 12 22:18:27 web01 sudo: jenkins : TTY=pts/3 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 22:19:37 web01 sshd[3731]: Accepted publickey for alice from 10.0.0.11 port 36835 ssh2
+Nov 12 22:20:34 web01 sshd[3732]: Connection closed by 10.0.0.11 port 48312 [preauth]
+Nov 12 22:22:01 web01 sshd[3733]: Accepted publickey for dave from 10.0.0.14 port 59760 ssh2
+Nov 12 22:23:47 web01 sudo: bob : TTY=pts/0 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 22:24:39 web01 sshd[3734]: Accepted publickey for deploy from 10.0.0.9 port 51761 ssh2
+Nov 12 22:25:38 web01 sudo: jenkins : TTY=pts/0 ; PWD=/home/jenkins ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 22:26:31 web01 sshd[3735]: Accepted publickey for carol from 10.0.0.13 port 30890 ssh2
+Nov 12 22:27:20 web01 sshd[3736]: Accepted publickey for alice from 10.0.0.11 port 56729 ssh2
+Nov 12 22:29:03 web01 sudo: carol : TTY=pts/2 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 22:30:17 web01 sshd[3737]: Accepted publickey for jenkins from 10.0.0.15 port 55644 ssh2
+Nov 12 22:31:30 web01 sshd[3738]: Accepted publickey for carol from 10.0.0.13 port 38989 ssh2
+Nov 12 22:32:44 web01 sshd[3739]: Accepted publickey for bob from 10.0.0.12 port 32812 ssh2
+Nov 12 22:34:09 web01 sshd[3740]: Connection closed by 10.0.0.13 port 53521 [preauth]
+Nov 12 22:35:04 web01 sudo: deploy : TTY=pts/3 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 22:35:54 web01 sshd[3741]: Accepted publickey for jenkins from 10.0.0.15 port 41916 ssh2
+Nov 12 22:37:28 web01 sshd[3742]: Connection closed by 10.0.0.9 port 32150 [preauth]
+Nov 12 22:38:49 web01 sshd[3743]: Accepted publickey for alice from 10.0.0.11 port 46296 ssh2
+Nov 12 22:39:41 web01 sshd[3744]: Accepted publickey for deploy from 10.0.0.9 port 52444 ssh2
+Nov 12 22:41:09 web01 sshd[3745]: Accepted publickey for deploy from 10.0.0.9 port 36945 ssh2
+Nov 12 22:42:49 web01 sshd[3746]: Accepted publickey for alice from 10.0.0.11 port 56614 ssh2
+Nov 12 22:44:38 web01 sshd[3747]: Accepted publickey for dave from 10.0.0.14 port 32806 ssh2
+Nov 12 22:45:34 web01 sshd[3748]: Accepted publickey for carol from 10.0.0.13 port 51889 ssh2
+Nov 12 22:47:07 web01 sshd[3749]: Accepted publickey for bob from 10.0.0.12 port 50003 ssh2
+Nov 12 22:48:23 web01 sshd[3750]: Accepted publickey for carol from 10.0.0.13 port 58336 ssh2
+Nov 12 22:50:01 web01 sshd[3751]: Accepted publickey for bob from 10.0.0.12 port 51637 ssh2
+Nov 12 22:51:45 web01 sshd[3752]: Connection closed by 10.0.0.9 port 52748 [preauth]
+Nov 12 22:53:04 web01 sshd[3753]: Accepted publickey for dave from 10.0.0.14 port 51829 ssh2
+Nov 12 22:54:54 web01 sshd[3754]: Accepted publickey for alice from 10.0.0.11 port 35026 ssh2
+Nov 12 22:56:29 web01 sshd[3755]: Accepted publickey for dave from 10.0.0.14 port 32633 ssh2
+Nov 12 22:58:14 web01 sshd[3756]: Accepted publickey for carol from 10.0.0.13 port 40355 ssh2
+Nov 12 22:59:43 web01 sshd[3757]: Accepted publickey for bob from 10.0.0.12 port 33058 ssh2
+Nov 12 23:01:04 web01 sudo: dave : TTY=pts/1 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl restart app
+Nov 12 23:01:59 web01 sshd[3758]: Accepted publickey for alice from 10.0.0.11 port 37660 ssh2
+Nov 12 23:03:06 web01 sshd[3759]: Accepted publickey for deploy from 10.0.0.9 port 35964 ssh2
+Nov 12 23:03:49 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 23:05:00 web01 sudo: alice : TTY=pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 23:06:30 web01 sudo: bob : TTY=pts/0 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 23:08:08 web01 sudo: alice : TTY=pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 23:09:27 web01 sudo: jenkins : TTY=pts/0 ; PWD=/home/jenkins ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Nov 12 23:10:59 web01 sudo: deploy : TTY=pts/3 ; PWD=/var/www ; USER=root ; COMMAND=/bin/systemctl reload postgresql
+Nov 12 23:12:49 web01 sshd[3760]: Connection closed by 10.0.0.15 port 47778 [preauth]
+Nov 12 23:13:55 web01 sshd[3761]: Accepted publickey for deploy from 10.0.0.9 port 39828 ssh2
+Nov 12 23:14:56 web01 sshd[3762]: Accepted publickey for carol from 10.0.0.13 port 48524 ssh2
+Nov 12 23:15:42 web01 sshd[3763]: Accepted publickey for carol from 10.0.0.13 port 50249 ssh2
+Nov 12 23:17:07 web01 sshd[3764]: Accepted publickey for jenkins from 10.0.0.15 port 33737 ssh2
+Nov 12 23:18:13 web01 sshd[3765]: Accepted publickey for deploy from 10.0.0.9 port 46943 ssh2
+Nov 12 23:19:31 web01 sshd[3766]: Accepted publickey for deploy from 10.0.0.9 port 54948 ssh2
+Nov 12 23:21:20 web01 sshd[3767]: Accepted publickey for dave from 10.0.0.14 port 53887 ssh2
+Nov 12 23:23:08 web01 sshd[3768]: Accepted publickey for carol from 10.0.0.13 port 50679 ssh2
+Nov 12 23:23:55 web01 sshd[3769]: Accepted publickey for dave from 10.0.0.14 port 56983 ssh2
+Nov 12 23:25:14 web01 sshd[3770]: Accepted publickey for deploy from 10.0.0.9 port 51085 ssh2
+Nov 12 23:26:53 web01 sshd[3771]: Accepted publickey for deploy from 10.0.0.9 port 34371 ssh2
+Nov 12 23:27:52 web01 sshd[3772]: Connection closed by 10.0.0.15 port 52358 [preauth]
+Nov 12 23:29:27 web01 sshd[3773]: Accepted publickey for carol from 10.0.0.13 port 47751 ssh2
+Nov 12 23:30:42 web01 sshd[3774]: Accepted publickey for deploy from 10.0.0.9 port 36688 ssh2
+Nov 12 23:31:54 web01 sshd[3775]: Accepted publickey for alice from 10.0.0.11 port 57066 ssh2
+Nov 12 23:32:47 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/apt-get update
+Nov 12 23:34:06 web01 sshd[3776]: Connection closed by 10.0.0.12 port 40492 [preauth]
+Nov 12 23:35:14 web01 sshd[3777]: Accepted publickey for deploy from 10.0.0.9 port 34433 ssh2
+Nov 12 23:36:46 web01 sshd[3778]: Accepted publickey for alice from 10.0.0.11 port 51202 ssh2
+Nov 12 23:38:21 web01 sshd[3779]: Accepted publickey for jenkins from 10.0.0.15 port 49430 ssh2
+Nov 12 23:39:46 web01 sshd[3780]: Accepted publickey for alice from 10.0.0.11 port 33665 ssh2
+Nov 12 23:41:29 web01 sshd[3781]: Accepted publickey for deploy from 10.0.0.9 port 38700 ssh2
+Nov 12 23:43:10 web01 sshd[3782]: Accepted publickey for bob from 10.0.0.12 port 58614 ssh2
+Nov 12 23:44:15 web01 sshd[3783]: Connection closed by 10.0.0.14 port 48177 [preauth]
+Nov 12 23:46:00 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/sbin/logrotate -f /etc/logrotate.conf
+Nov 12 23:47:11 web01 sudo: bob : TTY=pts/3 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/docker ps
+Nov 12 23:48:05 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 23:49:31 web01 sudo: dave : TTY=pts/0 ; PWD=/home/dave ; USER=root ; COMMAND=/usr/bin/docker compose up -d
+Nov 12 23:50:44 web01 sshd[3784]: Connection closed by 10.0.0.12 port 52958 [preauth]
+Nov 12 23:52:33 web01 sshd[3785]: Connection closed by 10.0.0.13 port 51689 [preauth]
+Nov 12 23:54:04 web01 sshd[3786]: Accepted publickey for jenkins from 10.0.0.15 port 59158 ssh2
+Nov 12 23:55:47 web01 sudo: deploy : TTY=pts/2 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 23:56:38 web01 sshd[3787]: Accepted publickey for alice from 10.0.0.11 port 37741 ssh2
+Nov 12 23:57:48 web01 sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
+Nov 12 23:58:32 web01 sudo: carol : TTY=pts/1 ; PWD=/home/carol ; USER=root ; COMMAND=/bin/journalctl -u nginx --since '1 hour ago'
