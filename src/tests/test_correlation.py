@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 
 from engine.correlation import Correlator
-from engine.models import Finding, Severity
+from models import Finding, Severity
 
 T0 = datetime(2025, 10, 10, 12, 0, 0)
 

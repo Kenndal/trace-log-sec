@@ -6,12 +6,12 @@ from datetime import datetime, timedelta
 
 import pytest
 
+from config.settings import load_settings, rule_specs
+from engine import Engine, LogSource
 from engine.correlation import Correlator
-from engine.engine import Engine, LogSource
-from engine.models import AuthLogEntry, AuthOutcome, Severity, WebLogEntry
 from engine.parsers import CombinedLogParser, LogParser, SyslogAuthParser
 from engine.rules import Rule, ThresholdRule, build_rules
-from settings import load_settings, rule_specs
+from models import AuthLogEntry, AuthOutcome, Severity, WebLogEntry
 
 REF = datetime(2026, 7, 30, 12, 0, 0)
 
@@ -43,8 +43,7 @@ def write_lines(path, n):
 
 def make_auth_log(tmp_path):
     lines = [
-        f"Oct 10 13:55:{i:02d} server sshd[1]: "
-        f"Failed password for root from 10.0.0.50 port {1000+i} ssh2"
+        f"Oct 10 13:55:{i:02d} server sshd[1]: Failed password for root from 10.0.0.50 port {1000 + i} ssh2"
         for i in range(6)
     ]
     f = tmp_path / "auth.log"
@@ -54,11 +53,7 @@ def make_auth_log(tmp_path):
 
 def make_web_log(tmp_path):
     # 10.0.0.50 also hammers web login (401) 10x within the same minute.
-    lines = [
-        f'10.0.0.50 - - [10/Oct/2025:13:55:{i:02d} +0000] '
-        f'"POST /login HTTP/1.1" 401 10'
-        for i in range(10)
-    ]
+    lines = [f'10.0.0.50 - - [10/Oct/2025:13:55:{i:02d} +0000] "POST /login HTTP/1.1" 401 10' for i in range(10)]
     f = tmp_path / "webserver.log"
     f.write_text("\n".join(lines) + "\n")
     return f
@@ -96,17 +91,13 @@ def test_stats_shape(tmp_path):
     src = stats["sources"][str(web)]
     assert set(src) == {"lines_read", "parsed", "malformed", "skipped_blank"}
     assert src["parsed"] == 10
-    assert set(stats["totals"]) == {
-        "lines_read", "parsed", "malformed", "skipped_blank", "findings", "incidents"
-    }
+    assert set(stats["totals"]) == {"lines_read", "parsed", "malformed", "skipped_blank", "findings", "incidents"}
     assert isinstance(stats["duration_seconds"], float)
 
 
 def test_missing_file_captured_not_raised(tmp_path):
     engine = Engine(config_rules())
-    report = engine.analyze(
-        [LogSource(path=str(tmp_path / "nope.log"), parser=CombinedLogParser())]
-    )
+    report = engine.analyze([LogSource(path=str(tmp_path / "nope.log"), parser=CombinedLogParser())])
     assert len(report.parse_errors) == 1
     assert report.parse_errors[0].line_no == 0
     assert report.findings == []
@@ -115,9 +106,7 @@ def test_missing_file_captured_not_raised(tmp_path):
 def test_missing_file_strict_raises(tmp_path):
     engine = Engine(config_rules(), strict=True)
     with pytest.raises(FileNotFoundError):
-        engine.analyze(
-            [LogSource(path=str(tmp_path / "nope.log"), parser=CombinedLogParser())]
-        )
+        engine.analyze([LogSource(path=str(tmp_path / "nope.log"), parser=CombinedLogParser())])
 
 
 def test_all_malformed_file_is_normal_report(tmp_path):
@@ -193,9 +182,7 @@ def test_ordering_stateful_rule_sees_only_its_own_source_order(tmp_path):
     write_lines(web_file, len(web_entries))
     write_lines(auth_file, len(auth_entries))
 
-    rule = ThresholdRule(
-        id="bf", match="auth_failure", threshold=5, window_seconds=60, severity=Severity.HIGH
-    )
+    rule = ThresholdRule(id="bf", match="auth_failure", threshold=5, window_seconds=60, severity=Severity.HIGH)
     engine = Engine([rule], correlator=Correlator())
 
     # Web source processed first, then auth — web events must not disturb the
@@ -208,3 +195,34 @@ def test_ordering_stateful_rule_sees_only_its_own_source_order(tmp_path):
     )
     assert len(report.findings) == 1
     assert report.findings[0].rule_id == "bf"
+
+
+# --------------------------------------------------------------------------- #
+# Rule-execution failure isolation
+# --------------------------------------------------------------------------- #
+
+
+class RaisingRule(Rule):
+    """Test double: raises on every entry it inspects."""
+
+    id = "boom"
+    severity = Severity.LOW
+
+    def inspect(self, entry):
+        raise RuntimeError("boom")
+
+
+def test_rule_exception_isolated_non_strict(tmp_path):
+    auth = make_auth_log(tmp_path)
+    engine = Engine([RaisingRule(), *config_rules()])
+    report = engine.analyze([LogSource(path=str(auth), parser=SyslogAuthParser(reference_time=REF))])
+    # The buggy rule's exceptions are swallowed; the well-behaved rule alongside
+    # it still runs to completion and produces its finding.
+    assert "ssh_brute_force" in {f.rule_id for f in report.findings}
+
+
+def test_rule_exception_strict_raises(tmp_path):
+    auth = make_auth_log(tmp_path)
+    engine = Engine([RaisingRule()], strict=True)
+    with pytest.raises(RuntimeError):
+        engine.analyze([LogSource(path=str(auth), parser=SyslogAuthParser(reference_time=REF))])

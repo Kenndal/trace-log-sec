@@ -10,27 +10,21 @@ See docs/engine-plan.md §5.
 
 from __future__ import annotations
 
-import re
 from abc import ABC, abstractmethod
 from collections.abc import Iterator
-from datetime import datetime, timezone
+from datetime import UTC, datetime, timezone
 from pathlib import Path
+import re
 
-from .models import (
+from constants import COMBINED_LOG_TIME_FORMAT, DEFAULT_AUTHLOG_SOURCE, DEFAULT_WEBLOG_SOURCE, SYSLOG_TIME_FORMAT
+from models import (
     AuthLogEntry,
     AuthOutcome,
     LogEntry,
     ParseError,
     WebLogEntry,
 )
-
-
-class MalformedLineError(Exception):
-    """Raised by a parser when a line cannot be parsed."""
-
-    def __init__(self, reason: str) -> None:
-        super().__init__(reason)
-        self.reason = reason
+from utils.exceptions import MalformedLineError
 
 
 class LogParser(ABC):
@@ -62,13 +56,13 @@ _COMBINED_RE = re.compile(
     re.VERBOSE,
 )
 
-_COMBINED_TIME_FMT = "%d/%b/%Y:%H:%M:%S %z"
+_COMBINED_TIME_FMT = COMBINED_LOG_TIME_FORMAT
 
 
 class CombinedLogParser(LogParser):
     """Parses NCSA Common/Combined access-log lines."""
 
-    source = "webserver"
+    source = DEFAULT_WEBLOG_SOURCE
 
     def __init__(self, source: str | None = None) -> None:
         if source is not None:
@@ -80,7 +74,8 @@ class CombinedLogParser(LogParser):
             raise MalformedLineError("does not match Combined log format")
 
         try:
-            timestamp = datetime.strptime(m.group("time"), _COMBINED_TIME_FMT)
+            # _COMBINED_TIME_FMT includes %z; ruff can't see that through the constant.
+            timestamp = datetime.strptime(m.group("time"), _COMBINED_TIME_FMT)  # noqa: DTZ007
         except ValueError as exc:
             raise MalformedLineError(f"bad timestamp: {exc}") from exc
 
@@ -148,25 +143,21 @@ _SYSLOG_RE = re.compile(
     re.VERBOSE,
 )
 
-_SYSLOG_TIME_FMT = "%Y %b %d %H:%M:%S"
+_SYSLOG_TIME_FMT = SYSLOG_TIME_FORMAT
 
 # IP / port extraction, reused across outcome classifications.
 _FROM_IP_RE = re.compile(r"\bfrom\s+(?P<ip>\d{1,3}(?:\.\d{1,3}){3})(?:\s+port\s+(?P<port>\d+))?")
 _ANY_IP_RE = re.compile(r"\b(?P<ip>\d{1,3}(?:\.\d{1,3}){3})\b")
 _PORT_RE = re.compile(r"\bport\s+(?P<port>\d+)")
 _INVALID_USER_RE = re.compile(r"invalid user\s+(?P<user>\S+)", re.IGNORECASE)
-_FAILED_PASSWORD_RE = re.compile(
-    r"Failed password for (?:invalid user\s+)?(?P<user>\S+)\s+from", re.IGNORECASE
-)
-_ACCEPTED_RE = re.compile(
-    r"Accepted \S+ for (?P<user>\S+)\s+from", re.IGNORECASE
-)
+_FAILED_PASSWORD_RE = re.compile(r"Failed password for (?:invalid user\s+)?(?P<user>\S+)\s+from", re.IGNORECASE)
+_ACCEPTED_RE = re.compile(r"Accepted \S+ for (?P<user>\S+)\s+from", re.IGNORECASE)
 
 
 class SyslogAuthParser(LogParser):
     """Parses BSD-syslog auth.log lines, resolving the missing year (§5.1)."""
 
-    source = "auth"
+    source = DEFAULT_AUTHLOG_SOURCE
 
     def __init__(
         self,
@@ -174,7 +165,7 @@ class SyslogAuthParser(LogParser):
         source: str | None = None,
         reference_time: datetime | None = None,
         default_year: int | None = None,
-        tz: timezone = timezone.utc,
+        tz: timezone = UTC,
     ) -> None:
         if source is not None:
             self.source = source
@@ -217,7 +208,8 @@ class SyslogAuthParser(LogParser):
         at or before ``reference_time`` (§5.1)."""
         if self._default_year is not None:
             try:
-                dt = datetime.strptime(
+                # BSD syslog carries no offset; tz is attached explicitly below.
+                dt = datetime.strptime(  # noqa: DTZ007
                     f"{self._default_year} {month} {int(day):02d} {time}", _SYSLOG_TIME_FMT
                 )
             except ValueError as exc:
@@ -226,9 +218,9 @@ class SyslogAuthParser(LogParser):
 
         ref = self._reference_time
         try:
-            candidate = datetime.strptime(
-                f"{ref.year} {month} {int(day):02d} {time}", _SYSLOG_TIME_FMT
-            ).replace(tzinfo=self._tz)
+            candidate = datetime.strptime(f"{ref.year} {month} {int(day):02d} {time}", _SYSLOG_TIME_FMT).replace(
+                tzinfo=self._tz
+            )
         except ValueError as exc:
             raise MalformedLineError(f"bad timestamp: {exc}") from exc
 
@@ -287,7 +279,7 @@ def parse_file(
     path: str | Path,
     parser: LogParser,
     *,
-    counters: dict | None = None,
+    counters: dict[str, int] | None = None,
 ) -> Iterator[LogEntry | ParseError]:
     """Stream a file through ``parser``, yielding ``LogEntry`` or ``ParseError``.
 

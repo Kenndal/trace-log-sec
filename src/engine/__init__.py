@@ -6,22 +6,25 @@ orchestrator. No CLI/presentation lives here.
 
 from __future__ import annotations
 
-from .correlation import Correlator
-from .engine import AnalysisReport, Engine, LogSource
-from .models import (
+from models import (
+    AnalysisReport,
     AuthLogEntry,
     AuthOutcome,
     Finding,
     Incident,
     LogEntry,
+    LogSource,
     ParseError,
     Severity,
     WebLogEntry,
 )
+from utils.exceptions import MalformedLineError
+
+from .correlation import Correlator
+from .engine import Engine
 from .parsers import (
     CombinedLogParser,
     LogParser,
-    MalformedLineError,
     SyslogAuthParser,
     parse_file,
 )

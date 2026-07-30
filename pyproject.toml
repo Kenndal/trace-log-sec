@@ -1,0 +1,127 @@
+[project]
+name = "trace-log-sec"
+version = "0.1.0"
+description = "CLI tool for security log analysis: parses log files and detects/correlates security incidents"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Jakub Przybylo", email = "jkb.przybylo@gmail.com" }]
+requires-python = ">=3.12,<3.14"
+keywords = ["security", "logs", "cli", "incident-detection", "log-analysis"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.12",
+    "Environment :: Console",
+    "Topic :: Security",
+]
+dependencies = [
+    "pydantic>=2.12.4",
+    "pyyaml>=6.0.3",
+]
+
+[project.urls]
+Homepage = "https://github.com/Kenndal/trace-log-sec"
+Repository = "https://github.com/Kenndal/trace-log-sec"
+Issues = "https://github.com/Kenndal/trace-log-sec/issues"
+
+[dependency-groups]
+dev = ["ruff>=0.8.0", "mypy>=1.13.0", "pre-commit>=4.0.1", "ty>=0.0.12", "types-PyYAML>=6.0.12"]
+test = [
+    "pytest>=8.3.4",
+    "pytest-cov>=6.0.0",
+]
+
+[[tool.uv.index]]
+name = "pypi"
+url = "https://pypi.org/simple/"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/engine", "src/models", "src/config", "src/constants", "src/cli", "src/utils"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = ["docs/"]
+
+[tool.ruff.lint]
+select = [
+    "E",      # pycodestyle errors
+    "F",      # Pyflakes (unused imports, undefined names)
+    "W",      # pycodestyle warnings
+    "B",      # flake8-bugbear (likely bugs and design problems)
+    "C90",    # mccabe complexity
+    "I",      # isort (import sorting)
+    "N",      # pep8-naming (naming conventions)
+    "UP",     # pyupgrade (modern Python syntax)
+    "ANN",    # flake8-annotations (type annotations)
+    "ASYNC",  # flake8-async (async/await best practices)
+    "S",      # flake8-bandit (security issues)
+    "BLE",    # flake8-blind-except (blind exception catching)
+    "A",      # flake8-builtins (builtin shadowing)
+    "COM",    # flake8-commas (trailing commas)
+    "DTZ",    # flake8-datetimez (datetime timezone awareness)
+    "T10",    # flake8-debugger (debugger statements)
+    "T20",    # flake8-print (print statements)
+    "PT",     # flake8-pytest-style (pytest best practices)
+]
+ignore = ["S101", "COM812", "B008"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 18
+
+[tool.ruff.lint.per-file-ignores]
+# Test functions/fixtures aren't held to the same annotation/tz-awareness bar as
+# production code (mirrors the `tests.*` mypy override below).
+"src/tests/*" = ["ANN001", "ANN003", "ANN201", "ANN202", "ANN204", "DTZ001"]
+# The demo script's entire purpose is printing a human-readable report.
+"scripts/*" = ["T201"]
+# `id` mirrors config.yaml's `id:` rule-spec field; renaming would break that vocabulary.
+"src/engine/rules/signature.py" = ["A002"]
+"src/engine/rules/threshold.py" = ["A002"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["engine", "models", "config", "constants", "cli"]
+force-sort-within-sections = true
+
+
+[tool.mypy]
+python_version = "3.12"
+plugins = ["pydantic.mypy"]
+strict = true
+show_error_codes = true
+explicit_package_bases = true
+mypy_path = "src"
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+disallow_untyped_calls = false
+
+[tool.ty.src]
+exclude = ["**/*.pyi"]
+
+[tool.ty.rules]
+# Equivalent to mypy's warn_redundant_casts
+redundant-cast = "warn"
+# Equivalent to mypy's warn_unused_ignores (ty has this as error by default)
+unused-ignore-comment = "ignore"
+# Additional helpful rules for stricter checking
+invalid-ignore-comment = "error"
+ignore-comment-unknown-rule = "error"
+deprecated = "warn"
+
+# Enable all core type checking rules at error level
+invalid-assignment = "error"
+invalid-argument-type = "ignore"  # Protocol not working
+invalid-return-type = "error"
+unresolved-reference = "error"
+unresolved-import = "error"
+unresolved-attribute = "error"
+call-non-callable = "error"
+missing-argument = "error"
+invalid-method-override = "ignore"
+invalid-parameter-default = "error"
