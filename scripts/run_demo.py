@@ -31,8 +31,8 @@ from engine import (  # noqa: E402
 )
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_AUTH = REPO_ROOT / "tests" / "fixtures" / "auth.log"
-DEFAULT_WEB = REPO_ROOT / "tests" / "fixtures" / "webserver.log"
+DEFAULT_AUTH = REPO_ROOT / "tests" / "fixtures" / "auth_incidents.log"
+DEFAULT_WEB = REPO_ROOT / "tests" / "fixtures" / "webserver_incidents.log"
 
 
 def _reference_time(web_path: str) -> datetime:

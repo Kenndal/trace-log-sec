@@ -243,3 +243,104 @@ def test_build_rules_severity_coercion():
 def test_default_rules_present():
     ids = {r.id for r in default_rules()}
     assert {"ssh_brute_force", "web_scanning", "directory_traversal", "sql_injection"} <= ids
+
+
+# --------------------------------------------------------------------------- #
+# sensitive_file_exposure / scanner_user_agent / sudo_privilege_escalation
+# --------------------------------------------------------------------------- #
+
+
+def _rule_from_defaults(rule_id):
+    return next(r for r in default_rules() if r.id == rule_id)
+
+
+def auth_msg(message, ip=None, seconds=0, user=None):
+    return AuthLogEntry(
+        timestamp=T0 + timedelta(seconds=seconds),
+        source="auth",
+        raw="",
+        line_no=1,
+        source_ip=ip,
+        message=message,
+        outcome=AuthOutcome.OTHER,
+        username=user,
+    )
+
+
+def web_ua(ip, seconds, user_agent, status=200):
+    return WebLogEntry(
+        timestamp=T0 + timedelta(seconds=seconds),
+        source="webserver",
+        raw="",
+        line_no=1,
+        source_ip=ip,
+        method="GET",
+        target="/",
+        status=status,
+        user_agent=user_agent,
+    )
+
+
+def test_sensitive_file_exposure_matches_git_config():
+    r = _rule_from_defaults("sensitive_file_exposure")
+    findings = run(r, [web("1.1.1.1", 0, target="/.git/config")])
+    assert len(findings) == 1
+
+
+def test_sensitive_file_exposure_ignores_ordinary_path():
+    r = _rule_from_defaults("sensitive_file_exposure")
+    findings = run(r, [web("1.1.1.1", 0, target="/products/environment-friendly-mug")])
+    assert findings == []
+
+
+def test_scanner_user_agent_matches_sqlmap():
+    r = _rule_from_defaults("scanner_user_agent")
+    findings = run(r, [web_ua("1.1.1.1", 0, "sqlmap/1.7.2#stable (http://sqlmap.org)")])
+    assert len(findings) == 1
+
+
+def test_scanner_user_agent_matches_blank_dash():
+    r = _rule_from_defaults("scanner_user_agent")
+    findings = run(r, [web_ua("1.1.1.1", 0, "-")])
+    assert len(findings) == 1
+
+
+def test_scanner_user_agent_ignores_curl_and_browsers():
+    r = _rule_from_defaults("scanner_user_agent")
+    entries = [
+        web_ua("1.1.1.1", 0, "curl/8.0"),
+        web_ua("1.1.1.1", 1, "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"),
+    ]
+    assert run(r, entries) == []
+
+
+def test_sudo_privilege_escalation_matches_shadow_read():
+    r = _rule_from_defaults("sudo_privilege_escalation")
+    line = (
+        "carol : TTY=pts/7 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow"
+    )
+    findings = run(r, [auth_msg(line, user="carol")])
+    assert len(findings) == 1
+
+
+def test_sudo_privilege_escalation_ignores_ordinary_sudo():
+    r = _rule_from_defaults("sudo_privilege_escalation")
+    line = (
+        "dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl restart nginx"
+    )
+    findings = run(r, [auth_msg(line, user="dave")])
+    assert findings == []
+
+
+def test_sudo_privilege_escalation_aggregates_under_no_ip():
+    # Sudo audit lines carry no source IP — all hits fold into one ip=None
+    # finding regardless of username (documented limitation, docs/mvp-rules-plan.md §4).
+    r = _rule_from_defaults("sudo_privilege_escalation")
+    entries = [
+        auth_msg("carol : ... COMMAND=/usr/bin/cat /etc/shadow", user="carol"),
+        auth_msg("admin : ... COMMAND=/bin/cat /etc/shadow", seconds=1, user="admin"),
+    ]
+    findings = run(r, entries)
+    assert len(findings) == 1
+    assert findings[0].source_ip is None
+    assert findings[0].count == 2
