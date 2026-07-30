@@ -24,14 +24,7 @@ from models import (
     ParseError,
     WebLogEntry,
 )
-
-
-class MalformedLineError(Exception):
-    """Raised by a parser when a line cannot be parsed."""
-
-    def __init__(self, reason: str) -> None:
-        super().__init__(reason)
-        self.reason = reason
+from utils.exceptions import MalformedLineError
 
 
 class LogParser(ABC):

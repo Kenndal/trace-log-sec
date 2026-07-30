@@ -36,7 +36,7 @@ name = "pypi"
 url = "https://pypi.org/simple/"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/engine", "src/models", "src/config", "src/constants", "src/cli"]
+packages = ["src/engine", "src/models", "src/config", "src/constants", "src/cli", "src/utils"]
 
 [build-system]
 requires = ["hatchling"]

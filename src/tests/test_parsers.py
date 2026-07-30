@@ -8,11 +8,11 @@ import pytest
 
 from engine.parsers import (
     CombinedLogParser,
-    MalformedLineError,
     SyslogAuthParser,
     parse_file,
 )
 from models import AuthOutcome, ParseError, WebLogEntry
+from utils.exceptions import MalformedLineError
 
 # --------------------------------------------------------------------------- #
 # Combined access log

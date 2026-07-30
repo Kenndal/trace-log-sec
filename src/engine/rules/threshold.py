@@ -15,6 +15,7 @@ from engine.rules.base import Rule
 from engine.rules.registry import register
 from engine.rules.utils import FieldExtractor, Predicate, add_evidence, resolve_preset
 from models import AuthLogEntry, AuthOutcome, Finding, LogEntry, Severity, WebLogEntry
+from utils.exceptions import RuleConfigError
 
 # Named predicates (the config-safe "match" presets).
 
@@ -85,9 +86,9 @@ class ThresholdRule(Rule):
         max_evidence: int = DEFAULT_MAX_EVIDENCE,
     ) -> None:
         if threshold < 1:
-            raise ValueError(f"threshold must be >= 1, got {threshold!r}")
+            raise RuleConfigError(f"threshold must be >= 1, got {threshold!r}")
         if window_seconds <= 0:
-            raise ValueError(f"window_seconds must be > 0, got {window_seconds!r}")
+            raise RuleConfigError(f"window_seconds must be > 0, got {window_seconds!r}")
         self.id = id
         self.title = title or id
         self.severity = severity

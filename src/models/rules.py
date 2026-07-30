@@ -14,6 +14,7 @@ from enum import IntEnum
 from typing import Any
 
 from models.parsers import LogEntry
+from utils.exceptions import RuleConfigError
 
 
 class Severity(IntEnum):
@@ -32,7 +33,7 @@ class Severity(IntEnum):
             return cls[name.strip().upper()]
         except KeyError as exc:  # pragma: no cover - defensive
             valid = ", ".join(m.name.lower() for m in cls)
-            raise ValueError(f"unknown severity {name!r}; expected one of {valid}") from exc
+            raise RuleConfigError(f"unknown severity {name!r}; expected one of {valid}") from exc
 
 
 @dataclass(kw_only=True)

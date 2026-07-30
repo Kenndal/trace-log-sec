@@ -18,13 +18,13 @@ from models import (
     Severity,
     WebLogEntry,
 )
+from utils.exceptions import MalformedLineError
 
 from .correlation import Correlator
 from .engine import Engine
 from .parsers import (
     CombinedLogParser,
     LogParser,
-    MalformedLineError,
     SyslogAuthParser,
     parse_file,
 )

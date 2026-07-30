@@ -13,6 +13,7 @@ from engine.rules import (
     build_rules,
 )
 from models import AuthLogEntry, AuthOutcome, Severity, WebLogEntry
+from utils.exceptions import RuleConfigError
 
 T0 = datetime(2025, 10, 10, 12, 0, 0)
 
@@ -114,13 +115,13 @@ def test_threshold_per_ip_isolation():
 
 @pytest.mark.parametrize("threshold", [0, -1])
 def test_threshold_rejects_non_positive_threshold(threshold):
-    with pytest.raises(ValueError, match="threshold"):
+    with pytest.raises(RuleConfigError, match="threshold"):
         ThresholdRule(id="bf", match="auth_failure", threshold=threshold, window_seconds=60)
 
 
 @pytest.mark.parametrize("window_seconds", [0, -60])
 def test_threshold_rejects_non_positive_window(window_seconds):
-    with pytest.raises(ValueError, match="window_seconds"):
+    with pytest.raises(RuleConfigError, match="window_seconds"):
         ThresholdRule(id="bf", match="auth_failure", threshold=5, window_seconds=window_seconds)
 
 
@@ -268,28 +269,28 @@ def test_config_rules_present():
 
 
 def test_build_rules_missing_id_raises():
-    with pytest.raises(ValueError, match="id"):
+    with pytest.raises(RuleConfigError, match="id"):
         build_rules([{"type": "threshold", "params": {"match": "auth_failure", "threshold": 1, "window_seconds": 1}}])
 
 
 def test_build_rules_unknown_type_raises():
-    with pytest.raises(ValueError, match="unknown rule type"):
+    with pytest.raises(RuleConfigError, match="unknown rule type"):
         build_rules([{"id": "a", "type": "nope"}])
 
 
 def test_build_rules_missing_required_param_raises():
     # ThresholdRule requires match/threshold/window_seconds; params is empty.
-    with pytest.raises(ValueError, match="failed to build rule 'a'"):
+    with pytest.raises(RuleConfigError, match="failed to build rule 'a'"):
         build_rules([{"id": "a", "type": "threshold", "params": {}}])
 
 
 def test_build_rules_invalid_regex_raises():
-    with pytest.raises(ValueError, match="failed to build rule 'sig'"):
+    with pytest.raises(RuleConfigError, match="failed to build rule 'sig'"):
         build_rules([{"id": "sig", "type": "signature", "params": {"patterns": [r"("]}}])
 
 
 def test_build_rules_invalid_severity_raises():
-    with pytest.raises(ValueError, match="failed to build rule 'a'"):
+    with pytest.raises(RuleConfigError, match="failed to build rule 'a'"):
         build_rules(
             [
                 {
@@ -303,7 +304,7 @@ def test_build_rules_invalid_severity_raises():
 
 
 def test_build_rules_unknown_match_preset_raises():
-    with pytest.raises(ValueError, match="failed to build rule 'a'"):
+    with pytest.raises(RuleConfigError, match="failed to build rule 'a'"):
         build_rules(
             [{"id": "a", "type": "threshold", "params": {"match": "nope", "threshold": 1, "window_seconds": 1}}]
         )

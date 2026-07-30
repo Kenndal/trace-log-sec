@@ -8,6 +8,7 @@ from typing import Any
 from engine.rules.base import Rule
 from engine.rules.registry import RULE_TYPES
 from models import Severity
+from utils.exceptions import RuleConfigError
 
 
 def build_rules(specs: Iterable[dict[str, Any]]) -> list[Rule]:
@@ -22,11 +23,11 @@ def build_rules(specs: Iterable[dict[str, Any]]) -> list[Rule]:
         if not spec.get("enabled", True):
             continue
         if "id" not in spec:
-            raise ValueError(f"rule spec missing required 'id' field: {spec!r}")
+            raise RuleConfigError(f"rule spec missing required 'id' field: {spec!r}")
         rule_id = spec["id"]
         type_name = spec.get("type")
         if type_name not in RULE_TYPES:
-            raise ValueError(f"unknown rule type {type_name!r} for id {rule_id!r}")
+            raise RuleConfigError(f"unknown rule type {type_name!r} for id {rule_id!r}")
         cls = RULE_TYPES[type_name]
 
         try:
@@ -37,7 +38,7 @@ def build_rules(specs: Iterable[dict[str, Any]]) -> list[Rule]:
                 kwargs[key] = _coerce_severity(value) if key == "severity" else value
             rules.append(cls(**kwargs))
         except Exception as e:
-            raise ValueError(f"failed to build rule {rule_id!r} (type={type_name!r}): {e}") from e
+            raise RuleConfigError(f"failed to build rule {rule_id!r} (type={type_name!r}): {e}") from e
     return rules
 
 

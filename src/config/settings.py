@@ -14,18 +14,10 @@ from pydantic import BaseModel, ValidationError
 import yaml
 
 from constants import DEFAULT_CONFIG_FILENAME
+from utils.exceptions import ConfigError
 
 PACKAGE_DIR = Path(__file__).resolve().parent
 DEFAULT_CONFIG_PATH = PACKAGE_DIR / DEFAULT_CONFIG_FILENAME
-
-
-class ConfigError(Exception):
-    """Raised when the YAML config at a given path can't be read or is invalid."""
-
-    def __init__(self, path: str | Path, reason: str) -> None:
-        self.path = path
-        self.reason = reason
-        super().__init__(f"invalid config at {path!r}: {reason}")
 
 
 class RuleSpec(BaseModel):

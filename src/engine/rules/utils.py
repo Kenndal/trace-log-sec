@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping
 
 from models import Finding, LogEntry
+from utils.exceptions import RuleConfigError
 
 Predicate = Callable[[LogEntry], bool]
 FieldExtractor = Callable[[LogEntry], str | None]
@@ -15,7 +16,7 @@ def resolve_preset[T](name: str, presets: Mapping[str, T], kind: str) -> T:
     try:
         return presets[name]
     except KeyError:
-        raise ValueError(f"unknown {kind} {name!r}") from None
+        raise RuleConfigError(f"unknown {kind} {name!r}") from None
 
 
 def add_evidence(finding: Finding, entry: LogEntry, max_evidence: int) -> None:

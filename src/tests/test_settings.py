@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from config.settings import ConfigError, load_settings, rule_specs
+from config.settings import load_settings, rule_specs
+from utils.exceptions import ConfigError
 
 VALID_RULE = """\
 rules:
