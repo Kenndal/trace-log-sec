@@ -1,0 +1,76 @@
+default_install_hook_types: [pre-commit, pre-push]
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-merge-conflict
+        stages: [pre-commit]
+
+  - repo: local
+    hooks:
+      - id: ruff-format
+        name: ruff format
+        entry: uv run ruff format
+        types: [python]
+        language: system
+        require_serial: true
+        stages: [pre-commit]
+
+      - id: ruff-check
+        name: ruff check
+        entry: uv run ruff check --fix
+        types: [python]
+        language: system
+        require_serial: true
+        stages: [pre-commit]
+
+      - id: mypy
+        name: mypy
+        entry: uv run mypy
+        types: [python]
+        language: system
+        require_serial: true
+        stages: [pre-commit]
+
+      - id: ty-check
+        name: ty check
+        entry: uv run ty check
+        types: [python]
+        language: system
+        require_serial: true
+        stages: [pre-commit]
+
+      - id: ruff-format-all
+        name: ruff format all files
+        entry: uv run ruff format .
+        pass_filenames: false
+        language: system
+        stages: [pre-push]
+
+      - id: ruff-check-all
+        name: ruff check all files
+        entry: uv run ruff check --fix .
+        pass_filenames: false
+        language: system
+        stages: [pre-push]
+
+      - id: mypy_all_files
+        name: mypy_all_files
+        entry: uv run mypy .
+        pass_filenames: false
+        language: system
+        stages: [pre-push]
+
+      - id: ty-check-all
+        name: ty check all files
+        entry: uv run ty check .
+        pass_filenames: false
+        language: system
+        stages: [pre-push]
+
+      - id: unit-tests
+        name: Unit tests
+        entry: uv run pytest src/tests/
+        pass_filenames: false
+        language: system
+        stages: [pre-push]

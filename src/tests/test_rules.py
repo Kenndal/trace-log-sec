@@ -4,13 +4,15 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta
 
-from engine.models import AuthLogEntry, AuthOutcome, Severity, WebLogEntry
+import pytest
+
+from config.settings import load_settings, rule_specs
 from engine.rules import (
     PatternSignatureRule,
     ThresholdRule,
     build_rules,
 )
-from settings import load_settings, rule_specs
+from models import AuthLogEntry, AuthOutcome, Severity, WebLogEntry
 
 T0 = datetime(2025, 10, 10, 12, 0, 0)
 
@@ -106,14 +108,29 @@ def test_threshold_per_ip_isolation():
 
 
 # --------------------------------------------------------------------------- #
+# ThresholdRule — config validation
+# --------------------------------------------------------------------------- #
+
+
+@pytest.mark.parametrize("threshold", [0, -1])
+def test_threshold_rejects_non_positive_threshold(threshold):
+    with pytest.raises(ValueError, match="threshold"):
+        ThresholdRule(id="bf", match="auth_failure", threshold=threshold, window_seconds=60)
+
+
+@pytest.mark.parametrize("window_seconds", [0, -60])
+def test_threshold_rejects_non_positive_window(window_seconds):
+    with pytest.raises(ValueError, match="window_seconds"):
+        ThresholdRule(id="bf", match="auth_failure", threshold=5, window_seconds=window_seconds)
+
+
+# --------------------------------------------------------------------------- #
 # ThresholdRule — breadth (scanning) via distinct_by
 # --------------------------------------------------------------------------- #
 
 
 def test_distinct_by_path_counts_breadth_not_volume():
-    r = ThresholdRule(
-        id="scan", match="web_404", distinct_by="path", threshold=3, window_seconds=120
-    )
+    r = ThresholdRule(id="scan", match="web_404", distinct_by="path", threshold=3, window_seconds=120)
     # 5 hits but only 2 distinct paths → no fire.
     entries = [web("1.1.1.1", s, target="/a", status=404) for s in range(3)]
     entries += [web("1.1.1.1", s + 3, target="/b", status=404) for s in range(2)]
@@ -121,9 +138,7 @@ def test_distinct_by_path_counts_breadth_not_volume():
 
 
 def test_distinct_by_path_fires_on_enough_distinct():
-    r = ThresholdRule(
-        id="scan", match="web_404", distinct_by="path", threshold=3, window_seconds=120
-    )
+    r = ThresholdRule(id="scan", match="web_404", distinct_by="path", threshold=3, window_seconds=120)
     entries = [web("1.1.1.1", i, target=f"/p{i}", status=404) for i in range(3)]
     findings = run(r, entries)
     assert len(findings) == 1
@@ -131,9 +146,7 @@ def test_distinct_by_path_fires_on_enough_distinct():
 
 
 def test_distinct_by_path_normalizes_trailing_slash_and_query():
-    r = ThresholdRule(
-        id="scan", match="web_404", distinct_by="path", threshold=2, window_seconds=120
-    )
+    r = ThresholdRule(id="scan", match="web_404", distinct_by="path", threshold=2, window_seconds=120)
     # "/a", "/a/", "/a?x=1" all normalize to the same key → 1 distinct → no fire.
     entries = [
         web("1.1.1.1", 0, target="/a", status=404),
@@ -183,9 +196,7 @@ def test_signature_case_insensitive_by_default():
 
 
 def test_signature_url_decoded_double_encoding():
-    r = PatternSignatureRule(
-        id="trav", patterns=[r"\.\./", r"%2e%2e"], target="request_target"
-    )
+    r = PatternSignatureRule(id="trav", patterns=[r"\.\./", r"%2e%2e"], target="request_target")
     # %252e%252e%252f decodes twice to ../ — caught via decoded variant.
     findings = run(r, [web("1.1.1.1", 0, target="/x?f=%252e%252e%252fetc")])
     assert len(findings) == 1
@@ -229,25 +240,73 @@ def test_signature_records_match_metadata():
 def test_build_rules_disabled_skipped():
     rules = build_rules(
         [
-            {"id": "a", "type": "threshold", "enabled": False,
-             "params": {"match": "auth_failure", "threshold": 1, "window_seconds": 1}},
-            {"id": "b", "type": "threshold",
-             "params": {"match": "auth_failure", "threshold": 1, "window_seconds": 1}},
+            {
+                "id": "a",
+                "type": "threshold",
+                "enabled": False,
+                "params": {"match": "auth_failure", "threshold": 1, "window_seconds": 1},
+            },
+            {"id": "b", "type": "threshold", "params": {"match": "auth_failure", "threshold": 1, "window_seconds": 1}},
         ]
     )
     assert [r.id for r in rules] == ["b"]
 
 
 def test_build_rules_severity_coercion():
-    rules = build_rules(
-        [{"id": "s", "type": "signature", "severity": "high", "params": {"patterns": [r"x"]}}]
-    )
+    rules = build_rules([{"id": "s", "type": "signature", "severity": "high", "params": {"patterns": [r"x"]}}])
     assert rules[0].severity == Severity.HIGH
 
 
 def test_config_rules_present():
     ids = {r.id for r in config_rules()}
     assert {"ssh_brute_force", "web_scanning", "directory_traversal", "sql_injection"} <= ids
+
+
+# --------------------------------------------------------------------------- #
+# build_rules — failure scenarios
+# --------------------------------------------------------------------------- #
+
+
+def test_build_rules_missing_id_raises():
+    with pytest.raises(ValueError, match="id"):
+        build_rules([{"type": "threshold", "params": {"match": "auth_failure", "threshold": 1, "window_seconds": 1}}])
+
+
+def test_build_rules_unknown_type_raises():
+    with pytest.raises(ValueError, match="unknown rule type"):
+        build_rules([{"id": "a", "type": "nope"}])
+
+
+def test_build_rules_missing_required_param_raises():
+    # ThresholdRule requires match/threshold/window_seconds; params is empty.
+    with pytest.raises(ValueError, match="failed to build rule 'a'"):
+        build_rules([{"id": "a", "type": "threshold", "params": {}}])
+
+
+def test_build_rules_invalid_regex_raises():
+    with pytest.raises(ValueError, match="failed to build rule 'sig'"):
+        build_rules([{"id": "sig", "type": "signature", "params": {"patterns": [r"("]}}])
+
+
+def test_build_rules_invalid_severity_raises():
+    with pytest.raises(ValueError, match="failed to build rule 'a'"):
+        build_rules(
+            [
+                {
+                    "id": "a",
+                    "type": "threshold",
+                    "severity": "not-a-severity",
+                    "params": {"match": "auth_failure", "threshold": 1, "window_seconds": 1},
+                }
+            ]
+        )
+
+
+def test_build_rules_unknown_match_preset_raises():
+    with pytest.raises(ValueError, match="failed to build rule 'a'"):
+        build_rules(
+            [{"id": "a", "type": "threshold", "params": {"match": "nope", "threshold": 1, "window_seconds": 1}}]
+        )
 
 
 # --------------------------------------------------------------------------- #
@@ -321,18 +380,14 @@ def test_scanner_user_agent_ignores_curl_and_browsers():
 
 def test_sudo_privilege_escalation_matches_shadow_read():
     r = _rule_from_defaults("sudo_privilege_escalation")
-    line = (
-        "carol : TTY=pts/7 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow"
-    )
+    line = "carol : TTY=pts/7 ; PWD=/home/carol ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow"
     findings = run(r, [auth_msg(line, user="carol")])
     assert len(findings) == 1
 
 
 def test_sudo_privilege_escalation_ignores_ordinary_sudo():
     r = _rule_from_defaults("sudo_privilege_escalation")
-    line = (
-        "dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl restart nginx"
-    )
+    line = "dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl restart nginx"
     findings = run(r, [auth_msg(line, user="dave")])
     assert findings == []
 

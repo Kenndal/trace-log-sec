@@ -6,27 +6,25 @@ from datetime import datetime, timedelta, timezone
 
 import pytest
 
-from engine.models import AuthOutcome, ParseError, WebLogEntry
 from engine.parsers import (
     CombinedLogParser,
     MalformedLineError,
     SyslogAuthParser,
     parse_file,
 )
+from models import AuthOutcome, ParseError, WebLogEntry
 
 # --------------------------------------------------------------------------- #
 # Combined access log
 # --------------------------------------------------------------------------- #
 
 COMBINED_LINE = (
-    '10.0.0.50 - frank [10/Oct/2025:13:55:36 -0700] '
+    "10.0.0.50 - frank [10/Oct/2025:13:55:36 -0700] "
     '"GET /index.html HTTP/1.1" 200 2326 '
     '"http://example.com/" "Mozilla/5.0"'
 )
 
-COMMON_LINE = (
-    '10.0.0.50 - - [10/Oct/2025:13:55:36 -0700] "GET /a HTTP/1.1" 404 -'
-)
+COMMON_LINE = '10.0.0.50 - - [10/Oct/2025:13:55:36 -0700] "GET /a HTTP/1.1" 404 -'
 
 
 def test_combined_full_line():
@@ -42,9 +40,7 @@ def test_combined_full_line():
     assert e.size == 2326
     assert e.referrer == "http://example.com/"
     assert e.user_agent == "Mozilla/5.0"
-    assert e.timestamp == datetime(
-        2025, 10, 10, 13, 55, 36, tzinfo=timezone(timedelta(hours=-7))
-    )
+    assert e.timestamp == datetime(2025, 10, 10, 13, 55, 36, tzinfo=timezone(timedelta(hours=-7)))
 
 
 def test_common_line_no_referrer_agent_and_dash_size():
@@ -95,7 +91,7 @@ def test_bad_timestamp_raises():
 REF = datetime(2026, 7, 30, 12, 0, 0)
 
 
-def _auth(msg: str, host="server", proc="sshd[1234]"):
+def _auth(msg: str, host: str = "server", proc: str = "sshd[1234]") -> str:
     return f"Oct 10 13:55:36 {host} {proc}: {msg}"
 
 
@@ -168,12 +164,14 @@ def test_malformed_auth_raises():
 def test_parse_file_mixes_entries_and_errors_and_counts(tmp_path):
     f = tmp_path / "webserver.log"
     f.write_text(
-        COMBINED_LINE + "\n"
+        COMBINED_LINE
+        + "\n"
         + "\n"  # blank
         + "[MALFORMED ENTRY\n"
-        + COMMON_LINE + "\n"
+        + COMMON_LINE
+        + "\n"
     )
-    counters: dict = {}
+    counters: dict[str, int] = {}
     items = list(parse_file(f, CombinedLogParser(), counters=counters))
     entries = [i for i in items if isinstance(i, WebLogEntry)]
     errors = [i for i in items if isinstance(i, ParseError)]

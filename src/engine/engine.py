@@ -9,12 +9,15 @@ See docs/engine-plan.md §8.
 
 from __future__ import annotations
 
+from collections.abc import Iterable, Sequence
 import logging
 import time
-from collections.abc import Iterable, Sequence
+from typing import Any
+
+from constants import DEFAULT_MAX_EVIDENCE
+from models import AnalysisReport, Finding, Incident, LogSource, ParseError
 
 from .correlation import Correlator
-from .models import AnalysisReport, Finding, Incident, LogEntry, LogSource, ParseError
 from .parsers import parse_file
 from .rules import Rule
 
@@ -28,7 +31,7 @@ class Engine:
         *,
         correlator: Correlator | None = None,
         logger: logging.Logger | None = None,
-        max_evidence: int = 20,
+        max_evidence: int = DEFAULT_MAX_EVIDENCE,
         strict: bool = False,
     ) -> None:
         self.rules = list(rules)
@@ -70,11 +73,21 @@ class Engine:
 
                 stats["parsed"] += 1
                 for rule in self.rules:
-                    findings.extend(rule.inspect(item))
+                    try:
+                        findings.extend(rule.inspect(item))
+                    except Exception as e:
+                        if self.strict:
+                            raise
+                        self.logger.warning("rule %s raised on entry: %s", rule.id, e)
 
         # 4. Flush end-of-stream aggregates.
         for rule in self.rules:
-            findings.extend(rule.flush())
+            try:
+                findings.extend(rule.flush())
+            except Exception as e:
+                if self.strict:
+                    raise
+                self.logger.warning("rule %s raised on flush: %s", rule.id, e)
 
         # Cap evidence to the engine-wide ceiling. A rule's own max_evidence
         # (if lower) already wins during collection; this only trims further.
@@ -99,7 +112,7 @@ class Engine:
         findings: list[Finding],
         incidents: list[Incident],
         started: float,
-    ) -> dict:
+    ) -> dict[str, Any]:
         totals = {
             "lines_read": 0,
             "parsed": 0,

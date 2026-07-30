@@ -9,18 +9,19 @@ See docs/engine-plan.md §7.
 
 from __future__ import annotations
 
-import hashlib
 from collections import defaultdict
 from collections.abc import Iterable
-from datetime import timedelta
+from datetime import datetime, timedelta
+import hashlib
 
-from .models import Finding, Incident, Severity
+from constants import DEFAULT_CORRELATION_WINDOW_MINUTES
+from models import Finding, Incident, Severity
 
 
 class Correlator:
     """Stateless correlator; clusters findings per IP within a time window."""
 
-    def __init__(self, window: timedelta = timedelta(minutes=10)) -> None:
+    def __init__(self, window: timedelta = timedelta(minutes=DEFAULT_CORRELATION_WINDOW_MINUTES)) -> None:
         self.window = window
 
     def correlate(self, findings: Iterable[Finding]) -> list[Incident]:
@@ -45,9 +46,9 @@ class Correlator:
         """Greedily group findings whose gap from the running span <= window."""
         clusters: list[list[Finding]] = []
         current: list[Finding] = []
-        current_end = None
+        current_end: datetime | None = None
         for f in findings:
-            if current and f.first_seen - current_end <= self.window:
+            if current_end is not None and f.first_seen - current_end <= self.window:
                 current.append(f)
                 current_end = max(current_end, f.last_seen)
             else:
@@ -69,9 +70,13 @@ class Correlator:
         last_seen = max(f.last_seen for f in cluster)
         severity = self._escalate(max(f.severity for f in cluster))
 
-        incident_id = "INC-" + hashlib.sha1(
-            (f"{ip}|{first_seen.isoformat()}|" + ",".join(sorted(rule_ids))).encode()
-        ).hexdigest()[:10]
+        # sha1 for a short deterministic display id, not a security use of the hash.
+        incident_id = (
+            "INC-"
+            + hashlib.sha1(  # noqa: S324
+                (f"{ip}|{first_seen.isoformat()}|" + ",".join(sorted(rule_ids))).encode()
+            ).hexdigest()[:10]
+        )
 
         return Incident(
             incident_id=incident_id,
@@ -97,8 +102,8 @@ class Correlator:
         cluster: list[Finding],
         rule_ids: set[str],
         sources: set[str],
-        first_seen,
-        last_seen,
+        first_seen: datetime,
+        last_seen: datetime,
     ) -> str:
         span = last_seen - first_seen
         titles = sorted({f.title for f in cluster})

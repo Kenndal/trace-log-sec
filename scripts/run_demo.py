@@ -5,22 +5,21 @@ Not the CLI (that layer is intentionally out of scope) — a thin harness that
 runs the default rule set over two log files and prints the analysis report.
 
 Usage:
-    python3 scripts/run_demo.py                       # uses tests/fixtures/*
-    python3 scripts/run_demo.py AUTH_LOG WEBSERVER_LOG
+    uv run python scripts/run_demo.py                       # uses src/tests/fixtures/*
+    uv run python scripts/run_demo.py AUTH_LOG WEBSERVER_LOG
 
-Run from the repo root so the ``engine`` package is importable.
+Requires `uv sync` first, so the package is editable-installed and
+``engine``/``config``/``models`` are importable.
 """
 
 from __future__ import annotations
 
-import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
+import sys
 
-# Allow running as `python3 scripts/run_demo.py` from the repo root.
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-
-from engine import (  # noqa: E402
+from config.settings import load_settings, rule_specs
+from engine import (
     CombinedLogParser,
     Engine,
     LogSource,
@@ -29,11 +28,10 @@ from engine import (  # noqa: E402
     build_rules,
     parse_file,
 )
-from settings import load_settings, rule_specs  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_AUTH = REPO_ROOT / "tests" / "fixtures" / "auth_incidents.log"
-DEFAULT_WEB = REPO_ROOT / "tests" / "fixtures" / "webserver_incidents.log"
+DEFAULT_AUTH = REPO_ROOT / "src" / "tests" / "fixtures" / "auth_incidents.log"
+DEFAULT_WEB = REPO_ROOT / "src" / "tests" / "fixtures" / "webserver_incidents.log"
 
 
 def _reference_time(web_path: str) -> datetime:
@@ -50,7 +48,7 @@ def _reference_time(web_path: str) -> datetime:
     for item in parse_file(web_path, CombinedLogParser()):
         if isinstance(item, WebLogEntry) and (latest is None or item.timestamp > latest):
             latest = item.timestamp
-    return latest if latest is not None else datetime.now(timezone.utc)
+    return latest if latest is not None else datetime.now(UTC)
 
 
 def main(argv: list[str]) -> int:
