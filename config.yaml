@@ -1,0 +1,142 @@
+# Detection rule configuration.
+#
+# Loaded by settings.py::load_settings() and turned into Rule instances via
+# engine.build_rules(). This is a transcription of the baseline previously
+# hardcoded in engine/rules.py::default_rules() (see docs/rule-config-plan.md).
+#
+# Each rule: {id, type, enabled?, severity?, params}.
+#   - type "threshold": stateful per-IP sliding window (brute force, scanning).
+#   - type "signature": stateless per-line regex matching (SQLi, traversal, ...).
+# Supplying a rule with an existing id overrides it; enabled: false disables it;
+# a new id adds a rule. See docs/engine-plan.md §6.1.
+
+rules:
+  - id: ssh_brute_force
+    type: threshold
+    severity: high
+    params:
+      match: auth_failure
+      threshold: 5
+      window_seconds: 60
+      title: SSH Brute Force
+      description: Repeated SSH authentication failures from one IP.
+
+  - id: web_login_brute_force
+    type: threshold
+    severity: medium
+    params:
+      match: web_login_failure
+      threshold: 10
+      window_seconds: 60
+      title: Web Login Brute Force
+      description: Repeated failed web logins (401/403) from one IP.
+
+  - id: web_scanning
+    type: threshold
+    severity: medium
+    params:
+      match: web_404
+      distinct_by: path
+      threshold: 15
+      window_seconds: 120
+      title: Web Scanning
+      description: Many distinct 404 paths from one IP (enumeration).
+
+  - id: directory_traversal
+    type: signature
+    severity: high
+    params:
+      target: request_target
+      title: Directory Traversal
+      description: Path traversal sequences in the request target.
+      patterns:
+        - "\\.\\./"
+        - "\\.\\.\\\\"
+        - "/etc/passwd"
+        - "/etc/shadow"
+        - "\\bboot\\.ini\\b"
+        - "%2e%2e"
+
+  - id: sql_injection
+    type: signature
+    severity: high
+    params:
+      target: request_target
+      title: SQL Injection
+      description: SQL-injection syntax in the request target.
+      patterns:
+        - "union\\s+select"
+        - "\\bor\\s+1\\s*=\\s*1\\b"
+        - "'\\s*or\\s*'1'\\s*=\\s*'1"
+        - '"\s*or\s*"1"\s*=\s*"1'
+        - "'\\s*or\\s+\\w"
+        - "'\\s*--"
+        - "'\\s*#"
+        - "\\bsleep\\s*\\("
+        - "\\bbenchmark\\s*\\("
+        - "information_schema"
+        - "xp_cmdshell"
+        - "\\bdrop\\s+table\\b"
+        - ";\\s*(?:drop|delete|update|insert|alter|truncate)\\b"
+
+  - id: sensitive_file_exposure
+    type: signature
+    severity: high
+    params:
+      target: request_target
+      title: Sensitive File / Credential Exposure Probing
+      description: Request for source control, environment, backup, or key material.
+      patterns:
+        - "\\.git/"
+        - "\\.svn/"
+        - "\\.env(\\.|$|\\?)"
+        - "\\.aws/credentials"
+        - "id_rsa"
+        - "\\.ssh/"
+        - "\\.htpasswd"
+        - "\\.pem$"
+        - "wp-config\\.php"
+        - "config\\.php"
+        - "\\.bak$"
+        - "\\.sql$"
+        - "\\.tar\\.gz$"
+        - "docker-compose\\.ya?ml"
+        - "\\.DS_Store"
+
+  - id: scanner_user_agent
+    type: signature
+    severity: medium
+    params:
+      target: user_agent
+      title: Known Scanner / Attack-Tool User-Agent
+      description: Request identifies itself as a known scanning or exploitation tool.
+      patterns:
+        - "sqlmap"
+        - "\\bnikto\\b"
+        - "\\bnessus\\b"
+        - "\\bmasscan\\b"
+        - "\\bnmap\\b"
+        - "acunetix"
+        - "netsparker"
+        - "\\bw3af\\b"
+        - "dirbuster"
+        - "gobuster"
+        - "feroxbuster"
+        - "\\bzgrab\\b"
+        - "^-$"
+
+  - id: sudo_privilege_escalation
+    type: signature
+    severity: critical
+    params:
+      target: auth_message
+      title: Sudo Access to Sensitive Files / Credentials
+      description: A sudo command read or copied credential material.
+      patterns:
+        - "COMMAND=.*\\bcat\\b.*shadow"
+        - "COMMAND=.*\\bcat\\b.*passwd\\b"
+        - "COMMAND=.*id_rsa"
+        - "COMMAND=.*\\.ssh/"
+        - "COMMAND=.*\\.aws/credentials"
+        - "COMMAND=.*\\buseradd\\b"
+        - "COMMAND=.*\\busermod\\b.*sudo"

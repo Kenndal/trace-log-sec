@@ -10,9 +10,15 @@ from engine.correlation import Correlator
 from engine.engine import Engine, LogSource
 from engine.models import AuthLogEntry, AuthOutcome, Severity, WebLogEntry
 from engine.parsers import CombinedLogParser, LogParser, SyslogAuthParser
-from engine.rules import Rule, ThresholdRule, default_rules
+from engine.rules import Rule, ThresholdRule, build_rules
+from settings import load_settings, rule_specs
 
 REF = datetime(2026, 7, 30, 12, 0, 0)
+
+
+def config_rules():
+    """Rules as configured in config.yaml (the default rule set)."""
+    return build_rules(rule_specs(load_settings()))
 
 
 class ListParser(LogParser):
@@ -62,7 +68,7 @@ def test_end_to_end_correlated_incident(tmp_path):
     auth = make_auth_log(tmp_path)
     web = make_web_log(tmp_path)
     engine = Engine(
-        default_rules(),
+        config_rules(),
         correlator=Correlator(window=timedelta(minutes=10)),
     )
     report = engine.analyze(
@@ -83,7 +89,7 @@ def test_end_to_end_correlated_incident(tmp_path):
 
 def test_stats_shape(tmp_path):
     web = make_web_log(tmp_path)
-    engine = Engine(default_rules())
+    engine = Engine(config_rules())
     report = engine.analyze([LogSource(path=str(web), parser=CombinedLogParser())])
     stats = report.stats
     assert set(stats) == {"sources", "totals", "duration_seconds"}
@@ -97,7 +103,7 @@ def test_stats_shape(tmp_path):
 
 
 def test_missing_file_captured_not_raised(tmp_path):
-    engine = Engine(default_rules())
+    engine = Engine(config_rules())
     report = engine.analyze(
         [LogSource(path=str(tmp_path / "nope.log"), parser=CombinedLogParser())]
     )
@@ -107,7 +113,7 @@ def test_missing_file_captured_not_raised(tmp_path):
 
 
 def test_missing_file_strict_raises(tmp_path):
-    engine = Engine(default_rules(), strict=True)
+    engine = Engine(config_rules(), strict=True)
     with pytest.raises(FileNotFoundError):
         engine.analyze(
             [LogSource(path=str(tmp_path / "nope.log"), parser=CombinedLogParser())]
@@ -117,7 +123,7 @@ def test_missing_file_strict_raises(tmp_path):
 def test_all_malformed_file_is_normal_report(tmp_path):
     f = tmp_path / "webserver.log"
     f.write_text("[MALFORMED ENTRY\nalso bad\n")
-    engine = Engine(default_rules())
+    engine = Engine(config_rules())
     report = engine.analyze([LogSource(path=str(f), parser=CombinedLogParser())])
     assert report.findings == []
     assert len(report.parse_errors) == 2
@@ -127,7 +133,7 @@ def test_all_malformed_file_is_normal_report(tmp_path):
 def test_empty_file_is_normal_report(tmp_path):
     f = tmp_path / "webserver.log"
     f.write_text("")
-    engine = Engine(default_rules())
+    engine = Engine(config_rules())
     report = engine.analyze([LogSource(path=str(f), parser=CombinedLogParser())])
     assert report.findings == []
     assert report.parse_errors == []
@@ -135,7 +141,7 @@ def test_empty_file_is_normal_report(tmp_path):
 
 def test_engine_rerun_idempotent(tmp_path):
     auth = make_auth_log(tmp_path)
-    engine = Engine(default_rules())
+    engine = Engine(config_rules())
     src = [LogSource(path=str(auth), parser=SyslogAuthParser(reference_time=REF))]
     r1 = engine.analyze(src)
     r2 = engine.analyze(src)

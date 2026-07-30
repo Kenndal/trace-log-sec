@@ -26,9 +26,10 @@ from engine import (  # noqa: E402
     LogSource,
     SyslogAuthParser,
     WebLogEntry,
-    default_rules,
+    build_rules,
     parse_file,
 )
+from settings import load_settings, rule_specs  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_AUTH = REPO_ROOT / "tests" / "fixtures" / "auth_incidents.log"
@@ -61,7 +62,7 @@ def main(argv: list[str]) -> int:
         print(__doc__)
         return 2
 
-    engine = Engine(default_rules())
+    engine = Engine(build_rules(rule_specs(load_settings())))
     report = engine.analyze(
         [
             LogSource(

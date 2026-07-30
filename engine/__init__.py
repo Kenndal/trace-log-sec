@@ -31,7 +31,6 @@ from .rules import (
     Rule,
     ThresholdRule,
     build_rules,
-    default_rules,
     register,
 )
 
@@ -58,7 +57,6 @@ __all__ = [
     "RULE_TYPES",
     "register",
     "build_rules",
-    "default_rules",
     # correlation
     "Correlator",
     # engine
