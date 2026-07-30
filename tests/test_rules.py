@@ -9,10 +9,15 @@ from engine.rules import (
     PatternSignatureRule,
     ThresholdRule,
     build_rules,
-    default_rules,
 )
+from settings import load_settings, rule_specs
 
 T0 = datetime(2025, 10, 10, 12, 0, 0)
+
+
+def config_rules():
+    """Rules as configured in config.yaml (the default rule set)."""
+    return build_rules(rule_specs(load_settings()))
 
 
 def auth_fail(ip, seconds, outcome=AuthOutcome.FAILURE, user="x"):
@@ -217,7 +222,7 @@ def test_signature_records_match_metadata():
 
 
 # --------------------------------------------------------------------------- #
-# build_rules / default_rules
+# build_rules / config_rules
 # --------------------------------------------------------------------------- #
 
 
@@ -240,8 +245,8 @@ def test_build_rules_severity_coercion():
     assert rules[0].severity == Severity.HIGH
 
 
-def test_default_rules_present():
-    ids = {r.id for r in default_rules()}
+def test_config_rules_present():
+    ids = {r.id for r in config_rules()}
     assert {"ssh_brute_force", "web_scanning", "directory_traversal", "sql_injection"} <= ids
 
 
@@ -251,7 +256,7 @@ def test_default_rules_present():
 
 
 def _rule_from_defaults(rule_id):
-    return next(r for r in default_rules() if r.id == rule_id)
+    return next(r for r in config_rules() if r.id == rule_id)
 
 
 def auth_msg(message, ip=None, seconds=0, user=None):
