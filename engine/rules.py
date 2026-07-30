@@ -19,7 +19,7 @@ import re
 from abc import ABC, abstractmethod
 from collections import deque
 from collections.abc import Callable, Iterable
-from datetime import timedelta
+from datetime import datetime, timedelta
 from urllib.parse import unquote
 
 from .models import (
@@ -68,8 +68,13 @@ def _auth_failure(entry: LogEntry) -> bool:
 
 
 def _web_login_failure(entry: LogEntry) -> bool:
-    # A failed authenticated request (401/403) to the server.
-    return isinstance(entry, WebLogEntry) and entry.status in (401, 403)
+    # A failed request (401/403) to a login-shaped endpoint — deliberately
+    # narrower than "any 401/403", which would also catch admin-path probing
+    # (a different signal, not login brute force).
+    if not isinstance(entry, WebLogEntry) or entry.status not in (401, 403):
+        return False
+    path = entry.path
+    return path is not None and "login" in path.lower()
 
 
 def _web_404(entry: LogEntry) -> bool:
@@ -288,10 +293,12 @@ class ThresholdRule(Rule):
         # Per-IP window state.
         self._events: dict[str | None, deque] = {}
         self._active: dict[str | None, Finding] = {}
+        self._max_seen: dict[str | None, datetime] = {}
 
     def reset(self) -> None:
         self._events = {}
         self._active = {}
+        self._max_seen = {}
 
     def inspect(self, entry: LogEntry) -> Iterable[Finding]:
         if not self._match(entry):
@@ -301,8 +308,14 @@ class ThresholdRule(Rule):
         window = self._events.setdefault(ip, deque())
         window.append(entry)
 
-        # Evict events older than `window` relative to the right edge (max seen).
-        right_edge = entry.timestamp
+        # Evict events older than `window` relative to the right edge, which is
+        # the max timestamp seen for this IP so far — not necessarily this
+        # entry's own timestamp, since a single IP's events aren't guaranteed
+        # to arrive in order (§6.3 out-of-order tolerance).
+        right_edge = self._max_seen.get(ip)
+        if right_edge is None or entry.timestamp > right_edge:
+            right_edge = entry.timestamp
+        self._max_seen[ip] = right_edge
         cutoff = right_edge - self.window
         while window and window[0].timestamp < cutoff:
             window.popleft()
@@ -480,6 +493,8 @@ def default_rules() -> list[Rule]:
                         r"\bbenchmark\s*\(",
                         r"information_schema",
                         r"xp_cmdshell",
+                        r"\bdrop\s+table\b",
+                        r";\s*(?:drop|delete|update|insert|alter|truncate)\b",
                     ],
                 },
             },

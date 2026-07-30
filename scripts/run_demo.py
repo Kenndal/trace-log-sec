@@ -25,16 +25,31 @@ from engine import (  # noqa: E402
     Engine,
     LogSource,
     SyslogAuthParser,
+    WebLogEntry,
     default_rules,
+    parse_file,
 )
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_AUTH = REPO_ROOT / "tests" / "fixtures" / "auth.log"
 DEFAULT_WEB = REPO_ROOT / "tests" / "fixtures" / "webserver.log"
 
-# Fixture logs are dated Oct 2025; a fixed reference keeps year resolution
-# (§5.1) deterministic regardless of when the demo is run.
-REFERENCE_TIME = datetime(2026, 7, 30, tzinfo=timezone.utc)
+
+def _reference_time(web_path: str) -> datetime:
+    """Anchor auth-log year resolution (§5.1) to the web log's own dates.
+
+    The auth log carries no year. Anchoring to "now" would silently pick the
+    wrong year whenever the log data itself isn't from today (e.g. sample or
+    archived logs), which breaks cross-file correlation by putting each file
+    in a different year. The web log's newest timestamp is a same-run source
+    of truth, so use that instead — falling back to "now" only if the web log
+    has no parseable timestamp at all.
+    """
+    latest: datetime | None = None
+    for item in parse_file(web_path, CombinedLogParser()):
+        if isinstance(item, WebLogEntry) and (latest is None or item.timestamp > latest):
+            latest = item.timestamp
+    return latest if latest is not None else datetime.now(timezone.utc)
 
 
 def main(argv: list[str]) -> int:
@@ -49,7 +64,10 @@ def main(argv: list[str]) -> int:
     engine = Engine(default_rules())
     report = engine.analyze(
         [
-            LogSource(path=auth_path, parser=SyslogAuthParser(reference_time=REFERENCE_TIME)),
+            LogSource(
+                path=auth_path,
+                parser=SyslogAuthParser(reference_time=_reference_time(web_path)),
+            ),
             LogSource(path=web_path, parser=CombinedLogParser()),
         ]
     )

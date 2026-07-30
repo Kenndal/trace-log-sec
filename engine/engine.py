@@ -76,6 +76,12 @@ class Engine:
         for rule in self.rules:
             findings.extend(rule.flush())
 
+        # Cap evidence to the engine-wide ceiling. A rule's own max_evidence
+        # (if lower) already wins during collection; this only trims further.
+        for f in findings:
+            if len(f.evidence) > self.max_evidence:
+                del f.evidence[self.max_evidence :]
+
         # 5. Correlate.
         incidents = self.correlator.correlate(findings)
 
