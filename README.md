@@ -115,8 +115,8 @@ class Rule(ABC):
     severity: Severity
 
     def inspect(self, entry: LogEntry) -> Iterable[Finding]: ...
-    def flush(self) -> Iterable[Finding]: ...   # end-of-stream aggregates
-    def reset(self) -> None: ...                # clear state between runs
+    def flush(self) -> Iterable[Finding]: ...  # end-of-stream aggregates
+    def reset(self) -> None: ...  # clear state between runs
 ```
 
 Rules ignore entry types they don't care about (`isinstance` checks), so the engine feeds **every** entry to **every** rule with no special casing.
@@ -339,7 +339,7 @@ from engine.rules.registry import register
 from models import Finding, LogEntry, Severity
 
 
-@register("sequence")          # ← makes type: sequence available in config
+@register("sequence")  # ← makes type: sequence available in config
 class SequenceRule(Rule):
     """Example: fire when event A is followed by event B within a gap."""
 
@@ -404,9 +404,11 @@ You can also bypass config entirely and pass instances straight to the engine:
 from engine import Engine, SequenceRule
 from models import Severity
 
-engine = Engine(rules=[
-    SequenceRule(id="my_sequence_rule", severity=Severity.HIGH, title="…"),
-])
+engine = Engine(
+    rules=[
+        SequenceRule(id="my_sequence_rule", severity=Severity.HIGH, title="…"),
+    ]
+)
 ```
 
 This is what unit tests typically do.
