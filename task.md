@@ -1,3 +1,6 @@
+# Quality Assurance Engineer
+## Technical Assessment
+
 ## Overview
 
 You will build a security log analysis tool and demonstrate your approach to quality engineering.
@@ -8,7 +11,7 @@ You will build a security log analysis tool and demonstrate your approach to qua
 
 Design and implement a command-line tool that processes log files and identifies potential security incidents.
 
-### Requirements    
+### Requirements
 
 1. **Input:** Accept one or more log files as input
 2. **Parsing:** Handle the provided log formats
@@ -72,9 +75,31 @@ Jul  3 10:00:20 server sudo: deploy : TTY=pts/1 ; PWD=/var/www ; USER=root ; COM
 Jul  3 10:00:25 server sshd[1245]: Connection closed by 10.0.0.50 port 52345 [preauth]
 ```
 
+---
+
+## AI Usage
+
+You are expected to use AI assistance as part of your workflow.
+
+**Required:** Include your AI conversation history with your submission (shared link or text transcript).
+
+We will review how you collaborated with AI as part of our evaluation.
+
+---
+
 ## Production Context
 
 Consider that this tool may be deployed in an evolving environment processing high volumes of log data continuously.
 
 ---
 
+## Submission
+
+Provide a link to a public GitHub repository containing:
+
+1. Your solution with a README explaining how to run the tool
+2. Your AI conversation history (text transcript or shared link)
+
+---
+
+Good luck!

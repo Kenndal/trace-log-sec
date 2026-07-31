@@ -5,9 +5,35 @@ Kept separate from ``cli.commands.analyze`` so a future command can reuse it.
 
 from __future__ import annotations
 
+from datetime import datetime
+
 import typer
 
-from models import AnalysisReport
+from models import AnalysisReport, Finding, Severity
+
+_SEVERITY_COLORS = {
+    Severity.INFO: typer.colors.BLUE,
+    Severity.LOW: typer.colors.CYAN,
+    Severity.MEDIUM: typer.colors.YELLOW,
+    Severity.HIGH: typer.colors.RED,
+    Severity.CRITICAL: typer.colors.BRIGHT_RED,
+}
+
+
+def render_live_finding(finding: Finding, *, now: datetime | None = None) -> None:
+    """Print a one-line alert for a finding as it fires during a follow run.
+
+    Prefixed with wall-clock time (when the operator saw it), while the
+    finding's own timestamps stay event time — the two differ when a log is
+    written with a delay, and the final report only shows the latter.
+    """
+    seen_at = (now or datetime.now().astimezone()).strftime("%H:%M:%S")
+    ip = finding.source_ip or "-"
+    typer.secho(
+        f"[{seen_at}] [{finding.severity.name:8}] {finding.rule_id:22} ip={ip:15} "
+        f"count={finding.count}  {finding.title}",
+        fg=_SEVERITY_COLORS.get(finding.severity),
+    )
 
 
 def render_report(report: AnalysisReport) -> None:

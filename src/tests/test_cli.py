@@ -2,12 +2,16 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
+from datetime import UTC, datetime, timedelta
+
 import pytest
 from typer.testing import CliRunner
 
 from cli import app
 from cli.commands.analyze import _resolve
 from config.settings import load_settings
+from engine import follow_sources
 
 runner = CliRunner()
 
@@ -336,3 +340,171 @@ def test_help_lists_list_reports_subcommand():
     result = runner.invoke(app, ["--help"])
     assert result.exit_code == 0
     assert "list-reports" in result.output
+
+
+# --------------------------------------------------------------------------- #
+# --follow
+# --------------------------------------------------------------------------- #
+
+
+def append(path, text):
+    with path.open("a", encoding="utf-8") as handle:
+        handle.write(text)
+
+
+def live_lines(ip, when=None):
+    """What a live feed looks like: an SSH burst and a traversal hit from one
+    IP, timestamped around ``when`` (default: a few minutes ago).
+
+    Auth lines carry no year, so their resolution depends on the run's anchor —
+    which is the point of `test_follow_anchors_syslog_years_to_now...`.
+    """
+    when = when or datetime.now(UTC) - timedelta(minutes=5)
+    failures = "".join(
+        f"{when:%b %d %H:%M}:{s:02d} server sshd[1]: Failed password for root from {ip} port 22 ssh2\n"
+        for s in range(5)
+    )
+    return failures, _traversal_hit(ip, time=f"{when:%d/%b/%Y:%H:%M:%S} +0000")
+
+
+@pytest.fixture
+def follow(monkeypatch):
+    """Run `--follow` over the real tailer, with a scripted stop condition.
+
+    The tail loop checks ``stop()`` once per polling pass, so each step runs
+    just before a pass and the loop reads exactly what that step wrote; when
+    the steps run out the run stops, as a Ctrl+C would. That keeps the whole
+    follow path under test without threads, signals, or sleeping.
+    """
+
+    def install(*steps: Callable[[], object] | None) -> None:
+        remaining = list(steps)
+
+        def stop():
+            if not remaining:
+                return True
+            step = remaining.pop(0)
+            if step is not None:
+                step()
+            return False
+
+        def patched(sources, **kwargs):
+            return follow_sources(sources, **{**kwargs, "stop": stop, "poll_interval": 0})
+
+        monkeypatch.setattr("cli.commands.analyze.follow_sources", patched)
+
+    return install
+
+
+def test_follow_prints_findings_live_and_still_writes_the_report(tmp_path, follow):
+    web = write(tmp_path, "webserver.log", COMBINED_LINE)
+    follow(lambda: append(web, _traversal_hit("203.0.113.5")))
+
+    result = runner.invoke(app, ["analyze", "--follow", str(web)])
+
+    assert result.exit_code == 0
+    assert "Following 1 file(s)" in result.output
+    # The live alert precedes the end-of-run report.
+    live, _, report = result.output.partition("=== FINDINGS ===")
+    assert "directory_traversal" in live
+    assert "directory_traversal" in report
+    assert len(list((tmp_path / "reports").glob("report_*.html"))) == 1
+
+
+def test_follow_ignores_lines_written_before_it_started(tmp_path, follow):
+    web = write(tmp_path, "webserver.log", _traversal_hit("203.0.113.5"))
+    follow(None)
+
+    result = runner.invoke(app, ["analyze", "--follow", str(web)])
+
+    assert result.exit_code == 0
+    assert "lines_read=0" in result.output
+    assert "directory_traversal" not in result.output
+
+
+def test_follow_short_flag_is_accepted(tmp_path, follow):
+    web = write(tmp_path, "webserver.log", COMBINED_LINE)
+    follow(None)
+
+    result = runner.invoke(app, ["analyze", "-f", str(web)])
+
+    assert result.exit_code == 0
+    assert "Following 1 file(s)" in result.output
+
+
+def test_follow_generates_the_report_when_interrupted(tmp_path, monkeypatch):
+    web = write(tmp_path, "webserver.log", COMBINED_LINE)
+
+    def interrupt(sources, **kwargs):
+        def stop():
+            raise KeyboardInterrupt
+
+        return follow_sources(sources, **{**kwargs, "stop": stop, "poll_interval": 0})
+
+    monkeypatch.setattr("cli.commands.analyze.follow_sources", interrupt)
+
+    result = runner.invoke(app, ["analyze", "--follow", str(web)])
+
+    assert result.exit_code == 0
+    assert "Stopped following" in result.output
+    assert "HTML report written to" in result.output
+
+
+def test_follow_correlates_across_files_at_the_end_of_the_run(tmp_path, follow):
+    # Findings stream out per file as they fire; joining them into an incident
+    # is the correlator's job and happens once the run is stopped.
+    ip = "203.0.113.50"
+    auth = write(tmp_path, "auth.log", SYSLOG_LINE)
+    web = write(tmp_path, "webserver.log", COMBINED_LINE)
+    failures, traversal = live_lines(ip)
+    follow(lambda: (append(auth, failures), append(web, traversal)))
+
+    result = runner.invoke(app, ["analyze", "--follow", str(auth), str(web)])
+
+    assert result.exit_code == 0
+    live, _, report = result.output.partition("=== FINDINGS ===")
+    assert "INC-" not in live
+    assert "INC-" in report
+
+
+def test_follow_anchors_syslog_years_to_now_not_to_stale_web_content(tmp_path, follow):
+    """The syslog year anchor is read once, at startup, from the newest
+    timestamp already in a web log. When tailing, that content can be
+    arbitrarily old — and a stale anchor pushes live auth lines back a year,
+    which would silently break correlation with the web findings they belong to.
+    """
+    ip = "203.0.113.77"
+    # A web log that has seen no traffic since 2024 — the anchor the old
+    # default would have picked.
+    web = write(tmp_path, "webserver.log", '1.2.3.4 - - [01/Jan/2024:00:00:00 +0000] "GET / HTTP/1.1" 200 1\n')
+    auth = write(tmp_path, "auth.log", SYSLOG_LINE)
+    failures, traversal = live_lines(ip)
+    follow(lambda: (append(auth, failures), append(web, traversal)))
+
+    result = runner.invoke(app, ["analyze", "--follow", str(auth), str(web)])
+
+    assert result.exit_code == 0
+    # Both fired within minutes of each other, so they belong to one incident.
+    assert "INC-" in result.output
+
+
+def test_follow_does_not_warn_about_the_year_anchor(tmp_path, follow):
+    # Anchoring live syslog to now is exactly right when tailing, so the
+    # archived-log warning would be noise here.
+    auth = write(tmp_path, "auth.log", SYSLOG_LINE)
+    follow(None)
+
+    result = runner.invoke(app, ["analyze", "--follow", str(auth)])
+
+    assert result.exit_code == 0
+    assert "no web logs or --reference-time" not in result.output
+
+
+def test_follow_on_an_undetectable_file_explains_why(tmp_path, follow):
+    empty = write(tmp_path, "webserver.log", "")
+    follow(None)
+
+    result = runner.invoke(app, ["analyze", "--follow", str(empty)])
+
+    assert result.exit_code == 1
+    assert "at least one parseable line" in result.output

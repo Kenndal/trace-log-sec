@@ -76,9 +76,11 @@ class PatternSignatureRule(Rule):
         flags = 0 if case_sensitive else re.IGNORECASE
         self._patterns = [(p, re.compile(p, flags)) for p in patterns]
         self._by_ip: dict[str | None, Finding] = {}
+        self._emitted: set[str | None] = set()
 
     def reset(self) -> None:
         self._by_ip = {}
+        self._emitted = set()
 
     def inspect(self, entry: LogEntry) -> Iterable[Finding]:
         value = self._extract(entry)
@@ -100,10 +102,18 @@ class PatternSignatureRule(Rule):
         if hit_pattern is None or hit_snippet is None:
             return ()
 
-        self._record(entry, hit_pattern, hit_snippet, value)
+        finding = self._record(entry, hit_pattern, hit_snippet, value)
+
+        # Emit once, the moment this IP's hits reach min_hits; later hits keep
+        # updating that same object in place. Aggregation is unchanged -- a
+        # follow run just doesn't have to wait for flush to see the signal.
+        ip = entry.source_ip
+        if finding.count >= self.min_hits and ip not in self._emitted:
+            self._emitted.add(ip)
+            return (finding,)
         return ()
 
-    def _record(self, entry: LogEntry, pattern: str, snippet: str, value: str) -> None:
+    def _record(self, entry: LogEntry, pattern: str, snippet: str, value: str) -> Finding:
         ip = entry.source_ip
         finding = self._by_ip.get(ip)
         if finding is None:
@@ -130,7 +140,15 @@ class PatternSignatureRule(Rule):
         matches = finding.metadata["matches"]
         if len(matches) < self.max_evidence:
             matches.append({"pattern": pattern, "snippet": snippet, "value": value})
+        return finding
 
     def flush(self) -> Iterable[Finding]:
-        emitted = [f for f in self._by_ip.values() if f.count >= self.min_hits]
-        return emitted
+        """Emit qualifying findings ``inspect`` hasn't already handed out.
+
+        With the default ``min_hits`` every qualifying finding is emitted at
+        its crossing, so this is normally empty; it stays as the safety net for
+        a rule whose threshold is only reached after the emission check.
+        """
+        stragglers = [ip for ip, f in self._by_ip.items() if f.count >= self.min_hits and ip not in self._emitted]
+        self._emitted.update(stragglers)
+        return [self._by_ip[ip] for ip in stragglers]

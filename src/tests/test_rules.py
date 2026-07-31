@@ -247,6 +247,46 @@ def test_signature_records_match_metadata():
     assert findings[0].metadata["matches"][0]["pattern"] == r"union\s+select"
 
 
+def test_signature_emits_from_inspect_not_only_flush():
+    """A follow run prints what ``inspect`` returns, so a signature hit has to
+    surface there rather than waiting for end-of-stream."""
+    r = sqli_rule()
+    emitted = list(r.inspect(web("1.1.1.1", 0, target="/s?q=1 union select a")))
+    assert [f.rule_id for f in emitted] == ["sqli"]
+
+
+def test_signature_does_not_re_emit_an_already_emitted_finding():
+    r = sqli_rule()
+    first = list(r.inspect(web("1.1.1.1", 0, target="/s?q=1 union select a")))
+    second = list(r.inspect(web("1.1.1.1", 1, target="/s?q=2 union select b")))
+    assert len(first) == 1
+    assert second == []
+    # The second hit still folds into the same finding.
+    assert first[0].count == 2
+
+
+def test_signature_flush_does_not_duplicate_emitted_findings():
+    r = sqli_rule()
+    findings = run(r, [web("1.1.1.1", 0, target="/s?q=1 union select a")])
+    assert len(findings) == 1
+
+
+def test_signature_emits_only_once_min_hits_is_reached():
+    r = sqli_rule(min_hits=2)
+    below = list(r.inspect(web("1.1.1.1", 0, target="/s?q=1 union select a")))
+    crossing = list(r.inspect(web("1.1.1.1", 1, target="/s?q=2 union select b")))
+    assert below == []
+    assert [f.count for f in crossing] == [2]
+
+
+def test_signature_reset_allows_a_fresh_emission():
+    r = sqli_rule()
+    run(r, [web("1.1.1.1", 0, target="/s?q=1 union select a")])
+    r.reset()
+    emitted = list(r.inspect(web("1.1.1.1", 2, target="/s?q=3 union select c")))
+    assert len(emitted) == 1
+
+
 # --------------------------------------------------------------------------- #
 # build_rules / config_rules
 # --------------------------------------------------------------------------- #

@@ -90,6 +90,7 @@ uv run trace-log-sec analyze \
 | `--window-minutes N` | `correlation.window_minutes` | from `config.yaml` (built-in default: `10`) |
 | `--reference-time DATETIME` | syslog year anchor | newest web-log timestamp in this run, else current UTC time |
 | `--config PATH` | the entire config file (rules included) | bundled `config.yaml` at the repo root |
+| `--follow` / `-f` | one-shot pass → continuous tailing | off |
 
 Precedence is always **command-line flag → `config.yaml` → built-in default**: an option only takes effect if explicitly passed.
 
@@ -111,6 +112,39 @@ uv run trace-log-sec analyze --config custom-config.yaml auth.log webserver.log
 
 `--config` must point to an existing, readable file; `--max-evidence`/`--window-minutes` still override whatever that file (or its defaults) sets. `list-reports` also accepts `--config`, so a run's HTML reports can be listed from the same custom `reporting.output_dir`.
 
+#### Continuous following (`--follow`)
+
+For live logs, `--follow` turns the one-shot pass into a `tail -f`-style session:
+
+```bash
+uv run trace-log-sec analyze --follow /var/log/auth.log /var/log/nginx/access.log
+```
+
+Each file is opened at its **end**, so only lines appended after the command starts are analyzed. Findings print as one-line alerts the moment they fire:
+
+```
+Following 2 file(s) — press Ctrl+C to stop and generate the report.
+[14:07:31] [HIGH    ] ssh_brute_force        ip=10.0.0.50    count=5  SSH Brute Force
+[14:09:02] [HIGH    ] directory_traversal    ip=203.0.113.5  count=1  Directory Traversal
+```
+
+Stop the session with **Ctrl+C** (or `SIGTERM`, so a `docker stop` behaves the same). The run then finishes exactly like a batch one: rules flush, findings are correlated into incidents, and the full terminal summary plus the HTML report are written. Detection is identical to batch mode — the same session code processes both — so tailing 5 lines gives the same findings as analyzing a file containing those 5 lines.
+
+Two details worth knowing:
+
+- Alerts are per finding, not per line. A finding is announced once, when it first crosses its threshold; later matching lines keep updating it silently, and the final report carries the complete count. Incidents appear only at the end, since correlation is a whole-run view.
+- Windows still use **event time** from the log line, never the wall clock, so a delayed writer or a backfilled batch is evaluated on its own timestamps. The bracketed time on an alert is when the operator saw it.
+
+**Limitations** (deliberate scope choices for this build):
+
+- **No log rotation or truncation handling.** If a followed file is rotated or truncated, the run keeps holding the old handle and stops seeing new lines — restart it after a rotation.
+- **State grows with the stream.** Rules keep per-IP state and the report keeps every finding, so memory grows with distinct IPs over a long session. Fine for hours of a normal feed; a permanently resident deployment would want per-IP expiry and periodic report checkpoints.
+- **Format detection still reads existing content.** A file that is empty when the run starts has no detectable format and is rejected with a hint.
+- **Line numbers are relative to the session**, counting from 1 at the first appended line, since content before the starting offset is never read.
+- **The syslog year anchor is fixed at startup.** A session running across New Year's Eve keeps resolving auth timestamps against the year it started in; restart it (or pass `--reference-time`) after the rollover.
+
+A scripted demo lives in `sandbox/demo/`: `./sandbox/demo/follow-demo.sh` replays the bundled sample logs into a pair of live files and tails them, so you can watch alerts appear and then stop the run to get the report.
+
 #### Input validation
 
 Before analysis starts, every path is checked. Problems are collected and reported together:
@@ -131,6 +165,8 @@ BSD syslog lines have **no year**. The CLI resolves the year as follows:
 3. Else the current UTC time — and a warning is printed, because archived auth-only logs can get the wrong year (which silently skews threshold windows and correlation)
 
 When analyzing both web and auth logs together, you usually do **not** need `--reference-time`. Pass it for historical auth-only runs.
+
+Under `--follow` step 2 is skipped: unless `--reference-time` is passed, live runs anchor to the **current time**, since lines are analyzed as they are written. The newest timestamp already sitting in a web log would be an unreliable anchor there — a quiet or freshly rotated file can be arbitrarily stale, and a stale anchor silently pushes live auth lines back a year, so they no longer correlate with the web findings they belong to. No warning is printed, because for a live stream this is the right answer rather than a guess.
 
 #### Terminal output
 
@@ -216,9 +252,12 @@ Pass `--config PATH` to `analyze` (or `list-reports`) to use a different config 
 The pipeline is a crash-proof, streaming, single-pass flow:
 
 ```
-LogSource(s)  →  parse_file  →  Rule.inspect / flush  →  Correlator  →  AnalysisReport
-                                                                      ↘ terminal + HTML
+LogSource(s)  →  parse_file      ↘
+                                   AnalysisSession  →  Correlator  →  AnalysisReport
+                 follow_sources  ↗  (rule.inspect / flush)          ↘ terminal + HTML
 ```
+
+A batch run reads each file to EOF through `parse_file`; a `--follow` run keeps tailing them through `follow_sources`. Both feed the same session, so the two modes differ only in where the lines come from and when the report is produced.
 
 ### 1. Parsing (`engine/parsers.py`)
 
@@ -291,7 +330,7 @@ There are **two algorithm classes**. All shipped detections are instances of one
 
 #### PatternSignatureRule (`type: signature`)
 
-Stateless per-line regex matching, aggregated per IP into one `Finding` (emitted on `flush`).
+Stateless per-line regex matching, aggregated per IP into one `Finding`.
 
 | Param | Role |
 |---|---|
@@ -307,6 +346,8 @@ Stateless per-line regex matching, aggregated per IP into one `Finding` (emitted
 **URL decoding:** matching runs against the union of `{raw, decoded}` forms, with up to 2 recursive `unquote` passes (catches double-encoding like `%252e`). Invalid `%` sequences are left as-is (fail-soft).
 
 **Aggregation:** hits for the same IP fold into one finding; `metadata["matches"]` records which pattern/snippet fired. Findings with no IP (e.g. some sudo lines) still aggregate, but the correlator cannot join them across sources.
+
+**Emission:** like `ThresholdRule`, the finding is emitted from `inspect` the moment that IP reaches `min_hits`, then updated in place — so a `--follow` run alerts on a signature hit as it happens instead of waiting for end of stream.
 
 #### ThresholdRule (`type: threshold`)
 
@@ -381,7 +422,7 @@ Correlation is the **only** place cross-source relationships are formed. Statefu
 
 ---
 
-### 4. Orchestration (`engine/engine.py`)
+### 4. Orchestration (`engine/engine.py`, `engine/session.py`)
 
 `Engine.analyze(sources) → AnalysisReport` runs the full pipeline:
 
@@ -391,11 +432,17 @@ Correlation is the **only** place cross-source relationships are formed. Statefu
      parse_file(...)
        ParseError  → collect + log warning
        LogEntry    → feed to every rule.inspect(); collect eager findings
-2. flush() every rule          # signature aggregates land here
+2. flush() every rule          # any aggregate not already emitted
 3. cap evidence                # engine-wide max_evidence ceiling
 4. correlator.correlate(...)   # findings → incidents
 5. build stats                 # per-source + totals + duration_seconds
 ```
+
+Steps 1–5 live in `AnalysisSession`, not in `Engine`: `session.feed(item, counters)` does the per-entry work and returns the findings that item newly emitted, and `session.finalize()` does the closing steps. `Engine.analyze` is just the batch driver over that session — the follow loop drives the same session from the tailer instead, which is why both modes detect identically.
+
+### 5. Following (`engine/tailing.py`)
+
+`follow_sources(sources, ...)` is the streaming counterpart to `parse_file`. It opens each file at its end, polls them round-robin in a single loop (no threads), holds back a trailing partial line until its newline arrives, and yields the same `LogEntry`/`ParseError` items — so the session cannot tell which producer it is being fed by. It runs until its `stop` predicate returns true, which the CLI wires to Ctrl+C and `SIGTERM`. See [`--follow`](#continuous-following---follow) for the operator-facing behavior and limitations.
 
 **Ordering invariants:**
 
@@ -433,7 +480,9 @@ trace-log-sec/
 ├── src/
 │   ├── engine/                 # Detection core (format-agnostic)
 │   │   ├── engine.py           # Orchestrator: parse → detect → correlate
+│   │   ├── session.py          # Incremental run state (feed / finalize)
 │   │   ├── parsers.py          # Combined + syslog parsers, parse_file()
+│   │   ├── tailing.py          # tail -f style following for --follow
 │   │   ├── correlation.py      # IP-based finding correlator
 │   │   └── rules/
 │   │       ├── base.py         # Rule ABC (inspect / flush / reset)
@@ -575,12 +624,14 @@ class SequenceRule(Rule):
         ...
 
     def inspect(self, entry: LogEntry) -> Iterable[Finding]:
-        # examine one entry; yield findings eagerly, or return () and
-        # buffer for flush(). Ignore entry types you don't care about.
+        # examine one entry; yield each finding once, when it first qualifies,
+        # then keep updating it in place. Ignore entry types you don't care
+        # about. Only what you yield here can appear in a --follow run's live
+        # output, so prefer emitting here over buffering for flush().
         ...
 
     def flush(self) -> Iterable[Finding]:
-        # emit end-of-stream aggregates (like PatternSignatureRule does)
+        # emit anything that can only be decided at end of stream
         return ()
 ```
 

@@ -36,6 +36,8 @@ from .rules import (
     build_rules,
     register,
 )
+from .session import AnalysisSession
+from .tailing import follow_sources
 
 __all__ = [
     # models
@@ -53,6 +55,7 @@ __all__ = [
     "SyslogAuthParser",
     "MalformedLineError",
     "parse_file",
+    "follow_sources",
     # rules
     "Rule",
     "PatternSignatureRule",
@@ -64,6 +67,7 @@ __all__ = [
     "Correlator",
     # engine
     "Engine",
+    "AnalysisSession",
     "LogSource",
     "AnalysisReport",
 ]
