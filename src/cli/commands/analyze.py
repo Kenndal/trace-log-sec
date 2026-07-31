@@ -14,7 +14,8 @@ from cli.render import render_report
 from cli.validation import validate_log_files
 from config.settings import load_settings, rule_specs
 from engine import Correlator, Engine, build_rules
-from utils.exceptions import CliInputError, ConfigError, RuleConfigError
+from reporter import write_report
+from utils.exceptions import CliInputError, ConfigError, ReportError, RuleConfigError
 
 
 def _log_files_callback(value: list[Path]) -> list[Path]:
@@ -123,3 +124,12 @@ def analyze(
     )
     report = engine.analyze(sources)
     render_report(report)
+
+    # Persist an HTML report. A write failure (e.g. an unwritable output dir)
+    # must not lose the terminal analysis above, so it only warns.
+    try:
+        report_path = write_report(report, settings.reporting.output_dir)
+    except ReportError as exc:
+        typer.secho(f"Warning: {exc}", fg=typer.colors.YELLOW, err=True)
+    else:
+        typer.secho(f"\nHTML report written to {report_path}", fg=typer.colors.GREEN)

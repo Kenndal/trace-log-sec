@@ -13,7 +13,12 @@ from typing import Any
 from pydantic import BaseModel, Field, ValidationError
 import yaml
 
-from constants import DEFAULT_CONFIG_FILENAME, DEFAULT_CORRELATION_WINDOW_MINUTES, DEFAULT_MAX_EVIDENCE
+from constants import (
+    DEFAULT_CONFIG_FILENAME,
+    DEFAULT_CORRELATION_WINDOW_MINUTES,
+    DEFAULT_MAX_EVIDENCE,
+    DEFAULT_REPORTS_DIR,
+)
 from utils.exceptions import ConfigError
 
 PACKAGE_DIR = Path(__file__).resolve().parent
@@ -40,10 +45,17 @@ class CorrelationConfig(BaseModel):
     window_minutes: float = DEFAULT_CORRELATION_WINDOW_MINUTES
 
 
+class ReportingConfig(BaseModel):
+    """HTML report output behavior (see :mod:`reporter`)."""
+
+    output_dir: str = DEFAULT_REPORTS_DIR
+
+
 class EngineSettings(BaseModel):
     rules: list[RuleSpec]
     engine: EngineConfig = Field(default_factory=EngineConfig)
     correlation: CorrelationConfig = Field(default_factory=CorrelationConfig)
+    reporting: ReportingConfig = Field(default_factory=ReportingConfig)
 
 
 def load_settings(path: str | Path = DEFAULT_CONFIG_PATH) -> EngineSettings:

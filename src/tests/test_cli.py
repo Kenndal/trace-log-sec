@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
 from typer.testing import CliRunner
 
 from cli import app
@@ -15,6 +16,15 @@ FIXTURES = Path(__file__).parent / "fixtures"
 
 COMBINED_LINE = '1.2.3.4 - - [10/Oct/2025:13:55:36 -0700] "GET /index.html HTTP/1.1" 200 2326\n'
 SYSLOG_LINE = "Jan 05 01:02:03 server sshd[1]: Failed password for x from 1.1.1.1 port 1 ssh2\n"
+
+
+@pytest.fixture(autouse=True)
+def _isolate_reports(tmp_path, monkeypatch):
+    """Redirect report output to a temp dir so tests never touch the real
+    ``reports/`` folder. ``analyze`` resolves the configured relative dir
+    against ``reporter.storage.PROJECT_ROOT``, so repointing that is enough.
+    """
+    monkeypatch.setattr("reporter.storage.PROJECT_ROOT", tmp_path)
 
 
 def write(tmp_path, name, content):
@@ -246,3 +256,41 @@ def test_analyze_web_present_does_not_trigger_year_warning(tmp_path):
     result = runner.invoke(app, ["analyze", str(auth), str(web)])
     assert result.exit_code == 0
     assert "no web logs or --reference-time" not in result.output
+
+
+# --------------------------------------------------------------------------- #
+# HTML report generation + list-reports command
+# --------------------------------------------------------------------------- #
+
+
+def test_analyze_generates_html_report_and_prints_path(tmp_path):
+    # tmp_path is where reports land (see the _isolate_reports fixture).
+    auth = write(tmp_path, "auth.log", SYSLOG_LINE)
+    result = runner.invoke(app, ["analyze", str(auth)])
+    assert result.exit_code == 0
+    assert "HTML report written to" in result.output
+    written = list((tmp_path / "reports").glob("report_*.html"))
+    assert len(written) == 1
+    assert written[0].read_text(encoding="utf-8").startswith("<!DOCTYPE html>")
+
+
+def test_list_reports_empty_reports_dir(tmp_path):
+    result = runner.invoke(app, ["list-reports"])
+    assert result.exit_code == 0
+    assert "No reports found" in result.output
+
+
+def test_list_reports_lists_generated_report(tmp_path):
+    auth = write(tmp_path, "auth.log", SYSLOG_LINE)
+    assert runner.invoke(app, ["analyze", str(auth)]).exit_code == 0
+
+    result = runner.invoke(app, ["list-reports"])
+    assert result.exit_code == 0
+    assert "report_" in result.output
+    assert ".html" in result.output
+
+
+def test_help_lists_list_reports_subcommand():
+    result = runner.invoke(app, ["--help"])
+    assert result.exit_code == 0
+    assert "list-reports" in result.output

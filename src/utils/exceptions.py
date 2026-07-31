@@ -41,3 +41,17 @@ class CliInputError(TraceLogSecError):
     def __init__(self, reason: str) -> None:
         self.reason = reason
         super().__init__(reason)
+
+
+class ReportError(TraceLogSecError):
+    """Raised when an HTML report can't be written to disk.
+
+    Wraps the underlying ``OSError`` (e.g. permission denied, unwritable
+    output directory) so callers get one consistent, informative failure type
+    — mirroring how ``ConfigError`` normalizes config-load failures.
+    """
+
+    def __init__(self, path: str | Path, reason: str) -> None:
+        self.path = path
+        self.reason = reason
+        super().__init__(f"could not write report to {path!r}: {reason}")
