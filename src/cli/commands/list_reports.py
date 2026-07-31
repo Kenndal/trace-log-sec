@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+from typing import Annotated
+
 import typer
 
 from cli.app import app
@@ -9,15 +12,26 @@ from config.settings import load_settings
 from reporter import list_reports, resolve_output_dir
 from utils.exceptions import ConfigError
 
+ConfigOption = Annotated[
+    Path | None,
+    typer.Option(
+        exists=True,
+        file_okay=True,
+        dir_okay=False,
+        readable=True,
+        help="Path to a YAML config file to use instead of the bundled config.yaml.",
+    ),
+]
+
 
 @app.command(name="list-reports")
-def list_reports_command() -> None:
+def list_reports_command(config: ConfigOption = None) -> None:
     """List generated HTML reports (newest first) with their timestamps.
 
     Scans the directory configured in ``config.yaml``'s ``reporting.output_dir``.
     """
     try:
-        settings = load_settings()
+        settings = load_settings(config) if config is not None else load_settings()
     except ConfigError as exc:
         typer.secho(f"Error: {exc}", fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1) from exc

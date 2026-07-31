@@ -68,6 +68,16 @@ ReferenceTimeOption = Annotated[
         ),
     ),
 ]
+ConfigOption = Annotated[
+    Path | None,
+    typer.Option(
+        exists=True,
+        file_okay=True,
+        dir_okay=False,
+        readable=True,
+        help="Path to a YAML config file to use instead of the bundled config.yaml.",
+    ),
+]
 
 
 @app.command()
@@ -76,12 +86,14 @@ def analyze(
     max_evidence: MaxEvidenceOption = None,
     window_minutes: WindowMinutesOption = None,
     reference_time: ReferenceTimeOption = None,
+    config: ConfigOption = None,
 ) -> None:
     """Analyze one or more log files for security incidents.
 
     Engine/correlation options default to config.yaml's ``engine``/
     ``correlation`` sections, which in turn default to the engine's own
-    built-in defaults — an explicit flag here always wins.
+    built-in defaults — an explicit flag here always wins. ``--config`` swaps
+    out the entire config file (rules included) for this run.
     """
     sources, skipped, anchored_to_now = build_log_sources(log_files, reference_time=reference_time)
 
@@ -107,7 +119,7 @@ def analyze(
         )
 
     try:
-        settings = load_settings()
+        settings = load_settings(config) if config is not None else load_settings()
         rules = build_rules(rule_specs(settings))
     except (ConfigError, RuleConfigError) as exc:
         typer.secho(f"Error: {exc}", fg=typer.colors.RED, err=True)
