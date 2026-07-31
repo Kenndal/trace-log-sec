@@ -4,8 +4,6 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta
 
-import pytest
-
 from config.settings import load_settings, rule_specs
 from engine import Engine, LogSource
 from engine.correlation import Correlator
@@ -101,12 +99,6 @@ def test_missing_file_captured_not_raised(tmp_path):
     assert len(report.parse_errors) == 1
     assert report.parse_errors[0].line_no == 0
     assert report.findings == []
-
-
-def test_missing_file_strict_raises(tmp_path):
-    engine = Engine(config_rules(), strict=True)
-    with pytest.raises(FileNotFoundError):
-        engine.analyze([LogSource(path=str(tmp_path / "nope.log"), parser=CombinedLogParser())])
 
 
 def test_all_malformed_file_is_normal_report(tmp_path):
@@ -212,17 +204,10 @@ class RaisingRule(Rule):
         raise RuntimeError("boom")
 
 
-def test_rule_exception_isolated_non_strict(tmp_path):
+def test_rule_exception_isolated(tmp_path):
     auth = make_auth_log(tmp_path)
     engine = Engine([RaisingRule(), *config_rules()])
     report = engine.analyze([LogSource(path=str(auth), parser=SyslogAuthParser(reference_time=REF))])
     # The buggy rule's exceptions are swallowed; the well-behaved rule alongside
     # it still runs to completion and produces its finding.
     assert "ssh_brute_force" in {f.rule_id for f in report.findings}
-
-
-def test_rule_exception_strict_raises(tmp_path):
-    auth = make_auth_log(tmp_path)
-    engine = Engine([RaisingRule()], strict=True)
-    with pytest.raises(RuntimeError):
-        engine.analyze([LogSource(path=str(auth), parser=SyslogAuthParser(reference_time=REF))])

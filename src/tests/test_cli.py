@@ -7,6 +7,8 @@ from pathlib import Path
 from typer.testing import CliRunner
 
 from cli import app
+from cli.commands.analyze import _resolve
+from config.settings import load_settings
 
 runner = CliRunner()
 FIXTURES = Path(__file__).parent / "fixtures"
@@ -19,6 +21,31 @@ def write(tmp_path, name, content):
     f = tmp_path / name
     f.write_text(content)
     return f
+
+
+# --------------------------------------------------------------------------- #
+# _resolve (command-line flag -> config.yaml value precedence)
+# --------------------------------------------------------------------------- #
+
+
+def test_resolve_returns_cli_value_when_provided():
+    assert _resolve(5, 10) == 5
+
+
+def test_resolve_falls_back_to_config_value_when_cli_omitted():
+    assert _resolve(None, 10) == 10
+
+
+def test_resolve_treats_explicit_falsy_cli_value_as_provided():
+    # An explicit `--max-evidence 0` / `--window-minutes 0` must win over the
+    # config value, not be coalesced away as "falsy".
+    assert _resolve(0, 20) == 0
+    assert _resolve(0.0, 10.0) == 0.0
+
+
+# --------------------------------------------------------------------------- #
+# analyze command
+# --------------------------------------------------------------------------- #
 
 
 def test_help_lists_analyze_subcommand():
@@ -44,6 +71,52 @@ def test_analyze_incidents_fixtures_correlate():
     )
     assert result.exit_code == 0
     assert "INC-" in result.output
+
+
+def test_analyze_window_minutes_override_prevents_correlation():
+    result = runner.invoke(
+        app,
+        [
+            "analyze",
+            "--window-minutes",
+            "0",
+            str(FIXTURES / "auth_incidents.log"),
+            str(FIXTURES / "webserver_incidents.log"),
+        ],
+    )
+    assert result.exit_code == 0
+    assert "INC-" not in result.output
+
+
+def test_analyze_uses_config_yaml_value_when_no_cli_override(monkeypatch):
+    # No --window-minutes given: the effective value must come from
+    # config.yaml's correlation.window_minutes, not the engine's own
+    # built-in default (which would still correlate these fixtures).
+    settings = load_settings()
+    correlation = settings.correlation.model_copy(update={"window_minutes": 0})
+    zero_window = settings.model_copy(update={"correlation": correlation})
+    monkeypatch.setattr("cli.commands.analyze.load_settings", lambda: zero_window)
+
+    result = runner.invoke(
+        app,
+        ["analyze", str(FIXTURES / "auth_incidents.log"), str(FIXTURES / "webserver_incidents.log")],
+    )
+    assert result.exit_code == 0
+    assert "INC-" not in result.output
+
+
+def test_analyze_max_evidence_rejects_negative(tmp_path):
+    auth = write(tmp_path, "auth.log", SYSLOG_LINE)
+    result = runner.invoke(app, ["analyze", "--max-evidence", "-1", str(auth)])
+    assert result.exit_code == 2
+    assert "--max-evidence" in result.output
+
+
+def test_analyze_window_minutes_rejects_negative(tmp_path):
+    auth = write(tmp_path, "auth.log", SYSLOG_LINE)
+    result = runner.invoke(app, ["analyze", "--window-minutes", "-1", str(auth)])
+    assert result.exit_code == 2
+    assert "--window-minutes" in result.output
 
 
 def test_analyze_no_files_given_missing_argument():

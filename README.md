@@ -221,7 +221,6 @@ Correlation is the **only** place cross-source relationships are formed. Statefu
 1. for each LogSource:
      parse_file(...)
        ParseError  → collect + log warning
-                     (strict=True + missing file → raise FileNotFoundError)
        LogEntry    → feed to every rule.inspect(); collect eager findings
 2. flush() every rule          # signature aggregates land here
 3. cap evidence                # engine-wide max_evidence ceiling
@@ -235,7 +234,7 @@ Correlation is the **only** place cross-source relationships are formed. Statefu
 - Stateful rules only ever see one source type, so per-file order is enough.
 - Cross-file relationships are the correlator's job (post-hoc, timestamp-based).
 
-**Failure policy:** never crash on bad input by default. Malformed lines and missing files become `ParseError`s in the report. Rule exceptions are logged and skipped unless `strict=True`.
+**Failure policy:** never crash on bad input. Malformed lines and missing files become `ParseError`s in the report; rule exceptions are logged and skipped.
 
 **Report shape:**
 
@@ -283,6 +282,21 @@ Example output shape:
 ```
 
 Files that don't match either known format are skipped with a warning (non-fatal, unless *every* given file is unrecognized, which is treated as an error). Invalid arguments — a missing file, wrong extension, a directory, or a duplicate path — are rejected before analysis starts, with every problem reported together in one message.
+
+### Overriding engine/correlation settings
+
+`analyze` also accepts options that override the `engine`/`correlation` sections of `config.yaml` for a single run, without editing the file:
+
+```bash
+uv run trace-log-sec analyze --max-evidence 5 --window-minutes 30 auth.log webserver.log
+```
+
+| Option | Overrides | Default |
+|---|---|---|
+| `--max-evidence` | `engine.max_evidence` | `config.yaml`'s value (itself defaulting to `20`) |
+| `--window-minutes` | `correlation.window_minutes` | `config.yaml`'s value (itself defaulting to `10`) |
+
+Precedence is always **command-line flag → `config.yaml` → built-in default**: an option only takes effect if explicitly passed; otherwise the value falls through to whatever `config.yaml` specifies (or its own default if `config.yaml` omits that section).
 
 ---
 

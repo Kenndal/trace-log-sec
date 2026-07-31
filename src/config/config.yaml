@@ -6,9 +6,32 @@
 #
 # Each rule: {id, type, enabled?, severity?, params}.
 #   - type "threshold": stateful per-IP sliding window (brute force, scanning).
+#     params: match, threshold, window_seconds, distinct_by?, title?,
+#     description?, max_evidence? (default 20).
 #   - type "signature": stateless per-line regex matching (SQLi, traversal, ...).
+#     params: target, patterns, title?, description?, case_sensitive?
+#     (default false), min_hits? (default 1), max_evidence? (default 20),
+#     max_decode_passes? (default 2 — nested URL-decode attempts tried
+#     against each value before giving up on evasion via encoding).
 # Supplying a rule with an existing id overrides it; enabled: false disables it;
 # a new id adds a rule. See docs/engine-plan.md §6.1.
+#
+# `engine` and `correlation` are both optional; omitting either (or the whole
+# section) falls back to the defaults shown below.
+
+# Engine-wide behavior (engine/engine.py::Engine), independent of any one rule.
+engine:
+  # Ceiling on stored evidence lines per finding, applied after collection.
+  # A rule's own `max_evidence` param (if lower) already wins during
+  # collection; this only trims further.
+  max_evidence: 20
+
+# Cross-rule correlation (engine/correlation.py::Correlator): how findings
+# for the same IP are clustered into incidents.
+correlation:
+  # Findings within this many minutes of each other (by the running cluster
+  # span) are grouped into one incident.
+  window_minutes: 10
 
 rules:
   - id: ssh_brute_force

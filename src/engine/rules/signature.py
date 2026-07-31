@@ -14,6 +14,7 @@ from engine.rules.base import Rule
 from engine.rules.registry import register
 from engine.rules.utils import FieldExtractor, add_evidence, resolve_preset
 from models import AuthLogEntry, Finding, LogEntry, Severity, WebLogEntry
+from utils.exceptions import RuleConfigError
 
 # Named match targets for signature rules (config-safe presets).
 TARGET_EXTRACTORS: dict[str, FieldExtractor] = {
@@ -26,11 +27,11 @@ TARGET_EXTRACTORS: dict[str, FieldExtractor] = {
 }
 
 
-def _decode_variants(value: str) -> list[str]:
+def _decode_variants(value: str, max_passes: int) -> list[str]:
     """Return {raw, bounded-recursively-decoded} forms (fail-soft)."""
     variants = [value]
     current = value
-    for _ in range(MAX_DECODE_PASSES):
+    for _ in range(max_passes):
         decoded = unquote(current, errors="replace")
         if decoded == current:
             break
@@ -59,13 +60,17 @@ class PatternSignatureRule(Rule):
         case_sensitive: bool = False,
         min_hits: int = 1,
         max_evidence: int = DEFAULT_MAX_EVIDENCE,
+        max_decode_passes: int = MAX_DECODE_PASSES,
     ) -> None:
+        if max_decode_passes < 0:
+            raise RuleConfigError(f"max_decode_passes must be >= 0, got {max_decode_passes!r}")
         self.id = id
         self.title = title or id
         self.severity = severity
         self.description = description
         self.min_hits = min_hits
         self.max_evidence = max_evidence
+        self.max_decode_passes = max_decode_passes
         self._target_name = target
         self._extract = resolve_preset(target, TARGET_EXTRACTORS, "signature target")
         flags = 0 if case_sensitive else re.IGNORECASE
@@ -82,7 +87,7 @@ class PatternSignatureRule(Rule):
 
         hit_pattern = None
         hit_snippet = None
-        for variant in _decode_variants(value):
+        for variant in _decode_variants(value, self.max_decode_passes):
             for source, compiled in self._patterns:
                 m = compiled.search(variant)
                 if m:

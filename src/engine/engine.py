@@ -2,7 +2,7 @@
 
 Feeds parsed entries through every rule, flushes end-of-stream aggregates, and
 runs the correlator. Never crashes on bad input: parse failures (including a
-missing file) are captured as ``ParseError`` unless ``strict=True``.
+missing file) are captured as ``ParseError``.
 
 See docs/engine-plan.md §8.
 """
@@ -32,13 +32,11 @@ class Engine:
         correlator: Correlator | None = None,
         logger: logging.Logger | None = None,
         max_evidence: int = DEFAULT_MAX_EVIDENCE,
-        strict: bool = False,
     ) -> None:
         self.rules = list(rules)
         self.correlator = correlator if correlator is not None else Correlator()
         self.logger = logger or logging.getLogger("trace_log_sec.engine")
         self.max_evidence = max_evidence
-        self.strict = strict
 
     def analyze(self, sources: Iterable[LogSource]) -> AnalysisReport:
         started = time.monotonic()
@@ -58,8 +56,6 @@ class Engine:
             )
             for item in parse_file(source.path, source.parser, counters=stats):
                 if isinstance(item, ParseError):
-                    if item.line_no == 0 and self.strict:
-                        raise FileNotFoundError(item.reason)
                     parse_errors.append(item)
                     self.logger.warning(
                         "parse error in %s line %d: %s",
@@ -75,18 +71,14 @@ class Engine:
                 for rule in self.rules:
                     try:
                         findings.extend(rule.inspect(item))
-                    except Exception as e:
-                        if self.strict:
-                            raise
+                    except Exception as e:  # noqa: BLE001 (never crash on a buggy rule)
                         self.logger.warning("rule %s raised on entry: %s", rule.id, e)
 
         # 4. Flush end-of-stream aggregates.
         for rule in self.rules:
             try:
                 findings.extend(rule.flush())
-            except Exception as e:
-                if self.strict:
-                    raise
+            except Exception as e:  # noqa: BLE001 (never crash on a buggy rule)
                 self.logger.warning("rule %s raised on flush: %s", rule.id, e)
 
         # Cap evidence to the engine-wide ceiling. A rule's own max_evidence

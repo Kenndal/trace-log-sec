@@ -203,6 +203,20 @@ def test_signature_url_decoded_double_encoding():
     assert len(findings) == 1
 
 
+def test_signature_max_decode_passes_limits_depth():
+    # %252e%252e%252f needs 2 decode passes to reach ../; with only 1 allowed
+    # the doubly-encoded variant is never produced, so the traversal pattern
+    # (which only matches the decoded form) doesn't fire.
+    r = PatternSignatureRule(id="trav", patterns=[r"\.\./"], target="request_target", max_decode_passes=1)
+    findings = run(r, [web("1.1.1.1", 0, target="/x?f=%252e%252e%252fetc")])
+    assert findings == []
+
+
+def test_signature_rejects_negative_max_decode_passes():
+    with pytest.raises(RuleConfigError):
+        PatternSignatureRule(id="trav", patterns=[r"\.\./"], max_decode_passes=-1)
+
+
 def test_signature_invalid_percent_is_fail_soft():
     r = sqli_rule()
     # A stray % must not raise; benign content → no hit.
