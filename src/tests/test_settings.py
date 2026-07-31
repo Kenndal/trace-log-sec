@@ -1,4 +1,4 @@
-"""Config loading failure-scenario tests (§9)."""
+"""Config loading failure-scenario tests."""
 
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-"""Correlator tests (§9)."""
+"""Correlator tests."""
 
 from __future__ import annotations
 

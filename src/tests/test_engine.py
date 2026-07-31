@@ -1,4 +1,4 @@
-"""Engine orchestration tests (§9)."""
+"""Engine orchestration tests."""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from config.settings import load_settings, rule_specs
 from engine import Engine, LogSource
 from engine.correlation import Correlator
-from engine.parsers import CombinedLogParser, LogParser, SyslogAuthParser
+from engine.parsers import CombinedLogParser, LogParser, SyslogAuthParser, parse_file
 from engine.rules import Rule, ThresholdRule, build_rules
 from models import AuthLogEntry, AuthOutcome, Severity, WebLogEntry
 
@@ -131,7 +131,7 @@ def test_engine_rerun_idempotent(tmp_path):
 
 
 # --------------------------------------------------------------------------- #
-# Ordering invariants I1 / I2 (§8)
+# Ordering invariants I1 / I2
 # --------------------------------------------------------------------------- #
 
 
@@ -211,3 +211,65 @@ def test_rule_exception_isolated(tmp_path):
     # The buggy rule's exceptions are swallowed; the well-behaved rule alongside
     # it still runs to completion and produces its finding.
     assert "ssh_brute_force" in {f.rule_id for f in report.findings}
+
+
+# --------------------------------------------------------------------------- #
+# AnalysisSession: the streaming core shared with `--follow`
+# --------------------------------------------------------------------------- #
+
+
+def summarize(report):
+    return (
+        sorted((f.rule_id, f.source_ip, f.count) for f in report.findings),
+        sorted((i.source_ip, len(i.findings)) for i in report.incidents),
+        report.stats["totals"],
+    )
+
+
+def drive(engine, sources):
+    """Feed a session entry by entry, the way the follow loop does."""
+    session = engine.session()
+    emitted = []
+    for source in sources:
+        counters = session.counters_for(source.path)
+        for item in parse_file(source.path, source.parser, counters=counters):
+            emitted.extend(session.feed(item, counters))
+    return session.finalize(), emitted
+
+
+def make_mixed_sources(tmp_path):
+    auth = make_auth_log(tmp_path)
+    web = make_web_log(tmp_path)
+    traversal = tmp_path / "traversal.log"
+    traversal.write_text('203.0.113.5 - - [10/Oct/2025:13:55:01 +0000] "GET /../../etc/passwd HTTP/1.1" 400 0\n')
+    return [
+        LogSource(path=str(auth), parser=SyslogAuthParser(reference_time=REF)),
+        LogSource(path=str(web), parser=CombinedLogParser(source=str(web))),
+        LogSource(path=str(traversal), parser=CombinedLogParser(source=str(traversal))),
+    ]
+
+
+def test_session_fed_entry_by_entry_matches_batch_analyze(tmp_path):
+    def engine():
+        return Engine(config_rules(), correlator=Correlator(window=timedelta(minutes=10)))
+
+    batch = engine().analyze(make_mixed_sources(tmp_path))
+    streamed, _ = drive(engine(), make_mixed_sources(tmp_path))
+
+    assert summarize(streamed) == summarize(batch)
+
+
+def test_feed_surfaces_every_finding_the_report_ends_up_with(tmp_path):
+    """The live (`--follow`) output must not be missing a class of detection:
+    both threshold and signature rules emit through ``feed``, not just flush."""
+    report, emitted = drive(Engine(config_rules()), make_mixed_sources(tmp_path))
+
+    assert {id(f) for f in emitted} == {id(f) for f in report.findings}
+    assert {f.rule_id for f in emitted} >= {"ssh_brute_force", "directory_traversal"}
+
+
+def test_feed_returns_a_finding_once_however_long_the_burst_runs(tmp_path):
+    """A finding updated in place must not be re-announced on every new hit."""
+    _, emitted = drive(Engine(config_rules()), make_mixed_sources(tmp_path))
+
+    assert len(emitted) == len({id(f) for f in emitted})

@@ -2,7 +2,7 @@
 
 Kept outside the ``engine`` package so the core detection engine stays
 format-agnostic (it only ever sees structured specs — plain dicts — never a
-file path or a YAML/pydantic dependency). See docs/rule-config-plan.md.
+file path or a YAML/pydantic dependency).
 """
 
 from __future__ import annotations

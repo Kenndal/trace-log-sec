@@ -22,7 +22,7 @@ Background traffic (the vast majority of both files) is randomized normal activi
 - **Category:** SSH auth + privilege escalation
 - **When:** ~09:40 UTC
 - **Actor(s):** 203.0.113.77 (user 'admin')
-- **Status:** PARTIALLY DETECTED - `ssh_brute_force` fires on the failed burst and `sudo_privilege_escalation` now fires separately on the `/etc/shadow` and `id_rsa` reads; they surface as two unrelated findings, not one chain, since sudo lines carry no source IP so the Correlator can't join them (see docs/mvp-rules-plan.md §4). The success event itself is still invisible until item #2 (brute-force-then-success) is built.
+- **Status:** PARTIALLY DETECTED - `ssh_brute_force` fires on the failed burst and `sudo_privilege_escalation` now fires separately on the `/etc/shadow` and `id_rsa` reads; they surface as two unrelated findings, not one chain, since sudo lines carry no source IP so the Correlator can't join them. The success event itself is still invisible until item #2 (brute-force-then-success) is built.
 - **What happens:** 6 failed SSH passwords in 40s, then a successful login, then sudo cat of /etc/shadow and id_rsa within 35s of login. This is the canonical 'attacker got in and immediately dumped credentials' story.
 
 ## Web login brute force (blocked)
@@ -71,7 +71,7 @@ Background traffic (the vast majority of both files) is randomized normal activi
 - **Category:** Web app
 - **When:** ~15:00 UTC
 - **Actor(s):** 198.51.100.250
-- **Status:** DETECTED - `sensitive_file_exposure` fires (count=13). Two of these requests (/.git/config, /.env.production) return 200 -- an actual exposed-secret finding, not just a probe -- but the rule can't yet see status codes, so all 13 fold into one HIGH finding; check `Finding.evidence` for the 200s (documented limitation, docs/mvp-rules-plan.md §2).
+- **Status:** DETECTED - `sensitive_file_exposure` fires (count=13). Two of these requests (/.git/config, /.env.production) return 200 -- an actual exposed-secret finding, not just a probe -- but the rule can't yet see status codes, so all 13 fold into one HIGH finding; check `Finding.evidence` for the 200s.
 - **What happens:** 13 requests for source-control, env, backup and key-material paths in 24s; 2 of them succeed (200).
 
 ## Known scanner / attack-tool user agents

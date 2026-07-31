@@ -1,7 +1,4 @@
-"""Data models dedicated to :mod:`engine.engine`.
-
-See docs/engine-plan.md §4.
-"""
+"""Data models dedicated to :mod:`engine.engine`."""
 
 from __future__ import annotations
 

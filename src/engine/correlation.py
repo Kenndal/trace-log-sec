@@ -3,8 +3,6 @@
 Groups findings by IP and clusters those close in time into ``Incident``s. An
 incident forms only for genuine multi-signal activity (≥2 distinct rules OR ≥2
 sources for the same IP) — a single rule's repeated findings never do.
-
-See docs/engine-plan.md §7.
 """
 
 from __future__ import annotations

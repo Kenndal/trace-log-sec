@@ -9,8 +9,6 @@ Two algorithm classes cover every shipped detection:
 Behavior lives in these classes; parameters (thresholds, patterns, severities)
 are data supplied via config specs. A registry + ``build_rules`` factory turns
 structured specs into rule instances.
-
-See docs/engine-plan.md §6.
 """
 
 from __future__ import annotations

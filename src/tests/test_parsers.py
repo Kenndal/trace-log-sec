@@ -1,4 +1,4 @@
-"""Parser tests (§9)."""
+"""Parser tests."""
 
 from __future__ import annotations
 

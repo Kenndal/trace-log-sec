@@ -1,8 +1,6 @@
 """Data models dedicated to :mod:`engine.parsers`.
 
 Log entries are frozen/immutable value objects (safe to share across rules).
-
-See docs/engine-plan.md §4.
 """
 
 from __future__ import annotations
@@ -13,7 +11,7 @@ from enum import Enum
 
 
 class AuthOutcome(Enum):
-    """Single-valued classification of an auth.log message (§5)."""
+    """Single-valued classification of an auth.log message."""
 
     FAILURE = "failure"
     INVALID_USER = "invalid_user"
