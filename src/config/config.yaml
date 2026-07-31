@@ -33,6 +33,14 @@ correlation:
   # span) are grouped into one incident.
   window_minutes: 10
 
+# HTML report output (reporter/). Optional; omitting it falls back to the
+# default shown below.
+reporting:
+  # Directory that generated `report_YYYY_MM_DD_HH_MM_SS.html` files are
+  # written to. A relative path is resolved against the current working
+  # directory; the directory is created automatically if it does not exist.
+  output_dir: reports
+
 rules:
   - id: ssh_brute_force
     type: threshold

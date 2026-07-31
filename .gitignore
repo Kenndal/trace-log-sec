@@ -206,6 +206,9 @@ tempCodeRunnerFile.py
 # Ruff stuff:
 .ruff_cache/
 
+# TraceLogSec generated HTML reports
+/reports/
+
 # PyPI configuration file
 .pypirc
 

@@ -66,6 +66,20 @@ def test_engine_and_correlation_default_when_omitted(tmp_path):
     assert settings.correlation.window_minutes == 10
 
 
+def test_reporting_defaults_when_omitted(tmp_path):
+    # A config with no `reporting:` section still yields a usable default dir.
+    f = write(tmp_path, "ok.yaml", VALID_RULE)
+    settings = load_settings(f)
+    assert settings.reporting.output_dir == "reports"
+
+
+def test_reporting_output_dir_override_applied(tmp_path):
+    content = VALID_RULE + "reporting:\n  output_dir: /custom/out\n"
+    f = write(tmp_path, "ok.yaml", content)
+    settings = load_settings(f)
+    assert settings.reporting.output_dir == "/custom/out"
+
+
 def test_engine_and_correlation_overrides_applied(tmp_path):
     content = (
         VALID_RULE
