@@ -10,7 +10,6 @@ import pytest
 
 from models import AnalysisReport, Finding, Incident, LogEntry, ParseError, Severity
 from reporter import list_reports, render_html, resolve_output_dir, write_report
-from reporter.storage import PROJECT_ROOT
 from utils.exceptions import ReportError
 
 FIXED_TIME = datetime(2025, 11, 12, 13, 10, 0, tzinfo=UTC)
@@ -258,8 +257,9 @@ def test_resolve_output_dir_absolute_kept(tmp_path):
     assert resolve_output_dir(tmp_path) == tmp_path
 
 
-def test_resolve_output_dir_relative_uses_project_root():
-    assert resolve_output_dir("reports") == (PROJECT_ROOT / "reports").resolve()
+def test_resolve_output_dir_relative_uses_cwd(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    assert resolve_output_dir("reports") == (tmp_path / "reports").resolve()
 
 
 # --------------------------------------------------------------------------- #

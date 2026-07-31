@@ -18,9 +18,6 @@ from utils.exceptions import ReportError
 
 from .html import render_html
 
-# reporter/storage.py -> reporter -> src -> project root.
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-
 
 @dataclass(frozen=True, kw_only=True)
 class ReportInfo:
@@ -34,11 +31,12 @@ def resolve_output_dir(output_dir: str | Path) -> Path:
     """Resolve a configured output dir to an absolute path.
 
     Absolute paths are returned unchanged; a relative path is resolved against
-    the project root, so reports land in the same place regardless of the
-    caller's working directory.
+    the current working directory — never derived from ``__file__``, which
+    only happens to sit under the repo when running from a ``src/`` checkout
+    and points into site-packages once installed as a wheel.
     """
     path = Path(output_dir)
-    return path if path.is_absolute() else (PROJECT_ROOT / path).resolve()
+    return path if path.is_absolute() else (Path.cwd() / path).resolve()
 
 
 def write_report(

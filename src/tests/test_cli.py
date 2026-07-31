@@ -22,9 +22,9 @@ SYSLOG_LINE = "Jan 05 01:02:03 server sshd[1]: Failed password for x from 1.1.1.
 def _isolate_reports(tmp_path, monkeypatch):
     """Redirect report output to a temp dir so tests never touch the real
     ``reports/`` folder. ``analyze`` resolves the configured relative dir
-    against ``reporter.storage.PROJECT_ROOT``, so repointing that is enough.
+    against the current working directory, so chdir'ing here is enough.
     """
-    monkeypatch.setattr("reporter.storage.PROJECT_ROOT", tmp_path)
+    monkeypatch.chdir(tmp_path)
 
 
 def write(tmp_path, name, content):
