@@ -89,6 +89,7 @@ uv run trace-log-sec analyze \
 | `--max-evidence N` | `engine.max_evidence` | from `config.yaml` (built-in default: `20`) |
 | `--window-minutes N` | `correlation.window_minutes` | from `config.yaml` (built-in default: `10`) |
 | `--reference-time DATETIME` | syslog year anchor | newest web-log timestamp in this run, else current UTC time |
+| `--config PATH` | the entire config file (rules included) | bundled `config.yaml` at the repo root |
 
 Precedence is always **command-line flag → `config.yaml` → built-in default**: an option only takes effect if explicitly passed.
 
@@ -101,6 +102,14 @@ uv run trace-log-sec analyze \
 ```
 
 `--reference-time` accepts `%Y-%m-%dT%H:%M:%S`, `%Y-%m-%d %H:%M:%S`, or `%Y-%m-%d`.
+
+Use `--config` to swap out the whole config file — rules, `engine`, `correlation`, and `reporting` sections — for a single run, without touching the bundled `config.yaml`:
+
+```bash
+uv run trace-log-sec analyze --config custom-config.yaml auth.log webserver.log
+```
+
+`--config` must point to an existing, readable file; `--max-evidence`/`--window-minutes` still override whatever that file (or its defaults) sets. `list-reports` also accepts `--config`, so a run's HTML reports can be listed from the same custom `reporting.output_dir`.
 
 #### Input validation
 
@@ -171,6 +180,8 @@ uv run trace-log-sec list-reports
 
 Scans `reporting.output_dir` and prints generated reports newest-first with their timestamps. Files that do not match the `report_YYYY_MM_DD_HH_MM_SS.html` naming convention are ignored. A missing directory yields an empty result, not an error.
 
+Accepts `--config PATH` as well, to list reports from a custom config's `reporting.output_dir` instead of the bundled `config.yaml`'s.
+
 ---
 
 ## Configuration
@@ -195,6 +206,8 @@ rules:
 ```
 
 Sections `engine`, `correlation`, and `reporting` are optional — omitted keys fall back to the built-in defaults above. Rules are described in [Shipped rules](#shipped-rules-configyaml) and [Adding a new rule](#adding-a-new-rule).
+
+Pass `--config PATH` to `analyze` (or `list-reports`) to use a different config file entirely for a single run, instead of editing the bundled `config.yaml`.
 
 ---
 

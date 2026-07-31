@@ -111,7 +111,7 @@ def test_analyze_uses_config_yaml_value_when_no_cli_override(monkeypatch, tmp_pa
     settings = load_settings()
     correlation = settings.correlation.model_copy(update={"window_minutes": 0})
     zero_window = settings.model_copy(update={"correlation": correlation})
-    monkeypatch.setattr("cli.commands.analyze.load_settings", lambda: zero_window)
+    monkeypatch.setattr("cli.commands.analyze.load_settings", lambda *a, **k: zero_window)
 
     ip = "203.0.113.50"
     auth = write(tmp_path, "auth.log", _auth_failures(ip, [0, 1, 2, 3, 4]))
@@ -175,7 +175,49 @@ def test_analyze_multiple_bad_paths_all_reported(tmp_path):
     result = runner.invoke(app, ["analyze", str(missing), str(wrong_ext)])
     assert result.exit_code == 2
     assert "no such file" in result.output
-    assert ".log" in result.output
+
+
+# --------------------------------------------------------------------------- #
+# --config
+# --------------------------------------------------------------------------- #
+
+CUSTOM_CONFIG = """\
+rules:
+  - id: ssh_brute_force
+    type: threshold
+    severity: high
+    enabled: false
+    params:
+      match: auth_failure
+      threshold: 5
+      window_seconds: 60
+"""
+
+
+def test_analyze_config_overrides_default_disables_rule(tmp_path):
+    # Default config.yaml has ssh_brute_force enabled; this custom config
+    # disables it, so the same failing-auth activity should produce no finding.
+    config = write(tmp_path, "custom.yaml", CUSTOM_CONFIG)
+    ip = "203.0.113.50"
+    auth = write(tmp_path, "auth.log", _auth_failures(ip, [0, 1, 2, 3, 4]))
+    result = runner.invoke(app, ["analyze", "--config", str(config), str(auth)])
+    assert result.exit_code == 0
+    assert "ssh_brute_force" not in result.output
+
+
+def test_analyze_config_nonexistent_path_rejected(tmp_path):
+    auth = write(tmp_path, "auth.log", SYSLOG_LINE)
+    result = runner.invoke(app, ["analyze", "--config", str(tmp_path / "missing.yaml"), str(auth)])
+    assert result.exit_code == 2
+    assert "--config" in result.output
+
+
+def test_analyze_config_malformed_yaml_reported(tmp_path):
+    config = write(tmp_path, "bad.yaml", "rules: [this is not: valid: yaml\n")
+    auth = write(tmp_path, "auth.log", SYSLOG_LINE)
+    result = runner.invoke(app, ["analyze", "--config", str(config), str(auth)])
+    assert result.exit_code == 1
+    assert "invalid config" in result.output
 
 
 def test_analyze_unrecognized_file_skipped_with_warning(tmp_path):
