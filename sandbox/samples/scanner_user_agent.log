@@ -1,0 +1,5 @@
+203.0.113.99 - - [12/Nov/2025:15:30:00 +0000] "GET /product?id=1 HTTP/1.1" 404 246 "-" "sqlmap/1.7.2#stable (http://sqlmap.org)"
+198.51.100.66 - - [12/Nov/2025:15:30:10 +0000] "GET /admin HTTP/1.1" 404 6 "-" "Nikto/2.5.0 (Cgi Scanning)"
+192.0.2.150 - - [12/Nov/2025:15:30:20 +0000] "GET /backup HTTP/1.1" 404 12 "-" "gobuster/3.6"
+192.0.2.77 - - [12/Nov/2025:15:30:30 +0000] "GET /wp-login.php HTTP/1.1" 404 8 "-" "-"
+192.168.1.70 - - [12/Nov/2025:15:31:00 +0000] "GET /home HTTP/1.1" 200 1500 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"

@@ -1,0 +1,11 @@
+# QA fixture: schema-valid config whose rule uses an unregistered `type`.
+# load_settings succeeds, but build_rules raises RuleConfigError
+# ("unknown rule type 'bogus'"), which analyze reports as `Error: ...` exit 1.
+rules:
+  - id: my_broken_rule
+    type: bogus
+    severity: high
+    params:
+      target: request_target
+      patterns:
+        - "anything"

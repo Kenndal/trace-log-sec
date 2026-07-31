@@ -1,0 +1,7 @@
+Nov 12 02:15:00 web01 sshd[3824]: Accepted publickey for eve from 45.33.12.9 port 51811 ssh2
+Nov 12 02:15:25 web01 sudo: eve : TTY=pts/7 ; PWD=/home/eve ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow
+Nov 12 02:15:45 web01 sudo: eve : TTY=pts/7 ; PWD=/home/eve ; USER=root ; COMMAND=/bin/cp /root/.aws/credentials /tmp/creds.txt
+Nov 12 02:16:05 web01 sudo: eve : TTY=pts/7 ; PWD=/home/eve ; USER=root ; COMMAND=/bin/cat /home/eve/.ssh/id_rsa
+Nov 12 02:16:25 web01 sudo: eve : TTY=pts/7 ; PWD=/home/eve ; USER=root ; COMMAND=/usr/sbin/useradd -m backdoor
+Nov 12 02:16:35 web01 sudo: eve : TTY=pts/7 ; PWD=/home/eve ; USER=root ; COMMAND=/usr/sbin/usermod -aG sudo backdoor
+Nov 12 02:17:00 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl restart nginx

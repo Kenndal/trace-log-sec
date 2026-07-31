@@ -1,0 +1,7 @@
+192.168.1.120 - - [12/Nov/2025:19:00:00 +0000] "GET /faq HTTP/1.1" 200 3014 "-" "Mozilla/5.0 (X11; Linux x86_64) Chrome/124.0.0.0 Safari/537.36"
+this line is complete garbage and matches nothing
+192.168.1.121 - - [12/Nov/2025:19:00:12 +0000] "GET /pricing HTTP/1.1" 200 2437 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/124.0.0.0 Safari/537.36"
+!!! partial entry <<< truncated by disk-full event >>>
+192.168.1.122 - - [12/Nov/2025:19:00:24 +0000] "GET /about HTTP/1.1" 200 4102 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Version/17.4 Safari/605.1.15"
+[MALFORMED ENTRY - possible log rotation glitch
+192.168.1.123 - - [12/Nov/2025:19:00:36 +0000] "GET /contact HTTP/1.1" 200 2800 "-" "Mozilla/5.0 (X11; Linux x86_64) Chrome/124.0.0.0 Safari/537.36"

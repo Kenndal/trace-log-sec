@@ -1,0 +1,14 @@
+# QA fixture: proves --config fully swaps the rule set and that an in-file rule
+# overrides the bundled default. Only ssh_brute_force is defined, and its
+# threshold is lowered from 5 to 3, so ssh_brute_force_negative.log (4 failures
+# from one IP) now FIRES where it would not under the bundled config.
+rules:
+  - id: ssh_brute_force
+    type: threshold
+    severity: high
+    params:
+      match: auth_failure
+      threshold: 3
+      window_seconds: 60
+      title: SSH Brute Force
+      description: Repeated SSH authentication failures from one IP.

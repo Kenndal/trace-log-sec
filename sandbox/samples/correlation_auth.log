@@ -1,0 +1,6 @@
+Nov 12 13:13:00 web01 sshd[6001]: Failed password for invalid user oracle from 203.0.113.150 port 50001 ssh2
+Nov 12 13:13:07 web01 sshd[6002]: Failed password for invalid user postgres from 203.0.113.150 port 50002 ssh2
+Nov 12 13:13:15 web01 sshd[6003]: Failed password for invalid user git from 203.0.113.150 port 50003 ssh2
+Nov 12 13:13:24 web01 sshd[6004]: Failed password for invalid user test from 203.0.113.150 port 50004 ssh2
+Nov 12 13:13:34 web01 sshd[6005]: Failed password for invalid user admin from 203.0.113.150 port 50005 ssh2
+Nov 12 13:14:10 web01 sshd[6006]: Accepted publickey for alice from 10.0.0.11 port 50006 ssh2

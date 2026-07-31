@@ -1,0 +1,8 @@
+Nov 12 09:00:00 web01 sshd[4001]: Accepted publickey for bob from 10.0.0.12 port 58949 ssh2
+Nov 12 09:01:44 web01 sshd[4002]: Accepted publickey for alice from 10.0.0.11 port 48190 ssh2
+Nov 12 09:03:27 web01 sshd[4003]: Connection closed by 10.0.0.15 port 35477 [preauth]
+Nov 12 09:05:04 web01 sshd[4004]: Accepted publickey for dave from 10.0.0.14 port 52671 ssh2
+Nov 12 09:06:52 web01 sudo: dave : TTY=pts/2 ; PWD=/home/dave ; USER=root ; COMMAND=/bin/systemctl status nginx
+Nov 12 09:08:01 web01 sshd[4005]: Accepted publickey for jenkins from 10.0.0.15 port 45089 ssh2
+Nov 12 09:09:04 web01 sudo: deploy : TTY=pts/3 ; PWD=/var/www ; USER=root ; COMMAND=/usr/bin/git pull
+Nov 12 09:10:25 web01 sshd[4006]: Connection closed by 10.0.0.11 port 34734 [preauth]

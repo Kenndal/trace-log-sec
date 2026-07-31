@@ -1,0 +1,8 @@
+198.51.100.250 - - [12/Nov/2025:15:00:00 +0000] "GET /.git/config HTTP/1.1" 200 92 "-" "Mozilla/5.0 (compatible; scanner)"
+198.51.100.250 - - [12/Nov/2025:15:00:03 +0000] "GET /.env.production HTTP/1.1" 200 412 "-" "Mozilla/5.0 (compatible; scanner)"
+198.51.100.250 - - [12/Nov/2025:15:00:06 +0000] "GET /.aws/credentials HTTP/1.1" 404 0 "-" "Mozilla/5.0 (compatible; scanner)"
+198.51.100.250 - - [12/Nov/2025:15:00:09 +0000] "GET /id_rsa HTTP/1.1" 404 0 "-" "Mozilla/5.0 (compatible; scanner)"
+198.51.100.250 - - [12/Nov/2025:15:00:12 +0000] "GET /wp-config.php HTTP/1.1" 404 0 "-" "Mozilla/5.0 (compatible; scanner)"
+198.51.100.250 - - [12/Nov/2025:15:00:15 +0000] "GET /backup/db.sql HTTP/1.1" 404 0 "-" "Mozilla/5.0 (compatible; scanner)"
+198.51.100.250 - - [12/Nov/2025:15:00:18 +0000] "GET /site.bak HTTP/1.1" 404 0 "-" "Mozilla/5.0 (compatible; scanner)"
+192.168.1.60 - - [12/Nov/2025:15:01:00 +0000] "GET /index.html HTTP/1.1" 200 5000 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
