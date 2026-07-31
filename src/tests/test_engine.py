@@ -1,4 +1,4 @@
-"""Engine orchestration tests (§9)."""
+"""Engine orchestration tests."""
 
 from __future__ import annotations
 
@@ -131,7 +131,7 @@ def test_engine_rerun_idempotent(tmp_path):
 
 
 # --------------------------------------------------------------------------- #
-# Ordering invariants I1 / I2 (§8)
+# Ordering invariants I1 / I2
 # --------------------------------------------------------------------------- #
 
 

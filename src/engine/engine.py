@@ -7,8 +7,6 @@ missing file) are captured as ``ParseError``.
 The per-entry work lives in :class:`engine.session.AnalysisSession`; this class
 just drives it over a fixed set of files. A ``--follow`` run drives the same
 session from the tailer instead.
-
-See docs/engine-plan.md §8.
 """
 
 from __future__ import annotations

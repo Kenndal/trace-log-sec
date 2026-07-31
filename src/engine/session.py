@@ -9,8 +9,6 @@ emitted, which is what a live (``--follow``) run prints as it goes;
 Splitting this out of ``Engine.analyze`` keeps a single implementation of the
 detection pipeline: a batch run drives the session from ``parse_file``, a
 follow run drives it from the tailer, and both get identical semantics.
-
-See docs/engine-plan.md §8.
 """
 
 from __future__ import annotations

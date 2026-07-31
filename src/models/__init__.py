@@ -4,8 +4,6 @@ Split into one module per consumer in ``engine``: :mod:`models.parsers`,
 :mod:`models.rules`, :mod:`models.correlation`, :mod:`models.engine`. This
 package re-exports the full public surface so callers can keep writing
 ``from models import X``.
-
-See docs/engine-plan.md §4.
 """
 
 from __future__ import annotations

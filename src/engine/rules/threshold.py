@@ -1,7 +1,6 @@
 """Threshold rule: stateful per-IP sliding window (brute force, scanning, ...).
 
 Fires one finding per burst that crosses the configured threshold.
-See docs/engine-plan.md §6.
 """
 
 from __future__ import annotations
@@ -121,7 +120,7 @@ class ThresholdRule(Rule):
         # Evict events older than `window` relative to the right edge, which is
         # the max timestamp seen for this IP so far — not necessarily this
         # entry's own timestamp, since a single IP's events aren't guaranteed
-        # to arrive in order (§6.3 out-of-order tolerance).
+        # to arrive in order.
         right_edge = self._max_seen.get(ip)
         if right_edge is None or entry.timestamp > right_edge:
             right_edge = entry.timestamp

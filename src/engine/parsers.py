@@ -4,8 +4,6 @@ Each parser is pure and side-effect free: ``parse_line`` turns one raw line
 into a ``LogEntry`` or raises ``MalformedLineError``. ``parse_file`` wraps a
 parser in a crash-proof generator that converts failures into ``ParseError``
 records so a single bad line never aborts a run.
-
-See docs/engine-plan.md §5.
 """
 
 from __future__ import annotations
@@ -155,7 +153,7 @@ _ACCEPTED_RE = re.compile(r"Accepted \S+ for (?P<user>\S+)\s+from", re.IGNORECAS
 
 
 class SyslogAuthParser(LogParser):
-    """Parses BSD-syslog auth.log lines, resolving the missing year (§5.1)."""
+    """Parses BSD-syslog auth.log lines, resolving the missing year."""
 
     source = DEFAULT_AUTHLOG_SOURCE
 
@@ -205,7 +203,7 @@ class SyslogAuthParser(LogParser):
 
     def _resolve_timestamp(self, month: str, day: str, time: str) -> datetime:
         """Pick the year making ``(month, day, time)`` the most recent occurrence
-        at or before ``reference_time`` (§5.1)."""
+        at or before ``reference_time``."""
         if self._default_year is not None:
             try:
                 # BSD syslog carries no offset; tz is attached explicitly below.
@@ -245,7 +243,7 @@ def _classify_auth(
         port = int(fm.group("port")) if fm.group("port") else None
     else:
         # No "from IP" (e.g. "Connection closed by X port N [preauth]"):
-        # still extract any IPv4 and a nearby port as context (§5).
+        # still extract any IPv4 and a nearby port as context.
         am = _ANY_IP_RE.search(message)
         if am:
             ip = am.group("ip")

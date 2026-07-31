@@ -2,8 +2,6 @@
 
 ``Finding`` is a mutable aggregate the engine builds up during a run, then
 hands off read-only to a downstream presenter.
-
-See docs/engine-plan.md §4.
 """
 
 from __future__ import annotations

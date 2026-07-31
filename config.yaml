@@ -1,8 +1,7 @@
 # Detection rule configuration.
 #
 # Loaded by settings.py::load_settings() and turned into Rule instances via
-# engine.build_rules(). This is a transcription of the baseline previously
-# hardcoded in engine/rules.py::default_rules() (see docs/rule-config-plan.md).
+# engine.build_rules().
 #
 # Each rule: {id, type, enabled?, severity?, params}.
 #   - type "threshold": stateful per-IP sliding window (brute force, scanning).
@@ -14,7 +13,7 @@
 #     max_decode_passes? (default 2 — nested URL-decode attempts tried
 #     against each value before giving up on evasion via encoding).
 # Supplying a rule with an existing id overrides it; enabled: false disables it;
-# a new id adds a rule. See docs/engine-plan.md §6.1.
+# a new id adds a rule.
 #
 # `engine` and `correlation` are both optional; omitting either (or the whole
 # section) falls back to the defaults shown below.

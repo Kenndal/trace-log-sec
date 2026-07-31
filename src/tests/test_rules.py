@@ -1,4 +1,4 @@
-"""Rule tests (§9)."""
+"""Rule tests."""
 
 from __future__ import annotations
 
@@ -449,7 +449,7 @@ def test_sudo_privilege_escalation_ignores_ordinary_sudo():
 
 def test_sudo_privilege_escalation_aggregates_under_no_ip():
     # Sudo audit lines carry no source IP — all hits fold into one ip=None
-    # finding regardless of username (documented limitation, docs/mvp-rules-plan.md §4).
+    # finding regardless of username.
     r = _rule_from_defaults("sudo_privilege_escalation")
     entries = [
         auth_msg("carol : ... COMMAND=/usr/bin/cat /etc/shadow", user="carol"),

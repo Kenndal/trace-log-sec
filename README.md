@@ -506,7 +506,6 @@ trace-log-sec/
 │   │   └── storage.py          # write / list / resolve output dir
 │   ├── utils/                  # Exceptions (MalformedLineError, ConfigError, …)
 │   └── tests/                  # Unit tests
-├── docs/                       # Design plans (engine, rules, config)
 ├── task.md                     # Original assignment brief
 └── pyproject.toml
 ```

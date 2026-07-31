@@ -1,4 +1,4 @@
-"""Tailer tests: ``--follow``'s line source (§9)."""
+"""Tailer tests: ``--follow``'s line source."""
 
 from __future__ import annotations
 

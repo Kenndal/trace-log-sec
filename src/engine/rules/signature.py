@@ -1,6 +1,6 @@
 """Signature rule: stateless per-line regex matching (SQLi, traversal, ...).
 
-Aggregates hits per IP into one Finding. See docs/engine-plan.md §6.
+Aggregates hits per IP into one Finding.
 """
 
 from __future__ import annotations
