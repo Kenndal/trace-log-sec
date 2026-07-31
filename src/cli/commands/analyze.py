@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import timedelta
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Annotated
 
@@ -56,6 +56,17 @@ WindowMinutesOption = Annotated[
         help="Correlation clustering window, in minutes. Overrides config.yaml's correlation.window_minutes.",
     ),
 ]
+ReferenceTimeOption = Annotated[
+    datetime | None,
+    typer.Option(
+        formats=["%Y-%m-%dT%H:%M:%S", "%Y-%m-%d %H:%M:%S", "%Y-%m-%d"],
+        help=(
+            "Anchor (ISO 8601) for resolving the missing year in BSD syslog auth timestamps. "
+            "Defaults to the newest web-log timestamp in this run, or the current time if no "
+            "web logs are given — pass this explicitly for archived/historical auth-only logs."
+        ),
+    ),
+]
 
 
 @app.command()
@@ -63,6 +74,7 @@ def analyze(
     log_files: LogFilesArgument,
     max_evidence: MaxEvidenceOption = None,
     window_minutes: WindowMinutesOption = None,
+    reference_time: ReferenceTimeOption = None,
 ) -> None:
     """Analyze one or more log files for security incidents.
 
@@ -70,7 +82,7 @@ def analyze(
     ``correlation`` sections, which in turn default to the engine's own
     built-in defaults — an explicit flag here always wins.
     """
-    sources, skipped = build_log_sources(log_files)
+    sources, skipped, anchored_to_now = build_log_sources(log_files, reference_time=reference_time)
 
     for path in skipped:
         typer.secho(
@@ -82,6 +94,16 @@ def analyze(
     if not sources:
         typer.secho("Error: no recognized log files to analyze.", fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1)
+
+    if anchored_to_now:
+        typer.secho(
+            "Warning: resolving syslog years against the current time — no web logs or "
+            "--reference-time to anchor to. Archived auth logs may get the wrong year "
+            "(silently skewing threshold windows and correlation); pass --reference-time "
+            "for historical analysis.",
+            fg=typer.colors.YELLOW,
+            err=True,
+        )
 
     try:
         settings = load_settings()

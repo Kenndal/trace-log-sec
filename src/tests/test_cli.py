@@ -177,3 +177,72 @@ def test_analyze_all_files_unrecognized_exits_1(tmp_path):
     result = runner.invoke(app, ["analyze", str(weird)])
     assert result.exit_code == 1
     assert "Error" in result.output
+
+
+# --------------------------------------------------------------------------- #
+# Source-id uniqueness, format sniffing, and year anchoring (PR #7 review)
+# --------------------------------------------------------------------------- #
+
+
+def _auth_failures(ip, seconds):
+    return "".join(
+        f"Jul 31 01:02:{s:02d} server sshd[1]: Failed password for root from {ip} port 22 ssh2\n" for s in seconds
+    )
+
+
+def test_analyze_same_basename_files_get_distinct_sources(tmp_path):
+    # Two files sharing a basename ("auth.log") in different directories must
+    # not collide on source id — otherwise the >=2-distinct-sources correlation
+    # can never fire. host1's file crosses ssh_brute_force (threshold 5) on its
+    # own, and host2's later failure (same IP, same window) is folded into the
+    # active finding — so its `sources` set spans both files only if the ids are
+    # distinct, which is what makes the incident form.
+    ip = "9.9.9.9"
+    d1 = tmp_path / "host1"
+    d1.mkdir()
+    d2 = tmp_path / "host2"
+    d2.mkdir()
+    a1 = d1 / "auth.log"
+    a1.write_text(_auth_failures(ip, [0, 1, 2, 3, 4]))
+    a2 = d2 / "auth.log"
+    a2.write_text(_auth_failures(ip, [5]))
+
+    result = runner.invoke(app, ["analyze", "--reference-time", "2026-07-31T02:00:00", str(a1), str(a2)])
+    assert result.exit_code == 0
+    assert "INC-" in result.output
+    # The incident narrative lists the sources — both full paths, not one merged "auth".
+    assert "host1" in result.output
+    assert "host2" in result.output
+
+
+def test_analyze_detects_format_past_junk_first_line(tmp_path):
+    # A header / rotation remnant on the first line must not cause the whole
+    # file to be skipped when later lines parse fine.
+    f = write(tmp_path, "access.log", "# rotated 2026-07-31\n" + COMBINED_LINE)
+    result = runner.invoke(app, ["analyze", str(f)])
+    assert result.exit_code == 0
+    assert "Warning: skipping" not in result.output
+    assert "lines_read=2" in result.output
+
+
+def test_analyze_auth_only_warns_about_year_anchor(tmp_path):
+    auth = write(tmp_path, "auth.log", SYSLOG_LINE)
+    result = runner.invoke(app, ["analyze", str(auth)])
+    assert result.exit_code == 0
+    assert "no web logs or --reference-time" in result.output
+
+
+def test_analyze_reference_time_override_suppresses_year_warning(tmp_path):
+    auth = write(tmp_path, "auth.log", SYSLOG_LINE)
+    result = runner.invoke(app, ["analyze", "--reference-time", "2026-01-06", str(auth)])
+    assert result.exit_code == 0
+    assert "no web logs or --reference-time" not in result.output
+
+
+def test_analyze_web_present_does_not_trigger_year_warning(tmp_path):
+    # Web logs supply the anchor, so a mixed run never emits the auth-only warning.
+    web = write(tmp_path, "webserver.log", COMBINED_LINE)
+    auth = write(tmp_path, "auth.log", SYSLOG_LINE)
+    result = runner.invoke(app, ["analyze", str(auth), str(web)])
+    assert result.exit_code == 0
+    assert "no web logs or --reference-time" not in result.output
