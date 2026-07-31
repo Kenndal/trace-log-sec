@@ -72,14 +72,14 @@ uv run trace-log-sec list-reports --help
 uv run trace-log-sec analyze AUTH.log WEBSERVER.log
 ```
 
-`analyze` accepts one or more `*.log` files as positional arguments. Format — NCSA Combined access log vs BSD syslog auth log — is **auto-detected per file** from content (first parseable non-blank line within the first 20 lines), so files can be given in any order or mix. The shipped default rule set (`src/config/config.yaml`) is used, and findings are correlated across files by source IP.
+`analyze` accepts one or more `*.log` files as positional arguments. Format — NCSA Combined access log vs BSD syslog auth log — is **auto-detected per file** from content (first parseable non-blank line within the first 20 lines), so files can be given in any order or mix. The shipped default rule set (`config.yaml` at the repo root) is used, and findings are correlated across files by source IP.
 
-Quick start against the bundled incident fixtures:
+Quick start against the bundled sample logs:
 
 ```bash
 uv run trace-log-sec analyze \
-  src/tests/fixtures/auth_incidents.log \
-  src/tests/fixtures/webserver_incidents.log
+  samples/auth_incidents.log \
+  samples/webserver_incidents.log
 ```
 
 #### Options
@@ -175,7 +175,7 @@ Scans `reporting.output_dir` and prints generated reports newest-first with thei
 
 ## Configuration
 
-All runtime knobs live in `src/config/config.yaml` (shipped with the package):
+All runtime knobs live in `config.yaml` at the repo root (shipped with the package):
 
 ```yaml
 engine:
@@ -194,7 +194,7 @@ rules:
     params: { ... }
 ```
 
-Sections `engine`, `correlation`, and `reporting` are optional — omitted keys fall back to the built-in defaults above. Rules are described in [Shipped rules](#shipped-rules-configconfigyaml) and [Adding a new rule](#adding-a-new-rule).
+Sections `engine`, `correlation`, and `reporting` are optional — omitted keys fall back to the built-in defaults above. Rules are described in [Shipped rules](#shipped-rules-configyaml) and [Adding a new rule](#adding-a-new-rule).
 
 ---
 
@@ -325,7 +325,7 @@ Stateful per-IP sliding window. Fires **one finding per burst** that crosses the
 
 Windows use event timestamps only (never wall-clock / processing time).
 
-#### Shipped rules (`config/config.yaml`)
+#### Shipped rules (`config.yaml`)
 
 | ID | Type | What it detects | Defaults |
 |---|---|---|---|
@@ -415,6 +415,8 @@ The CLI then renders the report to the terminal (`cli/render.py`) and persists H
 
 ```
 trace-log-sec/
+├── config.yaml                 # Shipped rules + engine/correlation/reporting (edit this)
+├── samples/                    # Sample logs with embedded incidents (see incidents_manifest.md)
 ├── src/
 │   ├── engine/                 # Detection core (format-agnostic)
 │   │   ├── engine.py           # Orchestrator: parse → detect → correlate
@@ -429,7 +431,6 @@ trace-log-sec/
 │   │       └── utils.py        # Shared helpers (presets, evidence)
 │   ├── models/                 # Dataclasses (parsers, rules, correlation, engine)
 │   ├── config/
-│   │   ├── config.yaml         # Shipped rules + engine/correlation/reporting
 │   │   └── settings.py         # YAML → validated settings
 │   ├── constants/              # Shared literals (windows, formats, defaults)
 │   ├── cli/                    # Typer CLI
@@ -442,8 +443,7 @@ trace-log-sec/
 │   │   ├── html.py             # Pure HTML renderer (XSS-safe)
 │   │   └── storage.py          # write / list / resolve output dir
 │   ├── utils/                  # Exceptions (MalformedLineError, ConfigError, …)
-│   └── tests/                  # Unit tests + fixture logs
-├── scripts/run_demo.py         # Engine-only smoke demo (no CLI layer)
+│   └── tests/                  # Unit tests
 ├── docs/                       # Design plans (engine, rules, config)
 ├── task.md                     # Original assignment brief
 └── pyproject.toml
@@ -459,7 +459,7 @@ There are three tiers of extensibility. Prefer the cheapest one that fits.
 
 ### Tier 1 — Retune an existing rule (config only)
 
-Edit `src/config/config.yaml`: change `threshold`, `window_seconds`, `severity`, `patterns`, or set `enabled: false`.
+Edit `config.yaml` (repo root): change `threshold`, `window_seconds`, `severity`, `patterns`, or set `enabled: false`.
 
 ```yaml
 - id: ssh_brute_force
@@ -638,12 +638,4 @@ uv run ruff format .
 uv run mypy
 ```
 
-Optional engine-only smoke demo (bypasses the CLI layer):
-
-```bash
-uv run python scripts/run_demo.py
-# or with explicit paths:
-uv run python scripts/run_demo.py path/to/auth.log path/to/webserver.log
-```
-
-Fixture logs used for end-to-end demos live under `src/tests/fixtures/`; see `incidents_manifest.md` there for the embedded attack scenarios.
+Sample logs used for end-to-end demos live under `samples/`; see `incidents_manifest.md` there for the embedded attack scenarios.
