@@ -20,38 +20,15 @@ Clone the repository and install into a local virtual environment:
 ```bash
 git clone https://github.com/Kenndal/trace-log-sec.git
 cd trace-log-sec
-uv sync
+uv sync --all-groups
 ```
 
 That creates `.venv/`, editable-installs the package, and registers the `trace-log-sec` console script.
-
-To include the test tooling as well:
-
-```bash
-uv sync --group test
-```
-
-For linting / typing / pre-commit hooks:
-
-```bash
-uv sync --group dev --group test
-```
 
 Verify the install:
 
 ```bash
 uv run trace-log-sec --help
-```
-
-### Alternative: pip
-
-If you prefer pip over uv (still requires Python ≥ 3.12):
-
-```bash
-python -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
-pip install -e .
-trace-log-sec --help
 ```
 
 ---
