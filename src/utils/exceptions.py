@@ -33,3 +33,11 @@ class MalformedLineError(TraceLogSecError):
 
 class RuleConfigError(TraceLogSecError):
     """Raised when a rule spec, constructor argument, or preset name is invalid."""
+
+
+class CliInputError(TraceLogSecError):
+    """Raised when CLI-supplied arguments (e.g. log file paths) fail validation."""
+
+    def __init__(self, reason: str) -> None:
+        self.reason = reason
+        super().__init__(reason)

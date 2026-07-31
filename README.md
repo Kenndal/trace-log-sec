@@ -4,7 +4,7 @@ A security log analysis engine that parses webserver and authentication logs, de
 
 It processes NCSA Combined access logs (`webserver.log`) and BSD syslog auth logs (`auth.log`), runs signature and threshold detectors, then groups multi-signal activity by IP into correlated incidents. The design goal is a crash-proof, streaming, single-pass pipeline that stays memory-efficient and easy to extend.
 
-> **Note:** This is a preliminary README covering project structure and engine logic. Installation, CLI usage, and packaging details will be added later.
+> **Note:** This is a preliminary README covering project structure, engine logic, and CLI usage. Packaging/distribution details will be added later.
 
 ---
 
@@ -33,7 +33,7 @@ trace-log-sec/
 │   │   ├── config.yaml         # Shipped rule definitions
 │   │   └── settings.py         # YAML → validated RuleSpec dicts
 │   ├── constants/              # Shared literals (windows, formats, defaults)
-│   ├── cli/                    # CLI surface (WIP)
+│   ├── cli/                    # Typer CLI (`analyze` command)
 │   ├── utils/                  # Exceptions (MalformedLineError, ConfigError, …)
 │   └── tests/                  # Unit + fixture logs
 ├── scripts/run_demo.py         # End-to-end smoke demo
@@ -221,7 +221,6 @@ Correlation is the **only** place cross-source relationships are formed. Statefu
 1. for each LogSource:
      parse_file(...)
        ParseError  → collect + log warning
-                     (strict=True + missing file → raise FileNotFoundError)
        LogEntry    → feed to every rule.inspect(); collect eager findings
 2. flush() every rule          # signature aggregates land here
 3. cap evidence                # engine-wide max_evidence ceiling
@@ -235,7 +234,7 @@ Correlation is the **only** place cross-source relationships are formed. Statefu
 - Stateful rules only ever see one source type, so per-file order is enough.
 - Cross-file relationships are the correlator's job (post-hoc, timestamp-based).
 
-**Failure policy:** never crash on bad input by default. Malformed lines and missing files become `ParseError`s in the report. Rule exceptions are logged and skipped unless `strict=True`.
+**Failure policy:** never crash on bad input. Malformed lines and missing files become `ParseError`s in the report; rule exceptions are logged and skipped.
 
 **Report shape:**
 
@@ -251,6 +250,53 @@ AnalysisReport(
     },
 )
 ```
+
+---
+
+## CLI Usage
+
+Install (editable) with `uv sync`, then run the `trace-log-sec` console script:
+
+```bash
+uv sync
+uv run trace-log-sec analyze src/tests/fixtures/auth_incidents.log src/tests/fixtures/webserver_incidents.log
+```
+
+`analyze` accepts one or more `*.log` files as positional arguments. Format — NCSA Combined access log vs BSD syslog auth log — is auto-detected per file from its content, so files can be given in any order or mix. The shipped default rule set (`src/config/config.yaml`) is used, and findings are correlated across files by source IP.
+
+Example output shape:
+
+```
+=== FINDINGS ===
+  [HIGH    ] ssh_brute_force        ip=198.51.100.23  count=8   SSH Brute Force
+  ...
+
+=== INCIDENTS ===
+  INC-a1b2c3d4e5 [HIGH] 203.0.113.150
+    ...narrative...
+
+=== PARSE ERRORS ===
+  (none)
+
+=== STATS === lines_read=4167 parsed=4160 malformed=7 findings=12 incidents=3 (0.0421s)
+```
+
+Files that don't match either known format are skipped with a warning (non-fatal, unless *every* given file is unrecognized, which is treated as an error). Invalid arguments — a missing file, wrong extension, a directory, or a duplicate path — are rejected before analysis starts, with every problem reported together in one message.
+
+### Overriding engine/correlation settings
+
+`analyze` also accepts options that override the `engine`/`correlation` sections of `config.yaml` for a single run, without editing the file:
+
+```bash
+uv run trace-log-sec analyze --max-evidence 5 --window-minutes 30 auth.log webserver.log
+```
+
+| Option | Overrides | Default |
+|---|---|---|
+| `--max-evidence` | `engine.max_evidence` | `config.yaml`'s value (itself defaulting to `20`) |
+| `--window-minutes` | `correlation.window_minutes` | `config.yaml`'s value (itself defaulting to `10`) |
+
+Precedence is always **command-line flag → `config.yaml` → built-in default**: an option only takes effect if explicitly passed; otherwise the value falls through to whatever `config.yaml` specifies (or its own default if `config.yaml` omits that section).
 
 ---
 

@@ -17,12 +17,16 @@ classifiers = [
 dependencies = [
     "pydantic>=2.12.4",
     "pyyaml>=6.0.3",
+    "typer>=0.27.0",
 ]
 
 [project.urls]
 Homepage = "https://github.com/Kenndal/trace-log-sec"
 Repository = "https://github.com/Kenndal/trace-log-sec"
 Issues = "https://github.com/Kenndal/trace-log-sec/issues"
+
+[project.scripts]
+trace-log-sec = "cli:app"
 
 [dependency-groups]
 dev = ["ruff>=0.8.0", "mypy>=1.13.0", "pre-commit>=4.0.1", "ty>=0.0.12", "types-PyYAML>=6.0.12"]

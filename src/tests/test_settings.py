@@ -59,6 +59,29 @@ def test_valid_config_loads(tmp_path):
     assert [r.id for r in settings.rules] == ["a"]
 
 
+def test_engine_and_correlation_default_when_omitted(tmp_path):
+    f = write(tmp_path, "ok.yaml", VALID_RULE)
+    settings = load_settings(f)
+    assert settings.engine.max_evidence == 20
+    assert settings.correlation.window_minutes == 10
+
+
+def test_engine_and_correlation_overrides_applied(tmp_path):
+    content = (
+        VALID_RULE
+        + """\
+engine:
+  max_evidence: 5
+correlation:
+  window_minutes: 30
+"""
+    )
+    f = write(tmp_path, "ok.yaml", content)
+    settings = load_settings(f)
+    assert settings.engine.max_evidence == 5
+    assert settings.correlation.window_minutes == 30
+
+
 def test_duplicate_id_overrides_keeping_first_position(tmp_path):
     content = """\
 rules:
