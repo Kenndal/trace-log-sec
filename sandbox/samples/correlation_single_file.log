@@ -1,0 +1,5 @@
+198.51.100.91 - - [12/Nov/2025:14:00:00 +0000] "GET /products?id=1%20union%20select%20username,password%20from%20users HTTP/1.1" 200 812 "-" "curl/8.4.0"
+198.51.100.91 - - [12/Nov/2025:14:00:05 +0000] "GET /search?q=1%27%20or%201=1 HTTP/1.1" 200 77 "-" "curl/8.4.0"
+198.51.100.91 - - [12/Nov/2025:14:00:30 +0000] "GET /../../../etc/passwd HTTP/1.1" 400 0 "-" "curl/8.4.0"
+198.51.100.91 - - [12/Nov/2025:14:00:36 +0000] "GET /files/../../etc/shadow HTTP/1.1" 400 0 "-" "curl/8.4.0"
+192.168.1.90 - - [12/Nov/2025:14:01:00 +0000] "GET /home HTTP/1.1" 200 1200 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"

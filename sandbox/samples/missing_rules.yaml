@@ -1,0 +1,7 @@
+# QA fixture: valid YAML but missing the required top-level `rules` list.
+# EngineSettings validation must fail (rules is required), surfaced as
+# `ConfigError: ... Field required` on `rules`.
+engine:
+  max_evidence: 10
+correlation:
+  window_minutes: 5

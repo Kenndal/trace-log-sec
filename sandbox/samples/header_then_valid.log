@@ -1,0 +1,4 @@
+# TraceLogSec access log export - host web01 - generated 2025-11-12
+# columns: ip ident user [time] "request" status size "referrer" "agent"
+192.168.1.110 - - [12/Nov/2025:17:00:00 +0000] "GET /faq HTTP/1.1" 200 3014 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+192.168.1.111 - - [12/Nov/2025:17:00:12 +0000] "GET /pricing HTTP/1.1" 200 2437 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"

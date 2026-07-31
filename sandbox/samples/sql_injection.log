@@ -1,0 +1,6 @@
+198.51.100.90 - - [12/Nov/2025:13:45:00 +0000] "GET /products?id=1%20union%20select%20username,password%20from%20users HTTP/1.1" 200 812 "-" "curl/8.4.0"
+198.51.100.90 - - [12/Nov/2025:13:45:06 +0000] "GET /products?id=1%20or%201=1 HTTP/1.1" 200 812 "-" "curl/8.4.0"
+198.51.100.90 - - [12/Nov/2025:13:45:12 +0000] "GET /login?user=admin%27%20--%20 HTTP/1.1" 401 90 "-" "curl/8.4.0"
+198.51.100.90 - - [12/Nov/2025:13:45:18 +0000] "GET /search?q=1%27%20AND%20sleep(5)-- HTTP/1.1" 200 77 "-" "curl/8.4.0"
+198.51.100.90 - - [12/Nov/2025:13:45:24 +0000] "GET /report?col=name%20from%20information_schema.tables HTTP/1.1" 500 0 "-" "curl/8.4.0"
+198.51.100.90 - - [12/Nov/2025:13:45:42 +0000] "GET /orders?id=5;%20DROP%20TABLE%20orders-- HTTP/1.1" 200 33 "-" "curl/8.4.0"

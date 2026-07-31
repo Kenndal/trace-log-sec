@@ -1,0 +1,6 @@
+# QA fixture: deliberately malformed YAML syntax (unterminated flow sequence
+# and stray colons). yaml.safe_load must raise a YAMLError, which load_settings
+# wraps as `ConfigError: ... malformed YAML`.
+rules: [ id: ssh_brute_force, type: threshold
+  - broken: : :
+    indentation ][ mismatch

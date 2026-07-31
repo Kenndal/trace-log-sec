@@ -1,0 +1,6 @@
+Nov 12 08:20:00 web01 sshd[5101]: Accepted publickey for bob from 10.0.0.12 port 42001 ssh2
+Nov 12 08:20:05 web01 sshd[5102]: Failed password for root from 45.10.20.31 port 42002 ssh2
+Nov 12 08:20:12 web01 sshd[5103]: Failed password for root from 45.10.20.31 port 42003 ssh2
+Nov 12 08:20:20 web01 sshd[5104]: Failed password for root from 45.10.20.31 port 42004 ssh2
+Nov 12 08:20:29 web01 sshd[5105]: Failed password for root from 45.10.20.31 port 42005 ssh2
+Nov 12 08:21:10 web01 sshd[5106]: Accepted publickey for alice from 10.0.0.11 port 42006 ssh2

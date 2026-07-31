@@ -1,0 +1,31 @@
+# QA fixture: proves `enabled: false` disables a rule. sql_injection is present
+# but disabled; directory_traversal stays active. Run against
+# correlation_single_file.log (which contains BOTH SQLi and traversal payloads
+# from 198.51.100.91): only directory_traversal should fire, no sql_injection.
+rules:
+  - id: sql_injection
+    type: signature
+    severity: high
+    enabled: false
+    params:
+      target: request_target
+      title: SQL Injection
+      description: SQL-injection syntax in the request target.
+      patterns:
+        - "union\\s+select"
+        - "\\bor\\s+1\\s*=\\s*1\\b"
+        - "'\\s*or\\s+\\w"
+        - "'\\s*--"
+
+  - id: directory_traversal
+    type: signature
+    severity: high
+    params:
+      target: request_target
+      title: Directory Traversal
+      description: Path traversal sequences in the request target.
+      patterns:
+        - "\\.\\./"
+        - "/etc/passwd"
+        - "/etc/shadow"
+        - "%2e%2e"

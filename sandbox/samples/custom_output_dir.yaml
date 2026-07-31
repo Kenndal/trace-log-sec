@@ -1,0 +1,20 @@
+# QA fixture: redirects HTML report output to sandbox/reports (relative to the
+# current working directory, i.e. the repo root). After an analyze run using
+# this config, `list-reports --config custom_output_dir.yaml` should enumerate
+# the report from that directory instead of the default reports/.
+reporting:
+  output_dir: sandbox/reports
+
+rules:
+  - id: directory_traversal
+    type: signature
+    severity: high
+    params:
+      target: request_target
+      title: Directory Traversal
+      description: Path traversal sequences in the request target.
+      patterns:
+        - "\\.\\./"
+        - "/etc/passwd"
+        - "/etc/shadow"
+        - "%2e%2e"

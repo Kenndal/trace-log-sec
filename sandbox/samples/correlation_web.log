@@ -1,0 +1,7 @@
+203.0.113.150 - - [12/Nov/2025:13:10:00 +0000] "GET /../../../etc/passwd HTTP/1.1" 400 0 "-" "curl/8.4.0"
+203.0.113.150 - - [12/Nov/2025:13:10:05 +0000] "GET /files/../../etc/passwd HTTP/1.1" 400 0 "-" "curl/8.4.0"
+203.0.113.150 - - [12/Nov/2025:13:10:10 +0000] "GET /../../../../etc/shadow HTTP/1.1" 400 0 "-" "curl/8.4.0"
+203.0.113.150 - - [12/Nov/2025:13:10:15 +0000] "GET /assets/%2e%2e%2f%2e%2e%2fetc%2fpasswd HTTP/1.1" 400 0 "-" "curl/8.4.0"
+203.0.113.150 - - [12/Nov/2025:13:10:20 +0000] "GET /static/..\\..\\boot.ini HTTP/1.1" 400 0 "-" "curl/8.4.0"
+192.168.1.80 - - [12/Nov/2025:13:12:00 +0000] "GET /home HTTP/1.1" 200 1200 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+192.168.1.81 - - [12/Nov/2025:23:59:00 +0000] "GET /status HTTP/1.1" 200 42 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
