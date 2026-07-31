@@ -1,57 +1,210 @@
 # trace-log-sec
 
-A security log analysis engine that parses webserver and authentication logs, detects suspicious activity with configurable rules, and correlates related findings into incidents.
+A security log analysis CLI that parses webserver and authentication logs, detects suspicious activity with configurable rules, and correlates related findings into incidents.
 
-It processes NCSA Combined access logs (`webserver.log`) and BSD syslog auth logs (`auth.log`), runs signature and threshold detectors, then groups multi-signal activity by IP into correlated incidents. The design goal is a crash-proof, streaming, single-pass pipeline that stays memory-efficient and easy to extend.
-
-> **Note:** This is a preliminary README covering project structure, engine logic, and CLI usage. Packaging/distribution details will be added later.
+It processes NCSA Combined access logs and BSD syslog auth logs, runs signature and threshold detectors, groups multi-signal activity by IP into correlated incidents, and writes both a terminal summary and a standalone HTML report.
 
 ---
 
-## File structure
+## Requirements
 
-```
-trace-log-sec/
-├── src/
-│   ├── engine/                 # Detection core
-│   │   ├── engine.py           # Orchestrator: parse → detect → correlate
-│   │   ├── parsers.py          # Combined + syslog parsers, parse_file()
-│   │   ├── correlation.py      # IP-based finding correlator
-│   │   └── rules/
-│   │       ├── base.py         # Rule ABC (inspect / flush / reset)
-│   │       ├── signature.py    # PatternSignatureRule
-│   │       ├── threshold.py    # ThresholdRule
-│   │       ├── registry.py     # @register("type") → RULE_TYPES
-│   │       ├── factory.py      # build_rules(specs) → Rule instances
-│   │       └── utils.py        # Shared helpers (presets, evidence)
-│   ├── models/                 # Frozen/mutable dataclasses
-│   │   ├── parsers.py          # LogEntry, WebLogEntry, AuthLogEntry, ParseError
-│   │   ├── rules.py            # Finding, Severity
-│   │   ├── correlation.py      # Incident
-│   │   └── engine.py           # LogSource, AnalysisReport
-│   ├── config/
-│   │   ├── config.yaml         # Shipped rule definitions
-│   │   └── settings.py         # YAML → validated RuleSpec dicts
-│   ├── constants/              # Shared literals (windows, formats, defaults)
-│   ├── cli/                    # Typer CLI (`analyze` command)
-│   ├── utils/                  # Exceptions (MalformedLineError, ConfigError, …)
-│   └── tests/                  # Unit + fixture logs
-├── scripts/run_demo.py         # End-to-end smoke demo
-├── docs/                       # Design plans (engine, rules, config)
-├── task.md                     # Original assignment brief
-└── pyproject.toml
-```
-
-**Separation of concerns:** the `engine` package is format-agnostic — it accepts structured rule specs (plain dicts), never a YAML path. Config loading lives in `config/`. Models are split by consumer so each package owns the types it produces.
+- **Python** 3.12 or 3.13
+- **[uv](https://docs.astral.sh/uv/)** (recommended) — installs the project and its dependencies from the lockfile
 
 ---
 
-## Engine logic
+## Installation
 
-The pipeline is:
+Clone the repository and install into a local virtual environment:
+
+```bash
+git clone https://github.com/Kenndal/trace-log-sec.git
+cd trace-log-sec
+uv sync
+```
+
+That creates `.venv/`, editable-installs the package, and registers the `trace-log-sec` console script.
+
+To include the test tooling as well:
+
+```bash
+uv sync --group test
+```
+
+For linting / typing / pre-commit hooks:
+
+```bash
+uv sync --group dev --group test
+```
+
+Verify the install:
+
+```bash
+uv run trace-log-sec --help
+```
+
+### Alternative: pip
+
+If you prefer pip over uv (still requires Python ≥ 3.12):
+
+```bash
+python -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -e .
+trace-log-sec --help
+```
+
+---
+
+## CLI usage
+
+The tool exposes two commands: `analyze` and `list-reports`.
+
+```bash
+uv run trace-log-sec --help
+uv run trace-log-sec analyze --help
+uv run trace-log-sec list-reports --help
+```
+
+### Analyze logs
+
+```bash
+uv run trace-log-sec analyze AUTH.log WEBSERVER.log
+```
+
+`analyze` accepts one or more `*.log` files as positional arguments. Format — NCSA Combined access log vs BSD syslog auth log — is **auto-detected per file** from content (first parseable non-blank line within the first 20 lines), so files can be given in any order or mix. The shipped default rule set (`config.yaml` at the repo root) is used, and findings are correlated across files by source IP.
+
+Quick start against the bundled sample logs:
+
+```bash
+uv run trace-log-sec analyze \
+  samples/auth_incidents.log \
+  samples/webserver_incidents.log
+```
+
+#### Options
+
+| Option | Overrides | Default |
+|---|---|---|
+| `--max-evidence N` | `engine.max_evidence` | from `config.yaml` (built-in default: `20`) |
+| `--window-minutes N` | `correlation.window_minutes` | from `config.yaml` (built-in default: `10`) |
+| `--reference-time DATETIME` | syslog year anchor | newest web-log timestamp in this run, else current UTC time |
+
+Precedence is always **command-line flag → `config.yaml` → built-in default**: an option only takes effect if explicitly passed.
+
+```bash
+uv run trace-log-sec analyze \
+  --max-evidence 5 \
+  --window-minutes 30 \
+  --reference-time 2025-11-12T12:00:00 \
+  auth.log webserver.log
+```
+
+`--reference-time` accepts `%Y-%m-%dT%H:%M:%S`, `%Y-%m-%d %H:%M:%S`, or `%Y-%m-%d`.
+
+#### Input validation
+
+Before analysis starts, every path is checked. Problems are collected and reported together:
+
+- file must exist and be a regular file
+- extension must be `.log`
+- paths must be unique (duplicates rejected)
+- at least one file is required
+
+Unrecognized formats are skipped with a warning (non-fatal), unless *every* given file is unrecognized — that is treated as an error.
+
+#### Auth-log year anchoring
+
+BSD syslog lines have **no year**. The CLI resolves the year as follows:
+
+1. Explicit `--reference-time` if passed
+2. Else the newest Combined-log timestamp among web logs in this run (read cheaply from each file’s tail)
+3. Else the current UTC time — and a warning is printed, because archived auth-only logs can get the wrong year (which silently skews threshold windows and correlation)
+
+When analyzing both web and auth logs together, you usually do **not** need `--reference-time`. Pass it for historical auth-only runs.
+
+#### Terminal output
+
+```
+=== FINDINGS ===
+  [HIGH    ] ssh_brute_force        ip=198.51.100.23  count=8   SSH Brute Force
+  ...
+
+=== INCIDENTS ===
+  INC-a1b2c3d4e5 [HIGH] 203.0.113.150
+    ...narrative...
+
+=== PARSE ERRORS ===
+  (none)
+
+=== STATS === lines_read=4167 parsed=4160 malformed=7 findings=12 incidents=3 (0.0421s)
+
+HTML report written to reports/report_2026_07_31_12_00_00.html
+```
+
+Findings are sorted by severity (highest first), then rule id. Parse errors show source, line number, reason, and a raw snippet.
+
+#### HTML report
+
+Every successful `analyze` also writes a standalone HTML report under the directory configured in `config.yaml` (`reporting.output_dir`, default `reports/`). The directory is created automatically if missing. Filename format:
+
+```
+report_YYYY_MM_DD_HH_MM_SS.html
+```
+
+Relative paths resolve against the **current working directory**. A write failure (e.g. unwritable directory) only warns — the terminal analysis is never discarded.
+
+The HTML report includes:
+
+- executive summary tiles (findings, incidents, lines read/parsed/malformed, duration)
+- correlated incident cards with nested findings and expandable evidence
+- findings table (severity, IP, count, sources, time span, description, evidence)
+- parse-error table when any malformed lines were seen
+
+All log-derived values are HTML-escaped before embedding (attacker-controlled content must not become stored XSS when the report is opened in a browser).
+
+### List previous reports
+
+```bash
+uv run trace-log-sec list-reports
+```
+
+Scans `reporting.output_dir` and prints generated reports newest-first with their timestamps. Files that do not match the `report_YYYY_MM_DD_HH_MM_SS.html` naming convention are ignored. A missing directory yields an empty result, not an error.
+
+---
+
+## Configuration
+
+All runtime knobs live in `config.yaml` at the repo root (shipped with the package):
+
+```yaml
+engine:
+  max_evidence: 20          # ceiling on evidence lines stored per finding
+
+correlation:
+  window_minutes: 10        # IP clustering window for incidents
+
+reporting:
+  output_dir: reports       # HTML report directory (cwd-relative or absolute)
+
+rules:
+  - id: ssh_brute_force
+    type: threshold
+    severity: high
+    params: { ... }
+```
+
+Sections `engine`, `correlation`, and `reporting` are optional — omitted keys fall back to the built-in defaults above. Rules are described in [Shipped rules](#shipped-rules-configyaml) and [Adding a new rule](#adding-a-new-rule).
+
+---
+
+## How it works
+
+The pipeline is a crash-proof, streaming, single-pass flow:
 
 ```
 LogSource(s)  →  parse_file  →  Rule.inspect / flush  →  Correlator  →  AnalysisReport
+                                                                      ↘ terminal + HTML
 ```
 
 ### 1. Parsing (`engine/parsers.py`)
@@ -89,7 +242,7 @@ Mon DD HH:MM:SS host process[pid]: message
 
 BSD syslog has **no year** and **no timezone**. The parser resolves these as follows:
 
-- **Year:** pick the year that makes `(month, day, time)` the most recent occurrence at or before `reference_time` (default: now). If the candidate is in the future relative to the reference, subtract one year. An explicit `default_year` can force a fixed year.
+- **Year:** pick the year that makes `(month, day, time)` the most recent occurrence at or before `reference_time` (default: now). If the candidate is in the future relative to the reference, subtract one year. An explicit `default_year` can force a fixed year. The CLI supplies `reference_time` automatically (see [Auth-log year anchoring](#auth-log-year-anchoring)).
 - **Timezone:** attach `tz` (default UTC) so every engine timestamp is tz-aware and comparable with web-log times.
 
 Message semantics map to `AuthOutcome`:
@@ -134,12 +287,13 @@ Stateless per-line regex matching, aggregated per IP into one `Finding` (emitted
 | `case_sensitive` | Default `false` → `re.IGNORECASE` |
 | `min_hits` | Minimum matches before emit (default 1) |
 | `max_evidence` | Cap on stored evidence lines |
+| `max_decode_passes` | Nested URL-decode attempts (default 2) |
 
 **Target presets:** `request_target`, `path`, `query`, `user_agent`, `referrer`, `auth_message`.
 
 **URL decoding:** matching runs against the union of `{raw, decoded}` forms, with up to 2 recursive `unquote` passes (catches double-encoding like `%252e`). Invalid `%` sequences are left as-is (fail-soft).
 
-**Aggregation:** hits for the same IP fold into one finding; `metadata["matches"]` records which pattern/snippet fired.
+**Aggregation:** hits for the same IP fold into one finding; `metadata["matches"]` records which pattern/snippet fired. Findings with no IP (e.g. some sudo lines) still aggregate, but the correlator cannot join them across sources.
 
 #### ThresholdRule (`type: threshold`)
 
@@ -171,7 +325,7 @@ Stateful per-IP sliding window. Fires **one finding per burst** that crosses the
 
 Windows use event timestamps only (never wall-clock / processing time).
 
-#### Shipped rules (`config/config.yaml`)
+#### Shipped rules (`config.yaml`)
 
 | ID | Type | What it detects | Defaults |
 |---|---|---|---|
@@ -209,6 +363,8 @@ After all rules have flushed, `Correlator` groups findings into multi-signal `In
 7. `narrative` summarizes which rules/sources fired and over what span.
 
 Correlation is the **only** place cross-source relationships are formed. Stateful rules themselves are single-source (their `match` predicate selects one log type), so the engine does not merge-sort streams across files.
+
+**Known limit:** sudo lines often carry no source IP, so `sudo_privilege_escalation` findings cannot be joined into an IP-keyed incident with SSH/web activity from the same attacker.
 
 ---
 
@@ -251,52 +407,49 @@ AnalysisReport(
 )
 ```
 
+The CLI then renders the report to the terminal (`cli/render.py`) and persists HTML (`reporter/`).
+
 ---
 
-## CLI Usage
-
-Install (editable) with `uv sync`, then run the `trace-log-sec` console script:
-
-```bash
-uv sync
-uv run trace-log-sec analyze src/tests/fixtures/auth_incidents.log src/tests/fixtures/webserver_incidents.log
-```
-
-`analyze` accepts one or more `*.log` files as positional arguments. Format — NCSA Combined access log vs BSD syslog auth log — is auto-detected per file from its content, so files can be given in any order or mix. The shipped default rule set (`src/config/config.yaml`) is used, and findings are correlated across files by source IP.
-
-Example output shape:
+## File structure
 
 ```
-=== FINDINGS ===
-  [HIGH    ] ssh_brute_force        ip=198.51.100.23  count=8   SSH Brute Force
-  ...
-
-=== INCIDENTS ===
-  INC-a1b2c3d4e5 [HIGH] 203.0.113.150
-    ...narrative...
-
-=== PARSE ERRORS ===
-  (none)
-
-=== STATS === lines_read=4167 parsed=4160 malformed=7 findings=12 incidents=3 (0.0421s)
+trace-log-sec/
+├── config.yaml                 # Shipped rules + engine/correlation/reporting (edit this)
+├── samples/                    # Sample logs with embedded incidents (see incidents_manifest.md)
+├── src/
+│   ├── engine/                 # Detection core (format-agnostic)
+│   │   ├── engine.py           # Orchestrator: parse → detect → correlate
+│   │   ├── parsers.py          # Combined + syslog parsers, parse_file()
+│   │   ├── correlation.py      # IP-based finding correlator
+│   │   └── rules/
+│   │       ├── base.py         # Rule ABC (inspect / flush / reset)
+│   │       ├── signature.py    # PatternSignatureRule
+│   │       ├── threshold.py    # ThresholdRule
+│   │       ├── registry.py     # @register("type") → RULE_TYPES
+│   │       ├── factory.py      # build_rules(specs) → Rule instances
+│   │       └── utils.py        # Shared helpers (presets, evidence)
+│   ├── models/                 # Dataclasses (parsers, rules, correlation, engine)
+│   ├── config/
+│   │   └── settings.py         # YAML → validated settings
+│   ├── constants/              # Shared literals (windows, formats, defaults)
+│   ├── cli/                    # Typer CLI
+│   │   ├── app.py              # Shared Typer app
+│   │   ├── commands/           # analyze, list-reports
+│   │   ├── formats.py          # Format sniffing + LogSource construction
+│   │   ├── validation.py       # Path / .log / uniqueness checks
+│   │   └── render.py           # Terminal report rendering
+│   ├── reporter/               # Standalone HTML reports
+│   │   ├── html.py             # Pure HTML renderer (XSS-safe)
+│   │   └── storage.py          # write / list / resolve output dir
+│   ├── utils/                  # Exceptions (MalformedLineError, ConfigError, …)
+│   └── tests/                  # Unit tests
+├── docs/                       # Design plans (engine, rules, config)
+├── task.md                     # Original assignment brief
+└── pyproject.toml
 ```
 
-Files that don't match either known format are skipped with a warning (non-fatal, unless *every* given file is unrecognized, which is treated as an error). Invalid arguments — a missing file, wrong extension, a directory, or a duplicate path — are rejected before analysis starts, with every problem reported together in one message.
-
-### Overriding engine/correlation settings
-
-`analyze` also accepts options that override the `engine`/`correlation` sections of `config.yaml` for a single run, without editing the file:
-
-```bash
-uv run trace-log-sec analyze --max-evidence 5 --window-minutes 30 auth.log webserver.log
-```
-
-| Option | Overrides | Default |
-|---|---|---|
-| `--max-evidence` | `engine.max_evidence` | `config.yaml`'s value (itself defaulting to `20`) |
-| `--window-minutes` | `correlation.window_minutes` | `config.yaml`'s value (itself defaulting to `10`) |
-
-Precedence is always **command-line flag → `config.yaml` → built-in default**: an option only takes effect if explicitly passed; otherwise the value falls through to whatever `config.yaml` specifies (or its own default if `config.yaml` omits that section).
+**Separation of concerns:** the `engine` package is format-agnostic — it accepts structured rule specs (plain dicts), never a YAML path. Config loading lives in `config/`. Format sniffing and presentation (terminal + HTML) live in `cli/` and `reporter/`. Models are split by consumer so each package owns the types it produces.
 
 ---
 
@@ -306,7 +459,7 @@ There are three tiers of extensibility. Prefer the cheapest one that fits.
 
 ### Tier 1 — Retune an existing rule (config only)
 
-Edit `src/config/config.yaml`: change `threshold`, `window_seconds`, `severity`, `patterns`, or set `enabled: false`.
+Edit `config.yaml` (repo root): change `threshold`, `window_seconds`, `severity`, `patterns`, or set `enabled: false`.
 
 ```yaml
 - id: ssh_brute_force
@@ -459,11 +612,30 @@ engine = Engine(
 
 This is what unit tests typically do.
 
----
-
 ### Checklist for a new rule
 
 1. Can you express it with existing `type` + presets? → edit `config.yaml` only.
 2. Need a new `match` / `target` / `distinct_by` preset? → add a named function to the preset dict in `threshold.py` or `signature.py`, then reference it from config.
 3. Need a new algorithm? → subclass `Rule`, `@register("name")`, export, add a config entry.
 4. Add a unit test under `src/tests/test_rules.py` covering the boundary cases (threshold N−1 vs N, pattern hit/miss, flush aggregation, `reset` idempotency).
+
+---
+
+## Development
+
+```bash
+# Install with test + lint tooling
+uv sync --group dev --group test
+
+# Run the full suite
+uv run pytest
+
+# Lint / format
+uv run ruff check .
+uv run ruff format .
+
+# Type-check
+uv run mypy
+```
+
+Sample logs used for end-to-end demos live under `samples/`; see `incidents_manifest.md` there for the embedded attack scenarios.

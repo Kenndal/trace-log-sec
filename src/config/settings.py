@@ -21,8 +21,8 @@ from constants import (
 )
 from utils.exceptions import ConfigError
 
-PACKAGE_DIR = Path(__file__).resolve().parent
-DEFAULT_CONFIG_PATH = PACKAGE_DIR / DEFAULT_CONFIG_FILENAME
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
+DEFAULT_CONFIG_PATH = REPO_ROOT / DEFAULT_CONFIG_FILENAME
 
 
 class RuleSpec(BaseModel):

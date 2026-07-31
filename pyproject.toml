@@ -81,8 +81,6 @@ max-complexity = 18
 # Test functions/fixtures aren't held to the same annotation/tz-awareness bar as
 # production code (mirrors the `tests.*` mypy override below).
 "src/tests/*" = ["ANN001", "ANN003", "ANN201", "ANN202", "ANN204", "DTZ001"]
-# The demo script's entire purpose is printing a human-readable report.
-"scripts/*" = ["T201"]
 # `id` mirrors config.yaml's `id:` rule-spec field; renaming would break that vocabulary.
 "src/engine/rules/signature.py" = ["A002"]
 "src/engine/rules/threshold.py" = ["A002"]

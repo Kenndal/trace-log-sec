@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
 import pytest
 from typer.testing import CliRunner
 
@@ -12,10 +10,21 @@ from cli.commands.analyze import _resolve
 from config.settings import load_settings
 
 runner = CliRunner()
-FIXTURES = Path(__file__).parent / "fixtures"
 
 COMBINED_LINE = '1.2.3.4 - - [10/Oct/2025:13:55:36 -0700] "GET /index.html HTTP/1.1" 200 2326\n'
 SYSLOG_LINE = "Jan 05 01:02:03 server sshd[1]: Failed password for x from 1.1.1.1 port 1 ssh2\n"
+
+
+def _auth_failures(ip, seconds, hhmm="01:02"):
+    """``ssh_brute_force`` fires at 5 failures within 60s: default hhmm="01:02"."""
+    return "".join(
+        f"Jul 31 {hhmm}:{s:02d} server sshd[1]: Failed password for root from {ip} port 22 ssh2\n" for s in seconds
+    )
+
+
+def _traversal_hit(ip, time="31/Jul/2025:01:06:00 +0000"):
+    """A ``directory_traversal`` signature hit (matches ``\\.\\./`` + ``/etc/passwd``)."""
+    return f'{ip} - - [{time}] "GET /../../etc/passwd HTTP/1.1" 200 100\n'
 
 
 @pytest.fixture(autouse=True)
@@ -74,43 +83,40 @@ def test_analyze_web_and_auth_files_succeeds(tmp_path):
     assert "lines_read=2" in result.output
 
 
-def test_analyze_incidents_fixtures_correlate():
-    result = runner.invoke(
-        app,
-        ["analyze", str(FIXTURES / "auth_incidents.log"), str(FIXTURES / "webserver_incidents.log")],
-    )
+def test_analyze_multi_signal_activity_correlates(tmp_path):
+    # Same IP triggers ssh_brute_force (auth) and directory_traversal (web)
+    # ~4 minutes apart -- 2 distinct rules within the default 10-minute
+    # correlation window, so the Correlator merges them into one incident.
+    ip = "203.0.113.50"
+    auth = write(tmp_path, "auth.log", _auth_failures(ip, [0, 1, 2, 3, 4]))
+    web = write(tmp_path, "webserver.log", _traversal_hit(ip))
+    result = runner.invoke(app, ["analyze", str(auth), str(web)])
     assert result.exit_code == 0
     assert "INC-" in result.output
 
 
-def test_analyze_window_minutes_override_prevents_correlation():
-    result = runner.invoke(
-        app,
-        [
-            "analyze",
-            "--window-minutes",
-            "0",
-            str(FIXTURES / "auth_incidents.log"),
-            str(FIXTURES / "webserver_incidents.log"),
-        ],
-    )
+def test_analyze_window_minutes_override_prevents_correlation(tmp_path):
+    ip = "203.0.113.50"
+    auth = write(tmp_path, "auth.log", _auth_failures(ip, [0, 1, 2, 3, 4]))
+    web = write(tmp_path, "webserver.log", _traversal_hit(ip))
+    result = runner.invoke(app, ["analyze", "--window-minutes", "0", str(auth), str(web)])
     assert result.exit_code == 0
     assert "INC-" not in result.output
 
 
-def test_analyze_uses_config_yaml_value_when_no_cli_override(monkeypatch):
+def test_analyze_uses_config_yaml_value_when_no_cli_override(monkeypatch, tmp_path):
     # No --window-minutes given: the effective value must come from
     # config.yaml's correlation.window_minutes, not the engine's own
-    # built-in default (which would still correlate these fixtures).
+    # built-in default (which would still correlate this activity).
     settings = load_settings()
     correlation = settings.correlation.model_copy(update={"window_minutes": 0})
     zero_window = settings.model_copy(update={"correlation": correlation})
     monkeypatch.setattr("cli.commands.analyze.load_settings", lambda: zero_window)
 
-    result = runner.invoke(
-        app,
-        ["analyze", str(FIXTURES / "auth_incidents.log"), str(FIXTURES / "webserver_incidents.log")],
-    )
+    ip = "203.0.113.50"
+    auth = write(tmp_path, "auth.log", _auth_failures(ip, [0, 1, 2, 3, 4]))
+    web = write(tmp_path, "webserver.log", _traversal_hit(ip))
+    result = runner.invoke(app, ["analyze", str(auth), str(web)])
     assert result.exit_code == 0
     assert "INC-" not in result.output
 
@@ -156,8 +162,8 @@ def test_analyze_directory_rejected(tmp_path):
     assert "not a regular file" in result.output
 
 
-def test_analyze_duplicate_paths_rejected():
-    path = str(FIXTURES / "auth_incidents.log")
+def test_analyze_duplicate_paths_rejected(tmp_path):
+    path = str(write(tmp_path, "auth.log", SYSLOG_LINE))
     result = runner.invoke(app, ["analyze", path, path])
     assert result.exit_code == 2
     assert "duplicate" in result.output
@@ -192,12 +198,6 @@ def test_analyze_all_files_unrecognized_exits_1(tmp_path):
 # --------------------------------------------------------------------------- #
 # Source-id uniqueness, format sniffing, and year anchoring (PR #7 review)
 # --------------------------------------------------------------------------- #
-
-
-def _auth_failures(ip, seconds):
-    return "".join(
-        f"Jul 31 01:02:{s:02d} server sshd[1]: Failed password for root from {ip} port 22 ssh2\n" for s in seconds
-    )
 
 
 def test_analyze_same_basename_files_get_distinct_sources(tmp_path):
